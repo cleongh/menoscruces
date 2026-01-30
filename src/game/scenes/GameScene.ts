@@ -1,5 +1,6 @@
 import Enemy from "../enemy";
 import Player from "../player";
+import { PickableCoin } from "../sceneObjects/coin";
 import { InventoryUI } from "../UI/InventoryUI";
 
 export class GameScene extends Phaser.Scene {
@@ -7,6 +8,7 @@ export class GameScene extends Phaser.Scene {
   private enemies: Phaser.Physics.Arcade.Group;
   private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   private inventory: InventoryUI;
+  private coins: Phaser.Physics.Arcade.Group;
 
   constructor() {
     super("GameScene");
@@ -19,6 +21,20 @@ export class GameScene extends Phaser.Scene {
       runChildUpdate: true,
     });
 
+    this.coins = this.physics.add.group({
+      classType: PickableCoin,
+      runChildUpdate: true,
+    });
+
+    // recoger moneda al tocarla
+    this.physics.add.overlap(this.player, this.coins, (_, coin) => {
+      const c = coin as PickableCoin;
+
+      this.events.emit("coin-collected", c.coinData);
+
+      c.destroy();
+    });
+
     this.time.addEvent({
       delay: 1000,
       callback: this.spawnEnemy,
@@ -28,11 +44,15 @@ export class GameScene extends Phaser.Scene {
 
     this.physics.add.overlap(this.player, this.enemies, (p, e) => {
       console.log("Pero te quiero...");
-      this.events.emit("coin-collected", {
-        texture: "coin",
-        value: 10,
-        stat: "love",
-      });
+      const coin = new PickableCoin(
+        this,
+        (e as Enemy).x,
+        (e as Enemy).y,
+        "coin",
+        10,
+        "love",
+      );
+      this.coins.add(coin, true);
       e.destroy();
     });
 
@@ -40,7 +60,6 @@ export class GameScene extends Phaser.Scene {
 
     this.inventory = new InventoryUI(this, 50, 40);
 
-    // Example: Listen for a 'collect' event
     this.events.on("coin-collected", (coinData: any) => {
       this.inventory.addItem(coinData.texture, coinData.value, coinData.stat);
     });

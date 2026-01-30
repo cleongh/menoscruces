@@ -2,7 +2,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   public speed: number = 160;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
-    super(scene, x, y, "logo");
+    super(scene, x, y, "player");
     scene.add.existing(this);
     scene.physics.add.existing(this);
     this.setCollideWorldBounds(true);
