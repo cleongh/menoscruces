@@ -1,15 +1,17 @@
 import Enemy from "../enemy";
 import Player from "../player";
+import { InventoryUI } from "../UI/InventoryUI";
 
 export class GameScene extends Phaser.Scene {
   private player: Player;
   private enemies: Phaser.Physics.Arcade.Group;
   private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
+  private inventory: InventoryUI;
 
   constructor() {
     super("GameScene");
   }
-  
+
   create() {
     this.player = new Player(this, 0, 0);
     this.enemies = this.physics.add.group({
@@ -26,9 +28,22 @@ export class GameScene extends Phaser.Scene {
 
     this.physics.add.overlap(this.player, this.enemies, (p, e) => {
       console.log("Pero te quiero...");
+      this.events.emit("coin-collected", {
+        texture: "coin",
+        value: 10,
+        stat: "love",
+      });
+      e.destroy();
     });
 
     this.cursors = this.input.keyboard!.createCursorKeys();
+
+    this.inventory = new InventoryUI(this, 50, 40);
+
+    // Example: Listen for a 'collect' event
+    this.events.on("coin-collected", (coinData: any) => {
+      this.inventory.addItem(coinData.texture, coinData.value, coinData.stat);
+    });
   }
 
   spawnEnemy() {
