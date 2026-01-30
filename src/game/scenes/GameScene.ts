@@ -1,6 +1,6 @@
 import Enemy from "../enemy";
 import Player from "../player";
-import { PickableCoin } from "../sceneObjects/coin";
+import { PickableCoin } from "../sceneObjects/Coin";
 import { InventoryUI } from "../UI/InventoryUI";
 
 export class GameScene extends Phaser.Scene {
