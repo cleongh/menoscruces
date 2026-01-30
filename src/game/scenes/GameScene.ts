@@ -15,11 +15,11 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.player = new Player(this, 0, 0);
     this.enemies = this.physics.add.group({
       classType: Enemy,
       runChildUpdate: true,
     });
+    this.player = new Player(this, 0, 0, this.enemies);
 
     this.coins = this.physics.add.group({
       classType: PickableCoin,
