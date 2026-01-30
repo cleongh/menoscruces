@@ -1,36 +1,30 @@
 {
-    "name": "plantillaphaser",
-    "version": "1.0.0",
-    "main": "./main.js",
-    "description": "Plantilla para juegos con Phaser",
-    "scripts": {
-        "build:win": "npm run electron && npx electron-builder --win --config",
-        "build:mac": "npm run electron && npx electron-builder --mac --config",
-        "build:linux": "npm run electron && npx electron-builder --linux --config",
-        "electron": "npx electron-vite build",
-        "start": "npx vite",
-        "build": "npx vite build --outDir docs/"
-    },
+    "name": "template-vite-ts",
+    "description": "A Phaser 3 TypeScript template using Vite.",
+    "version": "1.4.0",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/cleongh/plantillaphaser.git"
+        "url": "git+https://github.com/phaserjs/template-vite-ts.git"
     },
-    "keywords": [],
-    "author": "Carlos León <cleon@ucm.es>",
+    "author": "Phaser Studio <support@phaser.io> (https://phaser.io/)",
     "license": "MIT",
+    "licenseUrl": "http://www.opensource.org/licenses/mit-license.php",
     "bugs": {
-        "url": "https://github.com/cleongh/plantillaphaser/issues"
+        "url": "https://github.com/phaserjs/template-vite-ts/issues"
     },
-    "homepage": "https://github.com/cleongh/plantillaphaser#readme",
-    "type": "module",
+    "homepage": "https://github.com/phaserjs/template-vite-ts#readme",
+    "scripts": {
+        "dev": "node log.js dev & vite --config vite/config.dev.mjs",
+        "build": "node log.js build & vite build --config vite/config.prod.mjs",
+        "dev-nolog": "vite --config vite/config.dev.mjs",
+        "build-nolog": "vite build --config vite/config.prod.mjs"
+    },
     "devDependencies": {
-        "electron": "^34.0.1",
-        "electron-builder": "^25.1.8",
-        "electron-vite": "^2.3.0",
-        "rollup": "^4.32.1",
-        "vite": "5.4.6"
+        "typescript": "~5.7.2",
+        "vite": "^6.3.1"
     },
     "dependencies": {
-        "phaser": "3.85.2"
+        "phaser": "^3.90.0",
+        "terser": "^5.39.0"
     }
 }
