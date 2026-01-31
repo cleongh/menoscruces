@@ -1,0 +1,50 @@
+#+title: Menos cruces (aka backflips vs portaviones)
+
+* dinámica global
+
+Vampire survivors, top-down 2D. se acumulan "monedas", que son buffs temporales hasta que se asientan en el mercader. Dificultad creciente de enemigos para gestionar gráfica de dificultad. La ronda es una acumulación de dificultad/buff que hay que "resetear" en el mercader.
+
+* Mecánicas
+
+- Moverse 8D
+- coger monedas "pequeñas" para multiplicador
+- monedas grandes (menos probables) para buff
+- mercader wanderea y deja rastro
+  - entrar en mercader resetea multiplicador
+  - asienta buffs
+
+* stats
+
+- ataque
+- velocidad de ataque
+- distancia de ataque
+- velocidad de movimiento
+- escudo
+- recuperación de vida
+- vida
+- monedas
+
+* equilibrio  
+  
+| ! | ronda | vida inicial | daño esperado | enemigos |
+|---+-------+--------------+---------------+----------|
+| # |     1 |            5 |             0 |          |
+|   |       |              |               |          |
+
+
+=enemigos= es los enemigos que se esperan hasta maximizar sistema general de ronda (correlaciona con el tiempo de juego con "enemigos por segundo" )
+
+Progresión de enemigos en crecimiento exponencial basado en máximo esperado de enemigos
+
+* buffs
+
+** buffs de stats
+
+** buffs temporales
+
+
+* Pendiente
+
+** TODO hacer "enemigos por segundo"
+
+** TODO hacer buffs temporales
