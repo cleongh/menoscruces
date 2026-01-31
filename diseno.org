@@ -2,9 +2,9 @@
 
 * índice
 
-- [[conceptos-generales][conceptos generales]]
-- [[elementos-de-juego][elementos de juego]]
-- [[screen-flow][screen-flow]]
+- [[#conceptos-generales][conceptos generales]]
+- [[#elementos-de-juego][elementos de juego]]
+- [[#screen-flow][screen flow]]
 
 * conceptos generales
 ** dinámica global
