@@ -126,6 +126,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   onAttack() {
+    this.attackCollider.updateRangeFactor((this.scene as GameScene).fatManager.getTransformedState().baseStats.rangeBase);
     (this.attackCollider.body as Phaser.Physics.Arcade.Body).enable = true;
 
     this.attackCollider.active = true;
