@@ -78,7 +78,7 @@ export interface BaseStats {
    */
   regenBase: number;
   /**
-   * Rango base del personaje
+   * Rango base del personaje. Valor entre 0 y X, 1 es el balor base. 0.5 indica que el rango es la mitad. Y 2 que es el doble de rango
    */
   rangeBase: number;
 

@@ -12,6 +12,7 @@ interface EnemyData {
 export default abstract class AbstractEnemy
   extends Phaser.Physics.Arcade.Sprite
 {
+  protected maxHealth: number;
   protected health: number;
   protected speed: number;
   protected attack: number;
@@ -25,6 +26,7 @@ export default abstract class AbstractEnemy
 
   constructor(scene: Phaser.Scene, x: number, y: number, data: EnemyData) {
     super(scene, x, y, data.sprite);
+    this.maxHealth = data.health;
     this.health = data.health;
     this.speed = data.speed;
     this.attack = data.attack;
@@ -71,6 +73,9 @@ export default abstract class AbstractEnemy
     });
 
     this.health -= damage;
+
+    if(this.health > this.maxHealth)
+      this.health = this.maxHealth;
 
     this.canMove = false;
     this.scene.time.addEvent({
