@@ -13,7 +13,7 @@ const config: Phaser.Types.Core.GameConfig = {
   width: 1024,
   height: 768,
   parent: "game-container",
-  backgroundColor: "#028af8",
+  backgroundColor: "rgb(231, 184, 236)",
   scene: [Boot, Preloader, MainMenu, GameScene, GameOver, NewCoinScene],
   physics: {
     default: "arcade",

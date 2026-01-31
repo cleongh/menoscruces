@@ -7,7 +7,7 @@ export class Preloader extends Scene {
 
   init() {
     //  We loaded this image in our Boot Scene, so we can display it here
-    this.add.image(512, 384, "background");
+    //this.add.image(512, 384, "background");
 
     //  A simple progress bar. This is the outline of the bar.
     this.add.rectangle(512, 384, 468, 32).setStrokeStyle(1, 0xffffff);
@@ -30,10 +30,17 @@ export class Preloader extends Scene {
     this.load.image("coin", "coin.png");
     this.load.image("boss", "placeholder/boss.jpg");
     this.load.image("big-coin", "placeholder/big-coin.png");
+    this.load.image("projectileEnemy", "placeholder/projectileEnemy.jpg");
+    this.load.image("projectile", "placeholder/projectile.jpg");
 
-    this.load.spritesheet("player", "placeholder/player.png", {
-      frameWidth: 32,
-      frameHeight: 32,
+    this.load.spritesheet("player", "player.png", {
+      frameWidth: 256,
+      frameHeight: 256,
+    });
+
+    this.load.spritesheet("flares", "particles/flares.png", {
+      frameWidth: 128, 
+      frameHeight: 128
     });
   }
 
@@ -44,14 +51,14 @@ export class Preloader extends Scene {
     // Animaciones
     this.anims.create({
       key: "run",
-      frames: this.anims.generateFrameNumbers("player", { start: 0, end: 3 }),
-      frameRate: 6, // Velocidad de la animación
+      frames: this.anims.generateFrameNumbers("player", { start: 1, end: 4 }),
+      frameRate: 12, // Velocidad de la animación
       repeat: -1, // Animación en bucle
     });
 
     this.anims.create({
       key: "idle",
-      frames: this.anims.generateFrameNumbers("player", { start: 1, end: 1 }),
+      frames: this.anims.generateFrameNumbers("player", { start: 0, end: 0 }),
     });
     //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
     this.scene.start("MainMenu");
