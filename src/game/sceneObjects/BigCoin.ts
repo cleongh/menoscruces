@@ -24,6 +24,8 @@ export class BigCoin extends AbstractCoin {
   public handleCoinPickup(): void {
     this.scene.scene.pause();
     const config: NewCoinSceneConfig = {
+      currentCoins: (this.scene as GameScene).fatManager.getTransformedState()
+        .localCoins,
       coinData: this.coinData,
       onCoinFlippedResult: (pass: boolean, isHead: boolean) => {
         const fatManager = (this.scene as GameScene).fatManager;
