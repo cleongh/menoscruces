@@ -6,6 +6,7 @@ export default class Boss extends AbstractEnemy {
       health: 500,
       speed: 80,
       attack: 0.15,
+      distanceAttack: 25,
       sprite: "boss",
     });
 

@@ -5,6 +5,7 @@ interface EnemyData {
   health: number;
   speed: number;
   attack: number;
+  distanceAttack: number;
   sprite: string;
 }
 
@@ -14,6 +15,7 @@ export default abstract class AbstractEnemy
   private health: number;
   private speed: number;
   private attack: number;
+  private distanceAttack: number;
 
   private canMove: boolean;
   private stunTime: number;
@@ -26,6 +28,7 @@ export default abstract class AbstractEnemy
     this.health = data.health;
     this.speed = data.speed;
     this.attack = data.attack;
+    this.distanceAttack = data.distanceAttack;
 
     this.canMove = true;
     this.stunTime = 200;

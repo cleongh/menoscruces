@@ -45,10 +45,6 @@ export class GameScene extends Phaser.Scene {
       loop: true,
     });
 
-    this.physics.add.overlap(this.player, this.enemies, (p, e) => {
-      console.log("Pero te quiero...");
-    });
-
     this.cursors = this.input.keyboard!.createCursorKeys();
 
     this.inventory = new InventoryUI(this, 50, 40);
@@ -72,6 +68,10 @@ export class GameScene extends Phaser.Scene {
 
     this.enemies.getChildren().forEach((enemy: any) => {
       enemy.update(this.player);
+      if(Phaser.Math.Distance.Between(this.player.x, this.player.y, enemy.x, enemy.y) <= enemy.distanceAttack){
+        console.log("Pero te quiero...");
+        this.player.receiveDamage(enemy.attack);
+      }
     });
 
     this.merchant.update();
