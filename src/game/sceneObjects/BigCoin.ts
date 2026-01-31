@@ -1,3 +1,4 @@
+import { NewCoinSceneConfig } from "../scenes/NewCoinScene";
 import { AbstractCoin } from "./AbstractCoin";
 
 interface BigCoinData {
@@ -16,11 +17,22 @@ export class BigCoin extends AbstractCoin {
 
   public handleCoinPickup(): void {
     this.scene.scene.pause();
-    this.scene.scene.launch("NewCoinScene", {
-      config: {},
-      callback: () => {
+    const config: NewCoinSceneConfig = {
+      opcion1: this.coinData.option1,
+      opcion2: this.coinData.option2,
+      onCoinFlippedResult: (pass: boolean, isHead: boolean) => {
+        // Aquí puedes manejar el resultado del lanzamiento de moneda
+        console.log(
+          `Moneda grande recogida. Resultado del lanzamiento: ${
+            isHead ? "CARA" : "CRUZ"
+          }`,
+        );
+        // Reanudar la escena del juego después de manejar el resultado
+        this.scene.scene.resume("GameScene");
+        this.scene.scene.stop("NewCoinScene");
         this.destroy();
       },
-    });
+    };
+    this.scene.scene.launch("NewCoinScene", config);
   }
 }
