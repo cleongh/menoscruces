@@ -1,8 +1,8 @@
 import Enemy from "../enemy";
 import Player from "../player";
-import { PickableCoin } from "../sceneObjects/Coin";
 import { InventoryUI } from "../UI/InventoryUI";
 import Merchant from "../merchant";
+import { PickableCoin } from "../sceneObjects/PickableCoin";
 
 export class GameScene extends Phaser.Scene {
   private player: Player;
