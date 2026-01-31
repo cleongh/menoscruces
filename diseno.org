@@ -19,6 +19,9 @@ Vampire survivors, top-down 2D. se acumulan "monedas", que son buffs temporales 
 
 * elementos de juego
 ** player
+:PROPERTIES:
+:CUSTOM_ID: player
+:END:
 *** stats
 
 - ataque
@@ -38,7 +41,7 @@ Genera un área rectangular de daño (WxH). Está activa durante D segundos y lu
 ** monedas y buffs
 *** Monedas pequeñas
 
-Simplemente son un contador, hay un porcentaje global de "enemigo deja moneda". Al cogerlas por overlap se suma 1 a "monedas" (de player)
+Simplemente son un contador, hay un porcentaje global de "enemigo deja moneda". Al cogerlas por overlap se suma 1 a "monedas" (de [[*player]])
 
 *** monedas "grandes"
 :PROPERTIES:
