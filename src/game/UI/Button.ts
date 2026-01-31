@@ -50,6 +50,8 @@ export class Button {
         this.label.setVisible(false);
     }
 
+    isVisible(): boolean { return this.bg.visible; }
+
     deactivate() {
         this.bg.setAlpha(0.5);
         this.label.setAlpha(0.5);
@@ -81,6 +83,11 @@ export class Button {
         this.bg.setScale(1.1);
         this.label.setScale(1.1);
         this.pointerOverCallback && this.pointerOverCallback();
+    }
+
+    deselect() {
+        this.bg.setScale(1);
+        this.label.setScale(1);
     }
 
 

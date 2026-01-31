@@ -37,12 +37,16 @@ export class NewCoinScene extends Phaser.Scene {
 
     elementsToHideOnRoll: Button[]; // Elementos que se ocultan al lanzar la moneda
 
+    rollButton: Button; // Botón para lanzar la moneda
+    skipButton: Button; // Botón para saltarse el lanzamiento de moneda
     continueButton: Button; // Botón para continuar con el juego tras el lanzamiento de moneda
 
     callbackAtTheEnd: (pass: boolean, isHead: boolean) => void; //Función callback para llamar una vez se ha resuelto el lanzamiento de moneda.
 
     coinResult: boolean; //Resultado de haber lanzado la moneda
     skipResult: boolean; //Indica si se ha skipeado el lanzamiento de moneda
+
+    state: number;
 
     constructor() {
         super({ key: "NewCoinScene" });
@@ -86,6 +90,60 @@ export class NewCoinScene extends Phaser.Scene {
     }
 
     create(): void {
+        /****
+         * INPUT VARIOS
+         * 
+         */
+        this.state = 0;
+        this.input.keyboard?.on("keydown-SPACE", () => {
+            if (this.state === 0) {
+                return;
+            }
+            if (this.state === 1) {
+                this.skipCoin();
+            } else if (this.state === 2) {
+                this.rollCoin();
+            } else if (this.state == 3) {
+                this.finishRollScene(this.skipResult, this.coinResult);
+            }
+            this.skipButton.deselect();
+            this.rollButton.deselect();
+            this.continueButton.deselect();
+            this.elementsToHideOnRoll.forEach((element) => {
+                element.hide();
+            });
+            this.state = 0;
+        });
+
+        this.input.keyboard?.on("keydown-W", () => {
+            if (this.skipButton.isVisible() && this.bonusCoin >= this.passCost) {
+                this.state = 1;
+                this.skipButton.select();
+                this.rollButton.deselect();
+            } else if (this.rollButton.isVisible()) {
+                this.state = 2;
+                this.rollButton.select();
+                this.skipButton.deselect();
+            } else {
+                this.state = 3;
+                this.continueButton.select();
+            }
+        });
+
+        this.input.keyboard?.on("keydown-S", () => {
+            if (this.rollButton.isVisible()) {
+                this.state = 2;
+                this.rollButton.select();
+                this.skipButton.deselect();
+            } else {
+                this.state = 3;
+                this.continueButton.select();
+            }
+        });
+        /**
+         * 
+         * 
+         */
         const width = this.scale.width;
         const height = this.scale.height;
 
@@ -118,19 +176,18 @@ export class NewCoinScene extends Phaser.Scene {
 
         this.elementsToHideOnRoll = [];
         // Botoncico de "roll", pos eso, lanza la monedica y a ver que sale
-        this.elementsToHideOnRoll.push(
-            this.drawButton(
-                "ROLL",
-                width / 2,
-                height - 240,
-                btnWidth,
-                btnHeight,
-                this.rollCoin,
-            ),
-        );
+        this.rollButton = this.drawButton(
+            "ROLL",
+            width / 2,
+            height - 240,
+            btnWidth,
+            btnHeight,
+            this.rollCoin,
+        ),
+            this.elementsToHideOnRoll.push(this.rollButton);
 
         // Botoncico de "skip", descuenta monedas
-        let skipButton = this.drawButton(
+        this.skipButton = this.drawButton(
             "SKIP",
             width / 2,
             height - 320,
@@ -139,8 +196,8 @@ export class NewCoinScene extends Phaser.Scene {
             this.skipCoin,
         );
         if (this.bonusCoin < this.passCost)
-            skipButton.deactivate()
-        this.elementsToHideOnRoll.push(skipButton);
+            this.skipButton.deactivate()
+        this.elementsToHideOnRoll.push(this.skipButton);
 
         this.continueButton = this.drawButton(
             "CONTINUE",
@@ -214,11 +271,7 @@ export class NewCoinScene extends Phaser.Scene {
         height: number,
         callbackFun: Function,
     ): Button {
-        // Botoncico de "roll", pos eso, lanza la monedica y a ver que sale
-        const btnWidth = 180;
-        const btnHeight = 56;
-
-        let button = new Button(this, text, x, y, btnWidth, btnHeight);
+        let button = new Button(this, text, x, y, width, height);
 
         button.setPointerUpCallback(() => {
             callbackFun.bind(this)();
