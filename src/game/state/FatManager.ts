@@ -8,11 +8,29 @@ export class FatManager {
   constructor(gameScene: GameScene, initialStats: BaseStats) {
     this.gameState = {
       baseStats: initialStats,
+      /**
+       * monedas pequeñas actuales del jugador
+       */
       localCoins: 0,
+      /**
+       * monedas pequeñas que han sido entregadas al mercader
+       */
       merchantCoins: 0,
+      /**
+       * ronda local
+       */
       localRound: 1,
+      /**
+       * ronda global (siempre crece)
+       */
       globalRound: 1,
+      /**
+       * monedas grandes ya entregadas al mercader
+       */
       permanentCoins: [],
+      /**
+       * monedas grandes recogidas en la ronda actual, no entregadas (temporales)
+       */
       currentCoins: [],
     };
     this.scene = gameScene;
