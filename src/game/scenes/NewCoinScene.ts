@@ -4,7 +4,7 @@ import { Button } from "../UI/Button";
 
 export interface NewCoinSceneConfig {
     // número de monedas disponible actualmente (no commiteadas)
-    currentCoins: number;
+    localCoins: number;
     // Aquí se pueden añadir configuraciones específicas para la escena de nueva moneda
     coinData: BigCoinData;
     /**
@@ -62,7 +62,7 @@ export class NewCoinScene extends Phaser.Scene {
             config.coinData.option2.description ||
             "Esto es un ejemplo de CRUZ de moneda";
 
-        this.bonusCoin = config.currentCoins;
+        this.bonusCoin = config.localCoins;
 
         this.passCost = config.coinData.passCost;
 

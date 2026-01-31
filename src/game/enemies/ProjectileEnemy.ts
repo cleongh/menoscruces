@@ -40,12 +40,12 @@ export class ProjectileEnemy extends AbstractEnemy {
             speed: 80,
             attack: 0.15,
             distanceAttack: 25,
-            sprite: "projectileEnemy",
+            sprite: "shootmachine",
         });
 
         this.canShoot = true;
-
-        this.setDisplaySize(15, 15);
+        this.setDisplaySize(50, 50);
+        //this.setDisplaySize(15, 15);
     }
 
     update(player: Player) {

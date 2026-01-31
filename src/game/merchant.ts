@@ -1,4 +1,6 @@
 import Player from "./player";
+import { GameScene } from "./scenes/GameScene";
+import { FatManager } from "./state/FatManager";
 
 export default class Merchant extends Phaser.Physics.Arcade.Sprite {
 
@@ -9,19 +11,34 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
   destinationCollider: Phaser.Physics.Arcade.Collider;
   hasReachedDestination = false;
 
-  // area alrededor del merchant en la que debe entrar el jugador para interactuar
-  public playerCollideZone: Phaser.GameObjects.Zone;
-  playerCollideSize = 200;
+  // distancia alrededor del merchant en la que debe entrar el jugador para poder interactuar
+  playerMinDistance = 200;
   playerIsWithMerchant = false;
 
   // velocidad de movimiento del mercader
-  public speed: number = 50;
+  public speed: number = 60;
+  defaultSpeed: number = 60;
+  speedWithPlayer: number = 10;
 
   // emitter de particulas tras el mercader
   trailEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
 
   // reference to the player, see if it is colliding still with the merchant 
   player: Player
+
+  // indicador visual de que se puede interactuar con el mercader
+  interactionSign: Phaser.GameObjects.Text
+  interactionSignBackgroundDefault = "#2201fc"
+  interactionSignBackgroundPressed = "#fc01fc"
+
+  // pulsar tecla M para interactuar con mercader
+  private mKey = "keydown-M";
+
+  // true cuando el jugador: está en rango de mercader Y pulsa la tecla
+  playerHasInteracted = false
+
+  // el gestor gordote
+  fatManager: FatManager;
 
   constructor(scene: Phaser.Scene,
     x: number,
@@ -32,6 +49,7 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
     scene.physics.add.existing(this);
     this.setDisplaySize(30, 30);
 
+    this.fatManager = (scene as GameScene).fatManager;
     this.player = player;
 
     // añadir pedos cósmicos al mercader
@@ -47,35 +65,44 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
     // genera nueva zona de destino inicial
     this.onDestinationReached();
 
-    // añadir zona con la que colisiona el jugador
-    this.playerCollideZone = new Phaser.GameObjects.Zone(this.scene, x, y, this.playerCollideSize, this.playerCollideSize);
-    this.scene.add.existing(this.playerCollideZone);
-    this.scene.physics.add.existing(this.playerCollideZone);
-
-    // habilitar interacción con mercader al acercarse lo suficiente
-    scene.physics.add.overlap(player, this.playerCollideZone, (player, merchantZone) => {
-      if (!this.playerIsWithMerchant) {
-      this.onPlayerReachedMerchant();
-      }
+    // pulsar tecla para interactuar con mercader
+    scene.input.keyboard?.on(this.mKey, (event: any) => {
+      console.log("M key pressed", event)
+      this.onPlayerWantsToTrade();
     })
+    
   }
 
   update() {
-    // keep trying to reach destionation
+    // seguir viajando al siguiente destino
     this.scene.physics.moveToObject(this, this.destinationZone, this.speed)
 
-    // set trail at merchant's location
+    // mover el trail
     this.trailEmitter?.setX(this.x);
     this.trailEmitter?.setY(this.y);
 
-    // mover la zona de colision con el jugador
-    this.playerCollideZone.setX(this.x);
-    this.playerCollideZone.setY(this.y);
+    // cuando el jugador se acerca al merchant, habilitar interaccion
+    let distanceFromPlayer = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.x, this.y)
 
-    // después de entrar en la zona del mercader, chequear si el player sigue ahí
+    // si el jugador no había llegado y ahora entra en la zona, trigger
+    if (distanceFromPlayer <= this.playerMinDistance && !this.playerIsWithMerchant) {
+      this.onPlayerReachedMerchant();
+    }
+
+    // si el jugador estaba con el merchant y se va, trigger
+    if (distanceFromPlayer > this.playerMinDistance && this.playerIsWithMerchant) {
+      this.onPlayerLeftMerchant();
+    }
+
+
+    // cuando el jugador está en rango del mercader
     if (this.playerIsWithMerchant) {
-      if (!this.player.body?.embedded) {
-        this.onPlayerLeftMerchant();
+
+      // cuando el player está en rango, y se muestra indicador, moverlo con el mercader
+      if (this.interactionSign) {
+        let newInteractionSignCoords = this.getInteractionSignCoords(this.x, this.y);
+        this.interactionSign.setX(newInteractionSignCoords[0])
+        this.interactionSign.setY(newInteractionSignCoords[1])
       }
     }
   }
@@ -156,19 +183,73 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
    * Callback cuando el jugador ha llegado al mercader
    */
   onPlayerReachedMerchant() {
-    this.playerIsWithMerchant = true
     console.log("LLEGASTE AL MERCADER!!")
+    this.playerIsWithMerchant = true
+
+    // reducir velocidad cuando le encuentra el jugador
+    this.speed = this.speedWithPlayer;
+
+
+
+    // mostrar que se puede interactuar
+    this.showInteraction();
   }
 
   /**
    * Callback cuando el jugador deja la zona del mercader
    */
   onPlayerLeftMerchant() {
+    console.log("por qué te vas? :(")
     this.playerIsWithMerchant = false
-        console.log("TE FUISTE!!")
 
+    // restaurar velocidad cuando player se va 
+    this.speed = this.defaultSpeed;
+
+    // no mostrar interaccion cuando el jugador se aleja
+    this.hideInteraction();
+    this.playerHasInteracted = false
+  }
+
+  onPlayerWantsToTrade() {
+    if (this.playerIsWithMerchant && !this.playerHasInteracted) {
+      this.playerHasInteracted = true
+      console.log("MERCADEA CONMIGO!!!")
+      this.interactionSign?.setBackgroundColor(this.interactionSignBackgroundPressed)
+      this.fatManager.commitCoinsToMerchant();
+      this.speed = this.defaultSpeed;
+    }
+  }
+
+  /**
+   * Muestra visualmente que se puede interactuar con el mercader
+   */
+  showInteraction() {
+    let signCoordinates = this.getInteractionSignCoords(this.x, this.y)
+    this.interactionSign = this.scene.add.text(signCoordinates[0], signCoordinates[1], 'M', {
+      fontSize: '20px',
+      color: '#ffffff',
+      align: 'center',
+      fixedWidth: 30,
+      backgroundColor: this.interactionSignBackgroundDefault
+    }).setPadding(2).setOrigin(0.5);
+  }
+
+  /**
+   * Dejar de mostrar que se puede interactuar con el mercader
+   */
+  hideInteraction() {
+    this.interactionSign.destroy();
+  }
+
+  /**
+   * Colocar el simbolo que señaliza que se puede interactuar con el mercader en funcion de la localización del mercader
+   */
+  getInteractionSignCoords(merchantX: number, merchantY: number): [number, number] {
+    var signX = merchantX
+    var signY = merchantY - this.playerMinDistance / 4
+
+    return [signX, signY]
   }
 
 }
-
 

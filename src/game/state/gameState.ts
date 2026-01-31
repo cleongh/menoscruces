@@ -1,3 +1,5 @@
+import { GameScene } from "../scenes/GameScene";
+
 export interface IBaseCoin {
   readonly kind: "passive";
   readonly texture: string;
@@ -8,9 +10,9 @@ export interface IBaseCoin {
 
 export interface IActiveCoin extends Omit<IBaseCoin, "kind"> {
   readonly kind: "active";
-  readonly onEffectTick: () => void;
-  readonly onEffectStart: () => void;
-  readonly onEffectEnd: () => void;
+  readonly onEffectTick: (scene: GameScene) => void;
+  readonly onEffectStart: (scene: GameScene) => void;
+  readonly onEffectEnd: (scene: GameScene) => void;
 }
 
 export type Coin = IBaseCoin | IActiveCoin;
@@ -76,7 +78,7 @@ export interface BaseStats {
    */
   regenBase: number;
   /**
-   * Rango base del personaje
+   * Rango base del personaje. Valor entre 0 y X, 1 es el balor base. 0.5 indica que el rango es la mitad. Y 2 que es el doble de rango
    */
   rangeBase: number;
 

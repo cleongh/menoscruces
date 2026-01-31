@@ -1,5 +1,5 @@
 import { BigCoin } from "../sceneObjects/BigCoin";
-import { coinDefinitions } from "../sceneObjects/coinDefinitions";
+import { GameScene } from "../scenes/GameScene";
 import AbstractEnemy from "./AbstractEnemy";
 
 export default class Boss extends AbstractEnemy {
@@ -21,7 +21,7 @@ export default class Boss extends AbstractEnemy {
       this.scene,
       this.x,
       this.y,
-      coinDefinitions[0].availableCoins[0],
+      (this.scene as GameScene).fatManager.getRandomCoinFromCurrent(),
     );
 
     (this.scene as any).coins.add(coin, true);
