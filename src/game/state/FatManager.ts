@@ -1,3 +1,6 @@
+import { enemyWaves } from "../enemies/enemyWave";
+import { BigCoinData } from "../sceneObjects/BigCoin";
+import { coinDefinitions } from "../sceneObjects/coinDefinitions";
 import { GameScene } from "../scenes/GameScene";
 import { BaseStats, Coin, GameState } from "./GameState";
 
@@ -113,6 +116,22 @@ export class FatManager {
     this.scene.events.emit("local-round-changed", this.gameState.localRound);
     this.gameState.globalRound += 1;
     this.scene.events.emit("global-round-changed", this.gameState.globalRound);
+  }
+
+  /**
+   * Consigue una definición aleatoria de moneda en base a la ronda actual
+   */
+  public getRandomCoinFromCurrent(): BigCoinData {
+    // cada Tier de monedas tiene asociado un conjunto de oleadas de enemigos (de momento, uniforme)
+    const wavesPerTier = Math.ceil(enemyWaves.length / coinDefinitions.length);
+    const currentTier = Math.min(
+      Math.floor((this.gameState.globalRound - 1) / wavesPerTier),
+      coinDefinitions.length - 1,
+    );
+    const currentTierCoins = coinDefinitions[currentTier];
+    return currentTierCoins.availableCoins[
+      Math.floor(Math.random() * currentTierCoins.availableCoins.length)
+    ];
   }
 }
 
