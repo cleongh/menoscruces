@@ -35,6 +35,11 @@ export class Preloader extends Scene {
       frameWidth: 32,
       frameHeight: 32,
     });
+
+    this.load.spritesheet("flares", "particles/flares.png", {
+      frameWidth: 128, 
+      frameHeight: 128
+    });
   }
 
   create() {

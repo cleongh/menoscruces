@@ -4,8 +4,6 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
   worldWidth = 700;
   worldHeight = 700;
 
-  // TODO add emitter
-
   destinationZone: Phaser.GameObjects.Zone 
   zoneWidth = 10;
   zoneHeigth = 10
@@ -14,11 +12,23 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
   hasReachedDestination = false;
 
   public speed: number = 100;
+
+  trailEmitter: Phaser.GameObjects.Particles.ParticleEmitter
   
   constructor(scene: Phaser.Scene, x: number, y: number) {
-    super(scene, x, y, "coin");
+    super(scene, x, y, "flares");
     scene.add.existing(this);
     scene.physics.add.existing(this);
+    this.setDisplaySize(30, 30);
+
+    this.trailEmitter = this.scene.add.particles(0, 0, 'flares', {
+    lifespan: 2000,
+    scale: { start: 0.2, end: 0 },
+    blendMode: 'ADD',
+    emitting: true,
+    speed: { min: this.speed - 20 , max: this.speed + 20 },
+    angle: 0
+  });
 
     this.onDestinationReached();
   }
@@ -26,8 +36,11 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
   update() {
     // keep trying to reach destionation
     this.scene.physics.moveToObject(this, this.destinationZone, this.speed)
-  }
 
+    // set trail at merchant's location
+    this.trailEmitter?.setX(this.x);
+    this.trailEmitter?.setY(this.y);
+  }
 
     /**
    * When destination is reached, stop checking, generate new destination, set collider for it
@@ -51,8 +64,24 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
     }
   )
 
+  // update particle emitter angle when destination changes
+  this.updateParticleEmitter();
+
   this.hasReachedDestination = false
   }
+}
+
+/**
+ * Updates the particle emitter trailing from player to match its path
+ */
+updateParticleEmitter() {
+  // angle between merechant and destination, 
+  let trailAngleRadians = Phaser.Math.Angle.Between(this.destinationZone.x, this.destinationZone.y, this.x, this.y);
+
+  // stupid unit transformation
+  let trailAngleDegrees = trailAngleRadians * 180 /  Math.PI;
+
+  this.trailEmitter.setAngle(trailAngleDegrees);
 }
 
   /**
@@ -84,8 +113,6 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
     this.scene.add.existing(zone);
     this.scene.physics.add.existing(zone);
   }
-
-
 
 }
 
