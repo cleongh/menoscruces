@@ -1,3 +1,4 @@
+import { GameScene } from "../scenes/GameScene";
 import { Coin } from "../state/GameState";
 import { CoinInventoryUI } from "./CoinInventoryUI";
 
@@ -15,7 +16,7 @@ export class InventoryUI extends Phaser.GameObjects.Container {
   // UI Text elements
   private localCounterText: Phaser.GameObjects.Text;
 
-  constructor(scene: Phaser.Scene, x: number, y: number) {
+  constructor(scene: GameScene, x: number, y: number) {
     super(scene, x, y);
 
     // Ajuste para que la UI se quede fija en la pantalla aunque se mueva la cámara
@@ -58,22 +59,25 @@ export class InventoryUI extends Phaser.GameObjects.Container {
 
     scene.add.existing(this);
 
-    scene.events.on("big-coin-collected", (coinData: Coin) => {
+    scene.typedEvents.on("big-coin-collected", (coinData: Coin) => {
       this.localCoins.addItem(coinData.texture);
+    });
+
+    scene.typedEvents.on("coin-commited", (coinData: Coin) => {
       this.permanentCoins.addItem(coinData.texture);
     });
 
-    scene.events.on("coin-committed", (coinData: Coin) => {
-      this.permanentCoins.addItem(coinData.texture);
+    scene.typedEvents.on("local-coins-changed", (newValue) => {
+      this.updateLocalCounter(newValue);
     });
 
-    scene.events.on("coin-collected", () => {
-      this.updateLocalCounter(1);
+    scene.typedEvents.on("current-coins-reset", () => {
+      this.localCoins.clearInventory();
     });
   }
 
   private updateLocalCounter(amount: number) {
-    this.localCoinCount += amount;
+    this.localCoinCount = amount;
     this.localCounterText.setText(`Monedas Actuales: ${this.localCoinCount}`);
 
     this.scene.tweens.add({

@@ -48,7 +48,7 @@ export class FatManager {
       coinData.onEffectStart(this.scene);
     }
 
-    this.scene.events.emit("big-coin-collected", coinData);
+    this.scene.typedEvents.emit("big-coin-collected", coinData);
   }
 
   public tickActiveCoins(): void {
@@ -88,34 +88,52 @@ export class FatManager {
     const coinsToAdd =
       Math.ceil(Math.random() * (maxCoins - minCoins + 1)) + minCoins;
     this.gameState.localCoins += coinsToAdd;
-    this.scene.events.emit("local-coins-changed", this.gameState.localCoins);
+    this.scene.typedEvents.emit(
+      "local-coins-changed",
+      this.gameState.localCoins,
+    );
   }
 
   public commitCoinsToMerchant(): void {
     this.gameState.merchantCoins += this.gameState.localCoins;
 
     this.gameState.localCoins = 0;
-    this.scene.events.emit("local-coins-changed", this.gameState.localCoins);
+    this.scene.typedEvents.emit(
+      "local-coins-changed",
+      this.gameState.localCoins,
+    );
 
     this.gameState.localRound = 1;
-    this.scene.events.emit("local-round-changed", this.gameState.localRound);
+    this.scene.typedEvents.emit(
+      "local-round-changed",
+      this.gameState.localRound,
+    );
 
     this.gameState.globalRound += 1;
-    this.scene.events.emit("global-round-changed", this.gameState.globalRound);
+    this.scene.typedEvents.emit(
+      "global-round-changed",
+      this.gameState.globalRound,
+    );
 
     this.gameState.currentCoins.forEach((coin) => {
       this.gameState.permanentCoins.push(coin);
-      this.scene.events.emit("coin-commited", coin);
+      this.scene.typedEvents.emit("coin-commited", coin);
     });
     this.gameState.currentCoins = [];
-    this.scene.events.emit("current-coins-reset");
+    this.scene.typedEvents.emit("current-coins-reset");
   }
 
   public increaseRound() {
     this.gameState.localRound += 1;
-    this.scene.events.emit("local-round-changed", this.gameState.localRound);
+    this.scene.typedEvents.emit(
+      "local-round-changed",
+      this.gameState.localRound,
+    );
     this.gameState.globalRound += 1;
-    this.scene.events.emit("global-round-changed", this.gameState.globalRound);
+    this.scene.typedEvents.emit(
+      "global-round-changed",
+      this.gameState.globalRound,
+    );
   }
 
   /**

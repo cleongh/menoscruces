@@ -9,6 +9,7 @@ import { Projectile, ProjectileEnemy } from "../enemies/ProjectileEnemy";
 import Landmark from "./Landmark";
 import { EnemySpawner } from "../enemies/EnemySpawner";
 import { enemyWaves } from "../enemies/enemyWave";
+import { TypedEventEmitter } from "../state/typedEvents";
 
 export class GameScene extends Phaser.Scene {
   private player: Player;
@@ -22,6 +23,7 @@ export class GameScene extends Phaser.Scene {
   private width: number = 2000;
   private height: number = 2000;
   private music: any;
+  public typedEvents: TypedEventEmitter;
 
   public fatManager: FatManager;
   private enemySpawner: EnemySpawner;
@@ -29,6 +31,7 @@ export class GameScene extends Phaser.Scene {
   constructor() {
     super("GameScene");
     this.fatManager = new FatManager(this, baseStats);
+    this.typedEvents = new TypedEventEmitter();
   }
 
   create() {
