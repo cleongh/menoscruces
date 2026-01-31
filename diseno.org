@@ -1,5 +1,11 @@
 #+title: Menos cruces (aka backflips vs portaviones)
 
+* índice
+
+- [[conceptos-generales][conceptos generales]]
+- [[elementos-de-juego][elementos de juego]]
+- [[screen-flow][screen-flow]]
+
 * conceptos generales
 ** dinámica global
 
@@ -22,9 +28,7 @@ Vampire survivors, top-down 2D. se acumulan "monedas", que son buffs temporales 
 Todas las distancias se definen aquí en función de $L$, que es la anchura del jugador. El jugador mide $L\times L$.
 
 ** player
-:PROPERTIES:
-:CUSTOM_ID: jugador
-:END:
+
 *** stats
 
 los stats son realmente *funciones*, no variables
@@ -50,7 +54,7 @@ Genera un área rectangular de daño (WxH). Está activa durante D segundos y lu
 ** monedas y buffs
 *** Monedas pequeñas
 
-Simplemente son un contador, hay un porcentaje global de "enemigo deja moneda". Al cogerlas por overlap se suma 1 a "monedas" (de [[#jugador][player]])
+Simplemente son un contador, hay un porcentaje global de "enemigo deja moneda". Al cogerlas por overlap se suma 1 a "monedas" (de [[#player][player]])
 
 *** monedas "grandes"
 :PROPERTIES:
