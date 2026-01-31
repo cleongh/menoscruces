@@ -15,12 +15,7 @@ export class FatManager {
       permanentCoins: [],
       currentCoins: [],
     };
-
     this.scene = gameScene;
-  }
-
-  public registerPermanentCoin(coin: Coin): void {
-    this.gameState.permanentCoins.push(coin);
   }
 
   public registerNewLocalCoin(coinData: Coin): void {
@@ -48,10 +43,34 @@ export class FatManager {
   }
 
   public pickCoin(): void {
-    this.gameState.localCoins += 1;
-    this.scene.events.emit("coin-collected");
+    const transformedState = this.getTransformedState();
+    const minCoins = transformedState.globalRound;
+    const maxCoins = transformedState.globalRound + transformedState.localRound;
+    const coinsToAdd =
+      Math.ceil(Math.random() * (maxCoins - minCoins + 1)) + minCoins;
+    this.gameState.localCoins += coinsToAdd;
+    this.scene.events.emit("local-coins-changed", this.gameState.localCoins);
   }
-  
+
+  public commitCoinsToMerchant(): void {
+    this.gameState.merchantCoins += this.gameState.localCoins;
+
+    this.gameState.localCoins = 0;
+    this.scene.events.emit("local-coins-changed", this.gameState.localCoins);
+
+    this.gameState.localRound = 1;
+    this.scene.events.emit("local-round-changed", this.gameState.localRound);
+
+    this.gameState.globalRound += 1;
+    this.scene.events.emit("global-round-changed", this.gameState.globalRound);
+
+    this.gameState.currentCoins.forEach((coin) => {
+      this.gameState.permanentCoins.push(coin);
+      this.scene.events.emit("coin-commited", coin);
+    });
+    this.gameState.currentCoins = [];
+    this.scene.events.emit("current-coins-reset");
+  }
 }
 
 export const baseStats: BaseStats = {
