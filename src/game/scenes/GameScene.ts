@@ -5,8 +5,10 @@ import Boss from "../enemies/Boss";
 import AbstractEnemy from "../enemies/AbstractEnemy";
 import { AbstractCoin } from "../sceneObjects/AbstractCoin";
 import { baseStats, FatManager } from "../state/FatManager";
-import {Projectile, ProjectileEnemy} from "../enemies/ProjectileEnemy"
+import { Projectile, ProjectileEnemy } from "../enemies/ProjectileEnemy";
 import Landmark from "./Landmark";
+import { EnemySpawner } from "../enemies/EnemySpawner";
+import { enemyWaves } from "../enemies/enemyWave";
 
 export class GameScene extends Phaser.Scene {
   private player: Player;
@@ -22,6 +24,7 @@ export class GameScene extends Phaser.Scene {
   private music: any;
 
   public fatManager: FatManager;
+  private enemySpawner: EnemySpawner;
 
   constructor() {
     super("GameScene");
@@ -35,12 +38,12 @@ export class GameScene extends Phaser.Scene {
 
     this.projectiles = this.physics.add.group({
       classType: Projectile,
-    })
+    });
 
     this.landmarks = this.physics.add.staticGroup({
       classType: Landmark,
-    })
-    
+    });
+
     this.player = new Player(this, 0, 0, this.enemies);
 
     this.merchant = new Merchant(this, 0, 0, this.player);
@@ -49,7 +52,6 @@ export class GameScene extends Phaser.Scene {
       classType: AbstractCoin,
     });
 
-    
     // recoger moneda al tocarla
     this.physics.add.collider(this.player, this.coins, (_, coin) => {
       const c = coin as AbstractCoin;
@@ -57,21 +59,34 @@ export class GameScene extends Phaser.Scene {
     });
 
     this.physics.add.collider(this.player, this.landmarks);
-    
-    this.physics.add.overlap(this.player, this.projectiles, (player, projectile) =>{
-      const pr = projectile as Projectile;
-      const pl = player as Player;
-      
-      pl.receiveDamage(pr.damage);
-      pr.destroy();
-    })
-    
-    this.time.addEvent({
-      delay: 1000,
-      callback: this.spawnEnemy,
-      callbackScope: this,
-      loop: true,
-    });
+
+    this.physics.add.overlap(
+      this.player,
+      this.projectiles,
+      (player, projectile) => {
+        const pr = projectile as Projectile;
+        const pl = player as Player;
+
+        pl.receiveDamage(pr.damage);
+        pr.destroy();
+      },
+    );
+
+    this.enemySpawner = new EnemySpawner(
+      this,
+      enemyWaves,
+      this.player,
+      this.enemies,
+    );
+    this.enemySpawner.updateCenter(0, 0);
+    const outerRadius = Math.max(
+      this.game.config.height as number,
+      this.game.config.width as number,
+    );
+    const innerRadius = outerRadius * 0.75;
+    this.enemySpawner.innerRadius = innerRadius;
+    this.enemySpawner.outerRadius = outerRadius;
+    this.enemySpawner.setPaused(false);
 
     this.cursors = this.input.keyboard!.createCursorKeys();
 
@@ -93,28 +108,14 @@ export class GameScene extends Phaser.Scene {
       delay: 0,
     };
     this.music = this.sound.add("music", config);
-    this.music.play()
-    
+    this.music.play();
+
     this.tweens.add({
       targets: this.music,
-      volume: { from: 0, to: .5 }, 
+      volume: { from: 0, to: 0.5 },
       duration: 3000,
-      ease: 'Linear'
+      ease: "Linear",
     });
-  }
-
-  spawnEnemy() {
-    const angle = Math.random() * Math.PI * 2;
-    const x = this.player.x + Math.cos(angle) * 500;
-    const y = this.player.y + Math.sin(angle) * 500;
-
-    if (Phaser.Math.Between(0, 1) === 0) {
-      const enemy = new Boss(this, x, y);
-      this.enemies.add(enemy, true);
-    } else {
-      const enemy = new ProjectileEnemy(this, x, y);
-      this.enemies.add(enemy, true);
-    }
   }
 
   update() {
@@ -138,9 +139,8 @@ export class GameScene extends Phaser.Scene {
     this.merchant.update();
   }
 
-
-  createLandmarks(numLandMarks: number = 10){
-    for(let i = 0; i < numLandMarks; ++i){
+  createLandmarks(numLandMarks: number = 10) {
+    for (let i = 0; i < numLandMarks; ++i) {
       let x = Phaser.Math.Between(0, this.width);
       let y = Phaser.Math.Between(0, this.height);
 
