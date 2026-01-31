@@ -50,6 +50,12 @@ export class Button {
         this.label.setVisible(false);
     }
 
+    deactivate() {
+        this.bg.setAlpha(0.5);
+        this.label.setAlpha(0.5);
+        this.bg.disableInteractive();
+    }
+
     show() {
         this.bg.setVisible(true);
         this.label.setVisible(true);
