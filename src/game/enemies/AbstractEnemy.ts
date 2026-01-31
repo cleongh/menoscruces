@@ -12,10 +12,10 @@ interface EnemyData {
 export default abstract class AbstractEnemy
   extends Phaser.Physics.Arcade.Sprite
 {
-  private health: number;
-  private speed: number;
-  private attack: number;
-  private distanceAttack: number;
+  protected health: number;
+  protected speed: number;
+  protected attack: number;
+  protected distanceAttack: number;
 
   private canMove: boolean;
   private stunTime: number;
