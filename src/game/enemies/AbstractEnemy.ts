@@ -34,6 +34,7 @@ export default abstract class AbstractEnemy
     this.stunTime = 200;
 
     this.canRecieveDamage = true;
+    this.play(data.sprite);
   }
 
   update(player: Player){
@@ -41,6 +42,11 @@ export default abstract class AbstractEnemy
       this.followPlayer(player);
     } else {
       this.body!.stop();
+    }
+    if (this.body && this.body.velocity.x<0) {
+      this.setFlipX(true);
+    } else {
+      this.setFlipX(false);
     }
   }
 
