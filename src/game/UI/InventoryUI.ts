@@ -1,8 +1,9 @@
+import { Coin } from "../state/GameState";
+
 interface InventoryItem {
-  sprite: Phaser.GameObjects.Sprite;
+  texture: Phaser.GameObjects.Sprite;
   label: Phaser.GameObjects.Text;
-  value: number;
-  statType: string;
+  value: string;
 }
 
 export class InventoryUI extends Phaser.GameObjects.Container {
@@ -14,16 +15,17 @@ export class InventoryUI extends Phaser.GameObjects.Container {
     super(scene, x, y);
     scene.add.existing(this);
 
-    scene.events.on("coin-collected", (coinData: any) => {
-      this.addItem(coinData.texture, coinData.value, coinData.stat);
+    scene.events.on("big-coin-collected", (coinData: Coin) => {
+      this.addItem(coinData.texture, coinData.kind);
     });
   }
 
-  public addItem(texture: string, value: number, stat: string) {
-    // 1. Efecto cola: si el inventario está lleno, eliminar el más antiguo
+  public addItem(texture: string, value: string) {
+    // 1. Efecto cola: si el inventario está lleno, eliminar el más antiguo1
+    console.log("Adding item to inventory:", texture, value);
     if (this.items.length >= this.maxSlots) {
       const oldest = this.items.shift();
-      oldest?.sprite.destroy();
+      oldest?.texture.destroy();
       oldest?.label.destroy();
     }
 
@@ -38,7 +40,7 @@ export class InventoryUI extends Phaser.GameObjects.Container {
       })
       .setOrigin(0.5);
 
-    const newItem: InventoryItem = { sprite, label, value, statType: stat };
+    const newItem: InventoryItem = { texture: sprite, label, value };
 
     // 3. añader a la lista y al contenedor
     this.items.push(newItem);
@@ -56,7 +58,7 @@ export class InventoryUI extends Phaser.GameObjects.Container {
 
       // Tween para efecto de slide
       this.scene.tweens.add({
-        targets: [item.sprite, item.label],
+        targets: [item.texture, item.label],
         x: posX,
         duration: 200,
         ease: "Back.easeOut",
@@ -66,7 +68,7 @@ export class InventoryUI extends Phaser.GameObjects.Container {
 
   public clearInventory() {
     this.items.forEach((item) => {
-      item.sprite.destroy();
+      item.texture.destroy();
       item.label.destroy();
     });
     this.items = [];

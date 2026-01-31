@@ -27,6 +27,7 @@ export class FatManager {
     // Las monedas van: [nueva, vieja1, vieja2, vieja3, vieja4]
     this.gameState.currentCoins.pop();
     this.gameState.currentCoins = [coinData, ...this.gameState.currentCoins];
+    this.scene.events.emit("big-coin-collected", coinData);
   }
 
   public getTransformedState(): GameState {

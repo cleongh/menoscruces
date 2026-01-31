@@ -24,7 +24,7 @@ export default class Boss extends AbstractEnemy {
         name: "+10 Extra Health",
         description: "Increases your maximum health by 10 points.",
         kind: "passive",
-        texture: "coin-health",
+        texture: "coin",
         modifier: (state) => {
           const newMaxHealth = state.baseStats.healthBase + 10;
           return {
@@ -40,7 +40,7 @@ export default class Boss extends AbstractEnemy {
         name: "-10 Extra Health",
         description: "Decreases your maximum health by 10 points.",
         kind: "passive",
-        texture: "coin-health",
+        texture: "coin",
         modifier: (state) => {
           const newMaxHealth = state.baseStats.healthBase - 10;
           return {
