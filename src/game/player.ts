@@ -19,7 +19,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
   private health: number;
   private cooldownDamage: number = 200;
-  private canRecieveDamage:boolean;
+  private canRecieveDamage: boolean;
+
+  private attackOffset: number;
 
   constructor(
     scene: Phaser.Scene,
@@ -28,7 +30,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     enemyGroup: Phaser.Physics.Arcade.Group,
   ) {
     super(scene, x, y, "player");
-    this.scale = 1/4;
+    this.scale = 1 / 4;
     this.setTint(0xb8fb27)
     scene.add.existing(this);
     scene.physics.add.existing(this);
@@ -67,6 +69,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     });
 
     this.canRecieveDamage = true;
+
+    this.attackOffset = this.width / 8;
   }
 
   protected preUpdate(time: number, delta: number): void {
@@ -115,14 +119,15 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.attackCollider.setX(
       this.x +
-        this.lastDir.x * (this.width * this.scale / 2 + this.attackCollider.width * this.attackCollider.scale / 2),
+      this.lastDir.x * (-this.attackOffset + this.width * this.scale / 2 + this.attackCollider.width * this.attackCollider.scale / 2),
     );
     this.attackCollider.setY(this.y);
+    this.attackCollider.setFlipX(this.lastDir.x < 0);
   }
 
   onAttack() {
     (this.attackCollider.body as Phaser.Physics.Arcade.Body).enable = true;
-    
+
     this.attackCollider.active = true;
     this.attackCollider.visible = true;
     this.attackCollider.play("gomilla", true);
@@ -142,13 +147,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   public receiveDamage(damage: number) {
-    if(!this.canRecieveDamage)
+    if (!this.canRecieveDamage)
       return;
-    
+
     this.canRecieveDamage = false;
     this.scene.time.addEvent({
       delay: this.cooldownDamage,
-      callback: ()=>{this.canRecieveDamage = true;},
+      callback: () => { this.canRecieveDamage = true; },
       callbackScope: this,
     })
 
@@ -161,7 +166,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  heal(){
+  heal() {
     const fatManager = (this.scene as GameScene).fatManager;
     this.health = this.health + fatManager.getTransformedState().baseStats.regenBase < fatManager.getTransformedState().baseStats.healthBase ? this.health + fatManager.getTransformedState().baseStats.regenBase : fatManager.getTransformedState().baseStats.healthBase
   }

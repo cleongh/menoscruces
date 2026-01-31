@@ -61,4 +61,6 @@ export const baseStats: BaseStats = {
   healthBase: 100,
   regenBase: 1,
   rangeBase: 50,
+  enemyDamageBase: 20,
+  enemySpeedBase: 80,
 };
