@@ -32,9 +32,15 @@ export class Preloader extends Scene {
     this.load.image("big-coin", "placeholder/big-coin.png");
     this.load.image("projectileEnemy", "placeholder/projectileEnemy.jpg");
     this.load.image("projectile", "placeholder/projectile.jpg");
+    this.load.image("landmark", "placeholder/landmark.jpg");
 
     this.load.spritesheet("player", "player.png", {
       frameWidth: 256,
+      frameHeight: 256,
+    });
+
+    this.load.spritesheet("gomilla", "weapons/gomilla.png", {
+      frameWidth: 512,
       frameHeight: 256,
     });
 
@@ -59,6 +65,13 @@ export class Preloader extends Scene {
     this.anims.create({
       key: "idle",
       frames: this.anims.generateFrameNumbers("player", { start: 0, end: 0 }),
+    });
+
+    this.anims.create({
+      key: "gomilla",
+      frames: this.anims.generateFrameNumbers("gomilla", { start: 0, end: 1 }),
+      frameRate: 10,
+      repeat: 5
     });
     //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
     this.scene.start("MainMenu");
