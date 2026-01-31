@@ -20,7 +20,6 @@ export class GameScene extends Phaser.Scene {
   create() {
     this.enemies = this.physics.add.group({
       classType: AbstractEnemy,
-      runChildUpdate: true,
     });
     this.player = new Player(this, 0, 0, this.enemies);
 
@@ -28,7 +27,6 @@ export class GameScene extends Phaser.Scene {
 
     this.coins = this.physics.add.group({
       classType: PickableCoin,
-      runChildUpdate: true,
     });
 
     // recoger moneda al tocarla
@@ -73,7 +71,7 @@ export class GameScene extends Phaser.Scene {
     this.player.update(this.cursors);
 
     this.enemies.getChildren().forEach((enemy: any) => {
-      enemy.followPlayer(this.player);
+      enemy.update(this.player);
     });
 
     this.merchant.update();
