@@ -96,6 +96,13 @@ Hay una una función $f(número\_ronda\_local, número\_ronda\_global)$ que, dad
 ]
   #+end_src
 
+Y se espera que la posición de cada enemigo sea aleatoria con una función que, dada una distancia mínima (que esté fuera de pantalla) y una máxima (más fuera aún) encuentre un punto aleatorio en distribución uniforme para hacer el spawn de cada enemigo.
+
+
+#+DOWNLOADED: screenshot @ 2026-01-31 11:10:47
+[[file:area_spawn.png]]
+
+
 # | ! | ronda | vida-inicial | enemigos | dano_medio_enemigo | probabilidad_dano_por_enemigo | dano_esperado |
 # |---+-------+--------------+----------+--------------------+-------------------------------+---------------|
 # | # |     1 |            5 |      100 |                1.0 |                        0.0001 |          0.01 |
