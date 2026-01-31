@@ -12,7 +12,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   private sKey: Phaser.Input.Keyboard.Key;
   private wKey: Phaser.Input.Keyboard.Key;
 
-  private attackLength: number = 200;
+  private attackLength: number = 300;
   private attackCooldown: number = 1000;
   private attackTime: number = 500;
   private attackCollider: Phaser.GameObjects.Zone;
@@ -29,7 +29,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     enemyGroup: Phaser.Physics.Arcade.Group,
   ) {
     super(scene, x, y, "player");
-    this.scale = 1/2;
+    this.scale = 1/4;
     this.setTint(0xb8fb27)
     scene.add.existing(this);
     scene.physics.add.existing(this);
@@ -43,7 +43,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.sKey = scene.input.keyboard!.addKey("s");
     this.wKey = scene.input.keyboard!.addKey("w");
 
-    this.attackCollider = scene.add.zone(x, y, this.attackLength, this.height);
+    this.attackCollider = scene.add.zone(x, y, this.attackLength * this.scale, this.height * this.scale / 2);
     this.attackCollider.setOrigin(0.5, 0.5);
     scene.physics.add.existing(this.attackCollider);
     scene.physics.add.overlap(this.attackCollider, enemyGroup, (p, e) => {
@@ -105,7 +105,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.attackCollider.setX(
       this.x +
-        this.lastDir.x * (this.width / 2 + this.attackCollider.width / 2),
+        this.lastDir.x * (this.width * this.scale / 2 + this.attackCollider.width / 2),
     );
     this.attackCollider.setY(this.y);
   }
