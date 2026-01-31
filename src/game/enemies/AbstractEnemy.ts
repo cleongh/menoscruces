@@ -37,7 +37,7 @@ export default abstract class AbstractEnemy
   }
 
   update(player: Player){
-    if(this.canMove){
+    if(this.canMove && Phaser.Math.Distance.Between(player.x, player.y, this.x, this.y) > this.distanceAttack){
       this.followPlayer(player);
     }
     else{
