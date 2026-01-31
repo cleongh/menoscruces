@@ -53,6 +53,8 @@ export class Preloader extends Scene {
       frameWidth: 128, 
       frameHeight: 128
     });
+
+    this.load.audio("music", "music/MainSongLoop.mp3");
   }
 
   create() {

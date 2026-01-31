@@ -19,6 +19,7 @@ export class GameScene extends Phaser.Scene {
   private coins: Phaser.Physics.Arcade.Group;
   private width: number = 2000;
   private height: number = 2000;
+  private music: any;
 
   public fatManager: FatManager;
 
@@ -81,6 +82,25 @@ export class GameScene extends Phaser.Scene {
     this.cameras.main.startFollow(this.player);
 
     this.createLandmarks();
+
+    const config = {
+      mute: false,
+      volume: 0,
+      rate: 1,
+      detune: 0,
+      seek: 0,
+      loop: true,
+      delay: 0,
+    };
+    this.music = this.sound.add("music", config);
+    this.music.play()
+    
+    this.tweens.add({
+      targets: this.music,
+      volume: { from: 0, to: .5 }, 
+      duration: 3000,
+      ease: 'Linear'
+    });
   }
 
   spawnEnemy() {
