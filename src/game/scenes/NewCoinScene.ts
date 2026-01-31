@@ -1,10 +1,12 @@
 import Phaser from "phaser";
+import { BigCoinData } from "../sceneObjects/BigCoin";
 import { Button } from "../UI/Button";
 
 export interface NewCoinSceneConfig {
+    // número de monedas disponible actualmente (no commiteadas)
+    currentCoins: number;
     // Aquí se pueden añadir configuraciones específicas para la escena de nueva moneda
-    headOption: string;
-    tailOption: string;
+    coinData: BigCoinData;
     /**
      * Callback a ser llamado cuando se resuelva el lanzamiento de moneda, con los datos
      * del resultado del lanzamiento.
@@ -19,13 +21,13 @@ export interface NewCoinSceneConfig {
  * de esas que la cara te da buffo pero la cruz te putea
  */
 export class NewCoinScene extends Phaser.Scene {
-
     headTexture: string; //Textura para la cara de la moneda
     tailTexture: string; //Textura para la cruz de la moneda
     headInfo: string; // Info para la cara de la moneda
     tailInfo: string; // Info para la cruz de la moneda
 
     bonusCoin: number; // cantidad de bonificador, monedas normales
+    passCost: number;
 
     leftCoin: Phaser.GameObjects.Sprite; // moneda que aparece en el lado izquierdo de la escena (cara)
     rightCoin: Phaser.GameObjects.Sprite; // moneda que aparece en el lado derecho de la escena (cruz)
@@ -49,10 +51,16 @@ export class NewCoinScene extends Phaser.Scene {
     init(config: NewCoinSceneConfig): void {
         this.headTexture = "coin_L";
         this.tailTexture = "coin_R";
-        this.headInfo = config.headOption || "Esto es un ejemplo de CARA de moneda";
-        this.tailInfo = config.tailOption || "Esto es un ejemplo de CRUZ de moneda";
+        this.headInfo =
+            config.coinData.option1.description ||
+            "Esto es un ejemplo de CARA de moneda";
+        this.tailInfo =
+            config.coinData.option2.description ||
+            "Esto es un ejemplo de CRUZ de moneda";
 
-        this.bonusCoin = 50350;
+        this.bonusCoin = config.currentCoins;
+
+        this.passCost = config.coinData.passCost;
 
         console.log(config.onCoinFlippedResult);
         this.callbackAtTheEnd = config.onCoinFlippedResult;
@@ -78,11 +86,19 @@ export class NewCoinScene extends Phaser.Scene {
     }
 
     create(): void {
-
         const width = this.scale.width;
         const height = this.scale.height;
 
-        const bgRect = this.add.rectangle(width / 2, height / 2, width * 0.9, height * 0.9, 0x000000, 0.8).setOrigin(0.5); // fondo semitransparente
+        const bgRect = this.add
+            .rectangle(
+                width / 2,
+                height / 2,
+                width * 0.9,
+                height * 0.9,
+                0x000000,
+                0.8,
+            )
+            .setOrigin(0.5); // fondo semitransparente
         bgRect.setStrokeStyle(4, 0xffffff);
 
         // Moneda a cada lado de la escena, necesitaré saber los efectos y la info (por ahora, asumo que viene en init).
@@ -102,24 +118,29 @@ export class NewCoinScene extends Phaser.Scene {
 
         this.elementsToHideOnRoll = [];
         // Botoncico de "roll", pos eso, lanza la monedica y a ver que sale
-        this.elementsToHideOnRoll.push(this.drawButton(
-            "ROLL",
-            width / 2,
-            height - 240,
-            btnWidth,
-            btnHeight,
-            this.rollCoin,
-        ));
+        this.elementsToHideOnRoll.push(
+            this.drawButton(
+                "ROLL",
+                width / 2,
+                height - 240,
+                btnWidth,
+                btnHeight,
+                this.rollCoin,
+            ),
+        );
 
         // Botoncico de "skip", descuenta monedas
-        this.elementsToHideOnRoll.push(this.drawButton(
+        let skipButton = this.drawButton(
             "SKIP",
             width / 2,
             height - 320,
             btnWidth,
             btnHeight,
             this.skipCoin,
-        ));
+        );
+        if (this.bonusCoin < this.passCost)
+            skipButton.deactivate()
+        this.elementsToHideOnRoll.push(skipButton);
 
         this.continueButton = this.drawButton(
             "CONTINUE",
@@ -127,7 +148,9 @@ export class NewCoinScene extends Phaser.Scene {
             height - 200,
             btnWidth,
             btnHeight,
-            () => { this.finishRollScene(this.skipResult, this.coinResult); }
+            () => {
+                this.finishRollScene(this.skipResult, this.coinResult);
+            },
         );
         this.continueButton.hide();
 
@@ -143,16 +166,10 @@ export class NewCoinScene extends Phaser.Scene {
     }
 
     /**
-     * 
-     */
-    private hideButtons(): void {
-
-    }
-
-    /**
      * Escribe el texto que representa la bonificación, las monedas normales que tiene el
      * jugador en el momento
      *
+     * También escrib el coste de pasar el lanzamiento
      **/
     private drawBonusCoinInfo(): void {
         this.bonusCoinText = this.add
@@ -167,6 +184,17 @@ export class NewCoinScene extends Phaser.Scene {
                 },
             )
             .setOrigin(0.5, 0);
+
+        this.add.text(
+            this.scale.width / 2,
+            this.scale.height * 0.16,
+            `Coste por omitir lanzamiento: ${this.passCost}`,
+            {
+                fontSize: "20px",
+                color: "#ffaaaa",
+                fontFamily: "Arial",
+            },
+        ).setOrigin(0.5, 0);
     }
 
     /**
@@ -195,11 +223,10 @@ export class NewCoinScene extends Phaser.Scene {
         button.setPointerUpCallback(() => {
             callbackFun.bind(this)();
 
-            this.elementsToHideOnRoll.forEach(element => {
-                element.hide()
+            this.elementsToHideOnRoll.forEach((element) => {
+                element.hide();
             });
         });
-
 
         return button;
     }
@@ -283,12 +310,16 @@ export class NewCoinScene extends Phaser.Scene {
      * Omite el lanzamiento de moneda, descuenta las monedas normales y llama al callback
      */
     private skipCoin(): void {
-        const costToSkip = 1000; // coste fijo por omitir el lanzamiento de moneda
-        this.bonusCoin -= costToSkip;
+        this.bonusCoin -= this.passCost;
         this.bonusCoinText.setText(`Monedas normales: ${this.bonusCoin}`);
 
         this.skipResult = true;
-
+        this.time.addEvent({
+            delay: 500,
+            callback: () => {
+                this.continueButton.show();
+            },
+        });
     }
 
     /**
@@ -297,7 +328,7 @@ export class NewCoinScene extends Phaser.Scene {
      */
     private rollCoin(): void {
         let isHeads = true;
-        let flipCount = Phaser.Math.Between(8, 15); // número aleatorio de "giros" completos
+        let flipCount = Phaser.Math.Between(8, 19); // número aleatorio de "giros" completos
         let totalDuration = 2000;
         let height = Phaser.Math.Between(200, 500);
         console.log(flipCount);

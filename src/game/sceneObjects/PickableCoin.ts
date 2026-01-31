@@ -1,3 +1,4 @@
+import { GameScene } from "../scenes/GameScene";
 import { AbstractCoin } from "./AbstractCoin";
 
 export class PickableCoin extends AbstractCoin {
@@ -9,7 +10,7 @@ export class PickableCoin extends AbstractCoin {
   }
 
   public handleCoinPickup(): void {
-    this.scene.events.emit("coin-collected");
+    (this.scene as GameScene).fatManager.pickCoin();
     this.destroy();
   }
 }
