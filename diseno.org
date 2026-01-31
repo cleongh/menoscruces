@@ -64,7 +64,7 @@ mismos parámetros que enemigo en línea recta. Pero cuando =distancia-a-persona
 
 El juego tiene un =int= que es el número de ronda actual local, que se resetea en el mercader. También hay un =int= de veces total, que son las rondas reales desde el principo.
 
-Hay una una función $f(número\_ronda\_local, número\_ronda_global)$ que, dada un número de ronda, devuelve el tiempo que falta para la siguiente ronda. Al cumplirse este, se suman los contadores de ronda y se hace un /spawn/.
+Hay una una función $f(número\_ronda\_local, número\_ronda\_global)$ que, dada un número de ronda, devuelve el tiempo que falta para la siguiente ronda. Al cumplirse este, se suman los contadores de ronda y se hace un /spawn/.
 
 * menú monedas
 :PROPERTIES:
@@ -77,12 +77,30 @@ Hay una una función $f(número\_ronda\_local, número\_ronda_global)$ que, dada
 
 
 * equilibrio  
-  
-| ! | ronda | vida-inicial | enemigos | dano_medio_enemigo | probabilidad_dano_por_enemigo | dano_esperado |
-|---+-------+--------------+----------+--------------------+-------------------------------+---------------|
-| # |     1 |            5 |      100 |                1.0 |                        0.0001 |          0.01 |
-| # |     2 |              |          |                    |                               |             0 |
-#+TBLFM: $7='(* $enemigos $dano_medio_enemigo $probabilidad_dano_por_enemigo);N
+
+** Spawn de enemigos
+
+- función de tiempo hasta próxima ronda: $time\_to\_next\_round(local\_round, global\_round)$, devuelve segundos
+- función de composición de ronda (cuántos enemigos de qué tipo): devuelve un JSON con:
+
+  #+begin_src json
+[
+  {
+    "tipo": "enemigo_tipo_1",
+    "cuántos": 24
+  },
+  {
+    "tipo": "enemigo_disparo_1",
+    "cuántos": 4
+  }
+]
+  #+end_src
+
+# | ! | ronda | vida-inicial | enemigos | dano_medio_enemigo | probabilidad_dano_por_enemigo | dano_esperado |
+# |---+-------+--------------+----------+--------------------+-------------------------------+---------------|
+# | # |     1 |            5 |      100 |                1.0 |                        0.0001 |          0.01 |
+# | # |     2 |              |          |                    |                               |             0 |
+# #+TBLFM: $7='(* $enemigos $dano_medio_enemigo $probabilidad_dano_por_enemigo);N
 
 
 =enemigos= es los enemigos que se esperan hasta maximizar sistema general de ronda (correlaciona con el tiempo de juego con "enemigos por segundo" )
