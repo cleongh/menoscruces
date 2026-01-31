@@ -62,7 +62,9 @@ mismos parámetros que enemigo en línea recta. Pero cuando =distancia-a-persona
 
 * spawn de enemigos
 
-Hay una una función $f(número-ronda)$
+El juego tiene un =int= que es el número de ronda actual local, que se resetea en el mercader. También hay un =int= de veces total, que son las rondas reales desde el principo.
+
+Hay una una función $f(número\_ronda\_local, número\_ronda_global)$ que, dada un número de ronda, devuelve el tiempo que falta para la siguiente ronda. Al cumplirse este, se suman los contadores de ronda y se hace un /spawn/.
 
 * menú monedas
 :PROPERTIES:
