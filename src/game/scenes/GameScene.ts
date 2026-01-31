@@ -1,8 +1,9 @@
-import Enemy from "../enemy";
 import Player from "../player";
-import { PickableCoin } from "../sceneObjects/Coin";
 import { InventoryUI } from "../UI/InventoryUI";
 import Merchant from "../merchant";
+import { PickableCoin } from "../sceneObjects/PickableCoin";
+import Boss from "../enemies/Boss";
+import AbstractEnemy from "../enemies/AbstractEnemy";
 
 export class GameScene extends Phaser.Scene {
   private player: Player;
@@ -18,7 +19,7 @@ export class GameScene extends Phaser.Scene {
 
   create() {
     this.enemies = this.physics.add.group({
-      classType: Enemy,
+      classType: AbstractEnemy,
       runChildUpdate: true,
     });
     this.player = new Player(this, 0, 0, this.enemies);
@@ -48,16 +49,6 @@ export class GameScene extends Phaser.Scene {
 
     this.physics.add.overlap(this.player, this.enemies, (p, e) => {
       console.log("Pero te quiero...");
-      const coin = new PickableCoin(
-        this,
-        (e as Enemy).x,
-        (e as Enemy).y,
-        "coin",
-        10,
-        "love",
-      );
-      this.coins.add(coin, true);
-      e.destroy();
     });
 
     this.cursors = this.input.keyboard!.createCursorKeys();
@@ -74,7 +65,7 @@ export class GameScene extends Phaser.Scene {
     const x = this.player.x + Math.cos(angle) * 500;
     const y = this.player.y + Math.sin(angle) * 500;
 
-    const enemy = new Enemy(this, x, y);
+    const enemy = new Boss(this, x, y);
     this.enemies.add(enemy, true);
   }
 
