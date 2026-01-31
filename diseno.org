@@ -86,15 +86,22 @@ Los buffs de mecánicas se acumulan: se pueden tener varios y se activan en cuan
 - Cruz: Genera un área circular de radio $2\times L$ que genera un escudo a los enemigos de la mitad del daño del jugador, cada 7 segundos. 
 
 ****** Halitosis
-Dispara un objeto en la dirección en la que se mueve cada 2.5 segundos. El objeto viaja 2 veces la velocidad de la pantalla, y va a $4\times$ de la velocidad del jugador.
+
+- Cara: Dispara un objeto en la dirección en la que se mueve cada 2.5 segundos. El objeto viaja 2 veces la velocidad de la pantalla, y va a $4\times$ de la velocidad del jugador.
+- Cruz: Te quedas parado durante 1 segundo, cada 10 segundos.
 
 ***** buffs de stats
 
-****** 
+****** Pincho
+- Cara: +2 en ataque
+- Cruz: -2 en ataque
 
 ***** buffs temporales
 
-****** 
+****** Locura
+
+- Durante 10 segundos eres invulnerable
+- Durante 10 segundos recibes el doble de daño
 
 ** rondas
 El juego tiene un =int= que es el número de ronda actual local, que se resetea en el mercader. También hay un =int= de veces total, que son las rondas reales desde el principio.
