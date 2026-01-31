@@ -22,7 +22,25 @@ export class FatManager {
     // Las monedas van: [nueva, vieja1, vieja2, vieja3, vieja4]
     this.gameState.currentCoins.pop();
     this.gameState.currentCoins = [coinData, ...this.gameState.currentCoins];
+
+    if (coinData.kind === "active") {
+      coinData.onEffectStart(this.scene);
+    }
+
     this.scene.events.emit("big-coin-collected", coinData);
+  }
+
+  public tickActiveCoins(): void {
+    this.gameState.currentCoins.forEach((coin) => {
+      if (coin.kind === "active") {
+        coin.onEffectTick(this.scene);
+      }
+    });
+    this.gameState.permanentCoins.forEach((coin) => {
+      if (coin.kind === "active") {
+        coin.onEffectTick(this.scene);
+      }
+    });
   }
 
   public getTransformedState(): GameState {
