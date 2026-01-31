@@ -57,7 +57,6 @@ export class GameScene extends Phaser.Scene {
         "love",
       );
       this.coins.add(coin, true);
-      e.destroy();
     });
 
     this.cursors = this.input.keyboard!.createCursorKeys();

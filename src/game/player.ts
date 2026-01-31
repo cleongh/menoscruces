@@ -12,7 +12,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   private sKey: Phaser.Input.Keyboard.Key;
   private wKey: Phaser.Input.Keyboard.Key;
 
-  private attackLength: number = 100;
+  private attackLength: number = 200;
   private attackCooldown: number = 1000;
   private attackTime: number = 500;
   private timerAttack: Phaser.Time.TimerEvent;
@@ -20,7 +20,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   private damage: number = 100;
 
   constructor(scene: Phaser.Scene, x: number, y: number, enemyGroup: Phaser.Physics.Arcade.Group) {
-    super(scene, x, y, "logo");
+    super(scene, x, y, "player");
     scene.add.existing(this);
     scene.physics.add.existing(this);
     this.setCollideWorldBounds(true);
@@ -33,7 +33,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.sKey = scene.input.keyboard!.addKey('s');
     this.wKey = scene.input.keyboard!.addKey('w');
 
-    this.attackCollider = scene.add.zone(x, y, this.attackLength, 50);
+    this.attackCollider = scene.add.zone(x, y, this.attackLength, this.height);
     this.attackCollider.setOrigin(0.5, 0.5);
     scene.physics.add.existing(this.attackCollider);
     scene.physics.add.overlap(this.attackCollider, enemyGroup, (p, e) => {
@@ -50,8 +50,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     })
   }
 
+  protected preUpdate(time: number, delta: number): void {
+    super.preUpdate(time, delta);
+  }
+
   update(cursors: Phaser.Types.Input.Keyboard.CursorKeys) {
-    let animKey: string;
+    let animKey: string = "idle";
 
     this.dir.x = 0;
     this.dir.y = 0;
@@ -59,31 +63,33 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.aKey.isDown || cursors.left.isDown) {
       this.dir.x = -1;
       this.lastDir.x = -1;
-      animKey = '_run';
-      this.setFlipX(true);
+      animKey = 'run';
+      this.setFlipX(false);
     }
 
     if (this.dKey.isDown || cursors.right.isDown) {
       this.dir.x = 1
       this.lastDir.x = 1;
-      animKey = '_run'
-      this.setFlipX(false);
+      animKey = 'run'
+      this.setFlipX(true);
     }
 
     if (this.wKey.isDown || cursors.up.isDown) {
       this.dir.y = -1
       this.lastDir.y = -1
-      animKey = '_run'
+      animKey = 'run'
     }
 
     if (this.sKey.isDown || cursors.down.isDown) {
       this.dir.y = 1
       this.lastDir.y = 1
-      animKey = '_run'
+      animKey = 'run'
     }
 
     this.dir.normalize();
     this.body!.setVelocity(this.dir.x * this.speed, this.dir.y * this.speed);
+
+    this.play(animKey, true);
 
     this.attackCollider.setX(this.x + this.lastDir.x * (this.width / 2 + this.attackCollider.width / 2));
     this.attackCollider.setY(this.y);
