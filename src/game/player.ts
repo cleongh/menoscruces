@@ -29,6 +29,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     enemyGroup: Phaser.Physics.Arcade.Group,
   ) {
     super(scene, x, y, "player");
+    this.scale = 1/2;
+    this.setTint(0xb8fb27)
     scene.add.existing(this);
     scene.physics.add.existing(this);
     this.setCollideWorldBounds(true);
@@ -74,14 +76,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       this.dir.x = -1;
       this.lastDir.x = -1;
       animKey = "run";
-      this.setFlipX(false);
+      this.setFlipX(true);
     }
 
     if (this.dKey.isDown || cursors.right.isDown) {
       this.dir.x = 1;
       this.lastDir.x = 1;
       animKey = "run";
-      this.setFlipX(true);
+      this.setFlipX(false);
     }
 
     if (this.wKey.isDown || cursors.up.isDown) {

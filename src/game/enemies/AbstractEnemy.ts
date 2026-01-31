@@ -12,10 +12,10 @@ interface EnemyData {
 export default abstract class AbstractEnemy
   extends Phaser.Physics.Arcade.Sprite
 {
-  private health: number;
-  private speed: number;
-  private attack: number;
-  private distanceAttack: number;
+  protected health: number;
+  protected speed: number;
+  protected attack: number;
+  protected distanceAttack: number;
 
   private canMove: boolean;
   private stunTime: number;
@@ -36,8 +36,8 @@ export default abstract class AbstractEnemy
     this.canRecieveDamage = true;
   }
 
-  update(player: Player) {
-    if (this.canMove) {
+  update(player: Player){
+    if(this.canMove && Phaser.Math.Distance.Between(player.x, player.y, this.x, this.y) > this.distanceAttack){
       this.followPlayer(player);
     } else {
       this.body!.stop();

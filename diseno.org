@@ -16,7 +16,6 @@ Vampire survivors, top-down 2D. se acumulan "monedas", que son buffs temporales 
   - puede salir positivo o negativo
   - se puede cancelar el "roll" con pérdida de monedas (parámetro)
 
-
 * player
 ** stats
 
@@ -34,9 +33,51 @@ Vampire survivors, top-down 2D. se acumulan "monedas", que son buffs temporales 
 *** La goma de la máscara
 Genera un área rectangular de daño (WxH). Está activa durante D segundos y luego se desactiva
 
+* monedas "grandes"
+:PROPERTIES:
+:ID:       92c25efe-3ef4-4183-a975-ada5a4443947
+:END:
+
+estas son las monedas que pueden ser cara a cruz. Al cogerlas, sale un menú:
+#+DOWNLOADED: screenshot @ 2026-01-31 11:10:47
+[[file:menú_monedas/2026-01-31_11-10-47_screenshot.png]]
+
+y =roll= puede ser cara o cruz. Salga lo que salga, se aplica un buff.
+
+** buffs
+
+Los buffs van conceptualmente juntos. Todo buff tiene cara positiva o negativa. Algunos buffs *tienen precondiciones*.
+
+*** Buffs
+
+**** Hedor infernal I
+Genera un área circular de radio R que genera daño D
+
+**** Hedor infernal II [precondición: HEDOR INFERNAL I]
+Desactiva hedor infernal I
+
+**** Halitosis I
+Dispara un objeto en la dirección en la que se mueve cada S segundos
+
+
+*** buffs de stats
+
+*** buffs temporales
+
+
+* rondas
+El juego tiene un =int= que es el número de ronda actual local, que se resetea en el mercader. También hay un =int= de veces total, que son las rondas reales desde el principio.
+
 * enemigos
 
-** enemigo que va hacia ti en línea recta
+
+=enemigos= es los enemigos que se esperan hasta maximizar sistema general de ronda (correlaciona con el tiempo de juego con "enemigos por segundo" )
+
+Progresión de enemigos en crecimiento exponencial basado en máximo esperado de enemigos
+
+** tipos de enemigos
+
+*** enemigo que va hacia ti en línea recta
 
 Parámetros:
 
@@ -45,9 +86,11 @@ Parámetros:
 - dps
 - distacia de ataque
 
-cuando está a menos de =distacia de ataque= (param) se activa el DPS. Al recibir impacto de héroe pierde vida. cuando vida <= 0, muere
+cuando está a menos de =distacia de ataque= (param) se activa el DPS. Al recibir impacto de héroe pierde vida. cuando vida <= 0, muere.
 
-** enemigo que dispara
+Cuando está a distancia de ataque o menos, no se mueve.
+
+*** enemigo que dispara
 
 - velocidad
 - vida
@@ -57,44 +100,35 @@ cuando está a menos de =distacia de ataque= (param) se activa el DPS. Al recibi
 - daño proyectil
 - distancia disparo
 
-mismos parámetros que enemigo en línea recta. Pero cuando =distancia-a-personaje < distancia-disparo= lanza ataque (un proyectil que va en línea recta hacia personaje). Al impactar el proyectil, se quita =daño proyectil=
+mismos parámetros que enemigo en línea recta. Pero cuando =distancia-a-personaje < distancia-disparo= lanza ataque (un proyectil que va en línea recta hacia personaje). Al impactar el proyectil, se quita =daño proyectil=.
 
+*** Spawn de enemigos
 
-* spawn de enemigos
-
-El juego tiene un =int= que es el número de ronda actual local, que se resetea en el mercader. También hay un =int= de veces total, que son las rondas reales desde el principo.
 
 Hay una una función $f(número\_ronda\_local, número\_ronda\_global)$ que, dada un número de ronda, devuelve el tiempo que falta para la siguiente ronda. Al cumplirse este, se suman los contadores de ronda y se hace un /spawn/.
 
-* menú monedas
-:PROPERTIES:
-:ID:       92c25efe-3ef4-4183-a975-ada5a4443947
-:END:
-
-
-#+DOWNLOADED: screenshot @ 2026-01-31 11:10:47
-[[file:menú_monedas/2026-01-31_11-10-47_screenshot.png]]
-
-
-* equilibrio  
-
-** Spawn de enemigos
 
 - función de tiempo hasta próxima ronda: $time\_to\_next\_round(local\_round, global\_round)$, devuelve segundos
 - función de composición de ronda (cuántos enemigos de qué tipo): devuelve un JSON con:
+          #+begin_src json
+        [
+        {
+        "tipo": "enemigo_tipo_1",
+        "cuántos": 24
+        },
+        {
+        "tipo": "enemigo_disparo_1",
+        "cuántos": 4
+        }
+        ]
+        #+end_src
 
-  #+begin_src json
-[
-  {
-    "tipo": "enemigo_tipo_1",
-    "cuántos": 24
-  },
-  {
-    "tipo": "enemigo_disparo_1",
-    "cuántos": 4
-  }
-]
-  #+end_src
+Y se espera que la posición de cada enemigo sea aleatoria con una función que, dada una distancia mínima (que esté fuera de pantalla) y una máxima (más fuera aún) encuentre un punto aleatorio en distribución uniforme para hacer el spawn de cada enemigo.
+
+
+#+DOWNLOADED: screenshot @ 2026-01-31 11:10:47
+[[file:area_spawn.svg]]
+
 
 # | ! | ronda | vida-inicial | enemigos | dano_medio_enemigo | probabilidad_dano_por_enemigo | dano_esperado |
 # |---+-------+--------------+----------+--------------------+-------------------------------+---------------|
@@ -103,31 +137,10 @@ Hay una una función $f(número\_ronda\_local, número\_ronda\_global)$ que, dad
 # #+TBLFM: $7='(* $enemigos $dano_medio_enemigo $probabilidad_dano_por_enemigo);N
 
 
-=enemigos= es los enemigos que se esperan hasta maximizar sistema general de ronda (correlaciona con el tiempo de juego con "enemigos por segundo" )
 
-Progresión de enemigos en crecimiento exponencial basado en máximo esperado de enemigos
+* screen flow
 
-* buffs
-
-Los buffs van conceptualmente juntos. Todo buff tiene cara positiva o negativa. Algunos buffs *tienen precondiciones*.
-
-** Buffs
-
-*** Hedor infernal I
-Genera un área circular de radio R que genera daño D
-
-*** Hedor infernal II [precondición: HEDOR INFERNAL I]
-Desactiva hedor infernal I
-
-
-*** Halitosis I
-Dispara un objeto en la dirección en la que se mueve cada S segundos
-
-
-** buffs de stats
-
-** buffs temporales
-
+[[file:screenflow.svg]]
 
 * Pendiente
 
