@@ -216,6 +216,7 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
       console.log("MERCADEA CONMIGO!!!")
       this.interactionSign?.setBackgroundColor(this.interactionSignBackgroundPressed)
       this.fatManager.commitCoinsToMerchant();
+      this.speed = this.defaultSpeed;
     }
   }
 
