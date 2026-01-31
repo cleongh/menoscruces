@@ -2,9 +2,11 @@ import Enemy from "../enemy";
 import Player from "../player";
 import { PickableCoin } from "../sceneObjects/Coin";
 import { InventoryUI } from "../UI/InventoryUI";
+import Merchant from "../merchant";
 
 export class GameScene extends Phaser.Scene {
   private player: Player;
+  private merchant: Merchant;
   private enemies: Phaser.Physics.Arcade.Group;
   private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   private inventory: InventoryUI;
@@ -20,6 +22,8 @@ export class GameScene extends Phaser.Scene {
       runChildUpdate: true,
     });
     this.player = new Player(this, 0, 0, this.enemies);
+
+    this.merchant = new Merchant(this, 0, 0);
 
     this.coins = this.physics.add.group({
       classType: PickableCoin,
@@ -80,5 +84,7 @@ export class GameScene extends Phaser.Scene {
     this.enemies.getChildren().forEach((enemy: any) => {
       enemy.followPlayer(this.player);
     });
+
+    this.merchant.update();
   }
 }
