@@ -12,6 +12,9 @@ Vampire survivors, top-down 2D. se acumulan "monedas", que son buffs temporales 
 - mercader wanderea y deja rastro
   - entrar en mercader resetea multiplicador
   - asienta buffs
+- al coger moneda grande, menú de roll
+  - puede salir positivo o negativo
+  - se puede cancelar el "roll" con pérdida de monedas (parámetro)
 
 * stats
 
@@ -21,9 +24,34 @@ Vampire survivors, top-down 2D. se acumulan "monedas", que son buffs temporales 
 - velocidad de movimiento
 - escudo
 - recuperación de vida
-- vida
+- vida (al llegar a 0, se acaba la partida)
 - monedas
 
+* enemigos
+
+** enemigo que va hacia ti en línea recta
+
+Parámetros:
+
+- velocidad
+- vida
+- dps
+- distacia de ataque
+
+cuando está a menos de =distacia de ataque= (param) se activa el DPS. Al recibir impacto de héroe pierde vida. cuando vida <= 0, muere
+
+** enemigo que dispara
+
+- velocidad
+- vida
+- dps
+- distacia de ataque
+- velocidad proyectil
+- daño proyectil
+- distancia disparo
+
+mismos parámetros que enemigo en línea recta. Pero cuando distancia-a-personaje <= distancia-de-ataque lanza ataque (un proyectil que va en línea recta hacia personaje). Al impactar el proyectil
+  
 * equilibrio  
   
 | ! | ronda | vida inicial | daño esperado | enemigos |
