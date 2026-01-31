@@ -41,9 +41,7 @@ export class Button {
             this.pointerOutCallback && this.pointerOutCallback();
         });
         this.bg.on("pointerover", () => {
-            this.bg.setScale(1.1);
-            this.label.setScale(1.1);
-            this.pointerOverCallback && this.pointerOverCallback();
+            this.select();
         });
     }
 
@@ -71,6 +69,12 @@ export class Button {
 
     setPointerOutCallback(callback: () => void) {
         this.pointerOutCallback = callback;
+    }
+
+    select() {
+        this.bg.setScale(1.1);
+        this.label.setScale(1.1);
+        this.pointerOverCallback && this.pointerOverCallback();
     }
 
 
