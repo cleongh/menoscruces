@@ -43,7 +43,7 @@ estas son las monedas que pueden ser cara a cruz. Al cogerlas, sale un menú:
 #+DOWNLOADED: screenshot @ 2026-01-31 11:10:47
 [[file:menú_monedas/2026-01-31_11-10-47_screenshot.png]]
 
-y =roll= puede ser cara o cruz. Salga lo que salga, se aplica un [[buffs][buff]]
+y =roll= puede ser cara o cruz. Salga lo que salga, se aplica un [[*buffs][buff]]
 
 ** buffs
 
