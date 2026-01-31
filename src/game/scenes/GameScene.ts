@@ -4,7 +4,8 @@ import Merchant from "../merchant";
 import Boss from "../enemies/Boss";
 import AbstractEnemy from "../enemies/AbstractEnemy";
 import { AbstractCoin } from "../sceneObjects/AbstractCoin";
-import {Projectile, ProjectileEnemy} from "../enemies/ProjectileEnemy"
+import { Projectile, ProjectileEnemy } from "../enemies/ProjectileEnemy";
+import { baseStats, FatManager } from "../state/FatManager";
 
 export class GameScene extends Phaser.Scene {
   private player: Player;
@@ -15,8 +16,11 @@ export class GameScene extends Phaser.Scene {
   private inventory: InventoryUI;
   private coins: Phaser.Physics.Arcade.Group;
 
+  public fatManager: FatManager;
+
   constructor() {
     super("GameScene");
+    this.fatManager = new FatManager(this, baseStats);
   }
 
   create() {
@@ -26,10 +30,9 @@ export class GameScene extends Phaser.Scene {
 
     this.projectiles = this.physics.add.group({
       classType: Projectile,
-    })
+    });
 
     this.player = new Player(this, 0, 0, this.enemies);
-    
 
     this.merchant = new Merchant(this, 0, 0);
 
@@ -39,18 +42,21 @@ export class GameScene extends Phaser.Scene {
 
     // recoger moneda al tocarla
     this.physics.add.collider(this.player, this.coins, (_, coin) => {
-      console.log("DAME DINERO");
       const c = coin as AbstractCoin;
       c.handleCoinPickup();
     });
 
-    this.physics.add.overlap(this.player, this.projectiles, (player, projectile) =>{
-      const pr = projectile as Projectile;
-      const pl = player as Player;
+    this.physics.add.overlap(
+      this.player,
+      this.projectiles,
+      (player, projectile) => {
+        const pr = projectile as Projectile;
+        const pl = player as Player;
 
-      pl.receiveDamage(pr.damage);
-      pr.destroy();
-    })
+        pl.receiveDamage(pr.damage);
+        pr.destroy();
+      },
+    );
 
     this.time.addEvent({
       delay: 1000,
@@ -62,10 +68,6 @@ export class GameScene extends Phaser.Scene {
     this.cursors = this.input.keyboard!.createCursorKeys();
 
     this.inventory = new InventoryUI(this, 50, 40);
-
-    this.events.on("coin-collected", (coinData: any) => {
-      this.inventory.addItem(coinData.texture, coinData.value, coinData.stat);
-    });
   }
 
   spawnEnemy() {
@@ -73,11 +75,10 @@ export class GameScene extends Phaser.Scene {
     const x = this.player.x + Math.cos(angle) * 500;
     const y = this.player.y + Math.sin(angle) * 500;
 
-    if(Phaser.Math.Between(0, 1) === 0){
+    if (Phaser.Math.Between(0, 1) === 0) {
       const enemy = new Boss(this, x, y);
       this.enemies.add(enemy, true);
-    }
-    else{
+    } else {
       const enemy = new ProjectileEnemy(this, x, y);
       this.enemies.add(enemy, true);
     }
@@ -88,7 +89,14 @@ export class GameScene extends Phaser.Scene {
 
     this.enemies.getChildren().forEach((enemy: any) => {
       enemy.update(this.player);
-      if(Phaser.Math.Distance.Between(this.player.x, this.player.y, enemy.x, enemy.y) <= enemy.distanceAttack){
+      if (
+        Phaser.Math.Distance.Between(
+          this.player.x,
+          this.player.y,
+          enemy.x,
+          enemy.y,
+        ) <= enemy.distanceAttack
+      ) {
         console.log("Pero te quiero...");
         enemy.physicalAttack(this.player);
       }

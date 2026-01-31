@@ -1,9 +1,9 @@
 import Phaser from "phaser";
+import { BigCoinData } from "../sceneObjects/BigCoin";
 
 export interface NewCoinSceneConfig {
   // Aquí se pueden añadir configuraciones específicas para la escena de nueva moneda
-  opcion1: string;
-  opcion2: string;
+  coinData: BigCoinData;
   /**
    * Callback a ser llamado cuando se resuelva el lanzamiento de moneda, con los datos
    * del resultado del lanzamiento.
@@ -39,8 +39,12 @@ export class NewCoinScene extends Phaser.Scene {
   init(config: NewCoinSceneConfig): void {
     this.headTexture = "coin_L";
     this.tailTexture = "coin_R";
-    this.headInfo = config.opcion1 || "Esto es un ejemplo de CARA de moneda";
-    this.tailInfo = config.opcion2 || "Esto es un ejemplo de CRUZ de moneda";
+    this.headInfo =
+      config.coinData.option1.description ||
+      "Esto es un ejemplo de CARA de moneda";
+    this.tailInfo =
+      config.coinData.option2.description ||
+      "Esto es un ejemplo de CRUZ de moneda";
 
     this.bonusCoin = 50350;
 
