@@ -51,6 +51,7 @@ export class FatManager {
     this.gameState.localCoins += 1;
     this.scene.events.emit("coin-collected");
   }
+  
 }
 
 export const baseStats: BaseStats = {

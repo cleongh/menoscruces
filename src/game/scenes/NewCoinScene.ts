@@ -3,6 +3,8 @@ import { BigCoinData } from "../sceneObjects/BigCoin";
 import { Button } from "../UI/Button";
 
 export interface NewCoinSceneConfig {
+    // número de monedas disponible actualmente (no commiteadas)
+    currentCoins: number;
     // Aquí se pueden añadir configuraciones específicas para la escena de nueva moneda
     coinData: BigCoinData;
     /**
