@@ -55,7 +55,7 @@ export class FatManager {
 }
 
 export const baseStats: BaseStats = {
-  attackBase: 10,
+  attackBase: 250,
   defenseBase: 5,
   speedBase: 100,
   healthBase: 100,

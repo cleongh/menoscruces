@@ -39,6 +39,11 @@ export class Preloader extends Scene {
       frameHeight: 256,
     });
 
+    this.load.spritesheet("eleph", "enemies/eleph.png", {
+      frameWidth: 256,
+      frameHeight: 256,
+    });
+
     this.load.spritesheet("gomilla", "weapons/gomilla.png", {
       frameWidth: 512,
       frameHeight: 256,
@@ -72,6 +77,13 @@ export class Preloader extends Scene {
       frames: this.anims.generateFrameNumbers("gomilla", { start: 0, end: 1 }),
       frameRate: 10,
       repeat: 5
+    });
+
+    this.anims.create({
+      key: "eleph",
+      frames: this.anims.generateFrameNumbers("eleph", { start: 0, end: 3 }),
+      frameRate: 12, // Velocidad de la animación
+      repeat: -1, // Animación en bucle
     });
     //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
     this.scene.start("MainMenu");
