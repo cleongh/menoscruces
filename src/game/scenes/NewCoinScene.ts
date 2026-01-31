@@ -241,7 +241,7 @@ export class NewCoinScene extends Phaser.Scene {
                 {
                     fontSize: "28px",
                     color: "#ffff00",
-                    fontFamily: "Arial",
+                    fontFamily: "salpicaduraFont",
                 },
             )
             .setOrigin(0.5, 0);
@@ -254,7 +254,7 @@ export class NewCoinScene extends Phaser.Scene {
                 {
                     fontSize: "20px",
                     color: "#ffaaaa",
-                    fontFamily: "Arial",
+                    fontFamily: "salpicaduraFont",
                 },
             )
             .setOrigin(0.5, 0);
@@ -324,7 +324,7 @@ export class NewCoinScene extends Phaser.Scene {
             .text(posX, posY + textOffsetY, textInfo, {
                 fontSize: "24px",
                 color: "#ffffff",
-                fontFamily: "Arial",
+                fontFamily: "salpicaduraFont",
                 align: "center",
                 wordWrap: { width: 220 },
             })
