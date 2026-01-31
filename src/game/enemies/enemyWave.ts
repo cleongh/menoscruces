@@ -9,15 +9,16 @@ export interface WaveConfig {
   enemies: { type: EnemyType; count: number }[];
 }
 
-export type EnemyType = "boss" | "projectileEnemy";
+export type EnemyType = "boss" | "projectileEnemy" | "basic";
 
 export const enemyWaves: WaveConfig[] = [
   {
     lengthInSeconds: 15,
     waitBeforeNextWaveInSeconds: 5,
     enemies: [
-      { type: "projectileEnemy", count: 30 },
+      { type: "projectileEnemy", count: 10 },
       { type: "boss", count: 5 },
+      { type: "basic", count: 20 },
     ],
   },
   {
@@ -26,6 +27,7 @@ export const enemyWaves: WaveConfig[] = [
     enemies: [
       { type: "projectileEnemy", count: 20 },
       { type: "boss", count: 2 },
+      { type: "basic", count: 20 },
     ],
   },
 ];
