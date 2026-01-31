@@ -11,11 +11,10 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
 
   // area alrededor del merchant en la que debe entrar el jugador para interactuar
   public playerCollideZone: Phaser.GameObjects.Zone;
-  playerCollideSize = 500;
+  playerCollideSize = 200;
   playerIsWithMerchant = false;
 
   // velocidad de movimiento del mercader
-  // TODO restore after testing
   public speed: number = 50;
 
   // emitter de particulas tras el mercader
