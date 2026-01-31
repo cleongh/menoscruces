@@ -30,7 +30,7 @@ export class Preloader extends Scene {
     this.load.image("coin", "coin.png");
     this.load.image("boss", "placeholder/boss.jpg");
 
-    this.load.spritesheet("player", "assets/placeholder/player.png", {
+    this.load.spritesheet("player", "placeholder/player.png", {
       frameWidth: 32,
       frameHeight: 32,
     });
@@ -50,7 +50,7 @@ export class Preloader extends Scene {
 
     this.anims.create({
       key: "idle",
-      frames: this.anims.generateFrameNumbers("player", { start: 0, end: 0 }),
+      frames: this.anims.generateFrameNumbers("player", { start: 1, end: 1 }),
     });
     //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
     this.scene.start("MainMenu");

@@ -51,10 +51,6 @@ export class GameScene extends Phaser.Scene {
       console.log("Pero te quiero...");
     });
 
-    this.physics.add.collider(this.player, this.enemies, (p, e) => {
-      (e as AbstractEnemy).physicalAttack(p as Player);
-    });
-
     this.cursors = this.input.keyboard!.createCursorKeys();
 
     this.inventory = new InventoryUI(this, 50, 40);
