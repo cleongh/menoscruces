@@ -1,5 +1,7 @@
 export class Button {
-    bg: Phaser.GameObjects.Rectangle;
+    bg: Phaser.GameObjects.Image;
+    imgHover: Phaser.GameObjects.Image;
+    imgPressed: Phaser.GameObjects.Image;
     label: Phaser.GameObjects.Text;
 
     pointerDownCallback?: () => void;
@@ -7,17 +9,22 @@ export class Button {
     pointerOverCallback?: () => void;
     pointerOutCallback?: () => void;
 
-    constructor(scene: Phaser.Scene, text: string, x: number, y: number, width: number, height: number) {
-        this.bg = scene.add
-            .rectangle(x, y, width, height, 0x777777)
-            .setStrokeStyle(2, 0xffffff)
-            .setOrigin(0.5)
-            .setInteractive({ useHandCursor: true });
+    constructor(scene: Phaser.Scene, text: string, x: number, y: number, imagen: string = "", imagenHover: string = "", imagenPressed: string = "") {
+        this.bg =  scene.add.image(x,y,imagen)
+        .setInteractive({ useHandCursor: true })
+
+        this.imgHover = scene.add.image(x,y,imagenHover);
+        this.imgHover.visible = false;
+        this.imgPressed = scene.add.image(x,y,imagenPressed);
+        this.imgPressed.visible = false;
+
+            
+
 
         this.label = scene.add
             .text(x, y, text, {
                 fontSize: "22px",
-                color: "#ffffff",
+                color: "#0",
                 fontFamily: "Arial",
             })
             .setOrigin(0.5);
@@ -25,6 +32,11 @@ export class Button {
         // INTERACCIONES CON EL BOTÓN
         this.bg.on("pointerdown", () => {
             this.bg.setScale(0.96);
+            this.imgHover.setScale(0.96);
+            this.imgPressed.setScale(0.96);
+            this.imgHover.visible = false;
+            this.imgPressed.visible = true;
+                
             this.label.setScale(0.96);
             this.pointerDownCallback && this.pointerDownCallback();
         });
@@ -32,11 +44,22 @@ export class Button {
             this.bg.setScale(1);
             this.label.setScale(1);
 
-            this.bg.setFillStyle(0x333333);
+            this.imgHover.setScale(1);
+            this.imgPressed.setScale(1);
+            this.imgHover.visible = false;
+            this.imgPressed.visible = false;
+
             this.pointerUpCallback && this.pointerUpCallback();
         });
         this.bg.on("pointerout", () => {
             this.bg.setScale(1);
+
+            this.imgHover.setScale(1);
+            this.imgPressed.setScale(1);
+
+            this.imgHover.visible = false;
+            this.imgPressed.visible = false;
+
             this.label.setScale(1);
             this.pointerOutCallback && this.pointerOutCallback();
         });
@@ -82,12 +105,23 @@ export class Button {
     select() {
         this.bg.setScale(1.1);
         this.label.setScale(1.1);
+        this.imgHover.setScale(1.1);
+        this.imgPressed.setScale(1.1);
+        //this.bg.visible = false;
+        this.imgHover.visible = true;
+        this.imgPressed.visible = false;
+
         this.pointerOverCallback && this.pointerOverCallback();
     }
 
     deselect() {
         this.bg.setScale(1);
         this.label.setScale(1);
+
+        this.imgHover.setScale(1);
+        this.imgPressed.setScale(1);
+        this.imgHover.visible = false;
+        this.imgPressed.visible = false;
     }
 
 
