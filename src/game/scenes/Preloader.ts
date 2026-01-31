@@ -78,7 +78,7 @@ export class Preloader extends Scene {
 
     this.load.spritesheet("flares", "particles/flares.png", {
       frameWidth: 128,
-      frameHeight: 128,
+      frameHeight: 128
     });
 
     this.load.audio("music", "music/MainSongLoop.mp3");

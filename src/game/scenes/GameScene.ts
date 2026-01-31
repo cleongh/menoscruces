@@ -29,6 +29,8 @@ export class GameScene extends Phaser.Scene {
   public fatManager: FatManager;
   private enemySpawner: EnemySpawner;
 
+  private smellImage: Phaser.GameObjects.Arc;
+
   constructor() {
     super("GameScene");
     this.fatManager = new FatManager(this, baseStats);
@@ -120,6 +122,10 @@ export class GameScene extends Phaser.Scene {
       duration: 3000,
       ease: "Linear",
     });
+
+    this.smellImage = this.add.circle(this.player.x, this.player.y, 10, 0x00FF00, 0.5);
+    this.smellImage.active = false;
+    this.smellImage.alpha = 0;
   }
 
   update() {
@@ -142,6 +148,9 @@ export class GameScene extends Phaser.Scene {
     });
 
     this.merchant.update();
+
+    this.smellImage.setX(this.player.x);
+    this.smellImage.setY(this.player.y);
   }
 
   createLandmarks(numLandMarks: number = 10) {
@@ -156,6 +165,13 @@ export class GameScene extends Phaser.Scene {
   }
 
   public infernallSmell_Cara(){
+    this.smellImage.active = true;
+    this.smellImage.setX(this.player.x);
+    this.smellImage.setY(this.player.y);
+    this.smellImage.radius = 2 * this.player.width * this.fatManager.getTransformedState().baseStats.rangeBase;
+    this.smellImage.alpha = 0.4;
+
+
     this.enemies.getChildren().forEach((enemy: any) => {
       enemy.update(this.player);
       if (
@@ -164,7 +180,7 @@ export class GameScene extends Phaser.Scene {
           this.player.y,
           enemy.x,
           enemy.y,
-        ) <= 2 * this.player.width
+        ) <= 2 * this.player.width * this.fatManager.getTransformedState().baseStats.rangeBase
       ) {
         let damage = this.fatManager.getTransformedState().baseStats.attackBase;
         enemy.quitHealth(damage * 3);
@@ -172,9 +188,24 @@ export class GameScene extends Phaser.Scene {
         console.log("Quita vida");
       }
     });
+
+    this.time.addEvent({
+      delay: 1000,
+      callback: () => {
+        this.smellImage.active = false;
+        this.smellImage.alpha = 0;
+      },
+      callbackScope: this,
+    })
   }
 
   public infernallSmell_Cruz(){
+    this.smellImage.active = true;
+    this.smellImage.setX(this.player.x);
+    this.smellImage.setY(this.player.y);
+    this.smellImage.radius = 2 * this.player.width * this.fatManager.getTransformedState().baseStats.rangeBase;
+    this.smellImage.alpha = 0.4;
+    
     this.enemies.getChildren().forEach((enemy: any) => {
       enemy.update(this.player);
       if (
@@ -183,7 +214,7 @@ export class GameScene extends Phaser.Scene {
           this.player.y,
           enemy.x,
           enemy.y,
-        ) <= 2* this.player.width
+        ) <= 2 * this.player.width * this.fatManager.getTransformedState().baseStats.rangeBase
       ) {
         let damage = this.fatManager.getTransformedState().baseStats.attackBase;
         enemy.quitHealth(-damage/2);
@@ -191,5 +222,14 @@ export class GameScene extends Phaser.Scene {
         console.log("Da vida");
       }
     });
+
+    this.time.addEvent({
+      delay: 1000,
+      callback: () => {
+        this.smellImage.active = false;
+        this.smellImage.alpha = 0;
+      },
+      callbackScope: this,
+    })
   }
 }

@@ -1,15 +1,11 @@
-import { BigCoinData } from "./BigCoin";
+import { BigCoin, BigCoinData } from "./BigCoin";
 
 interface TierDefinition {
   name: string;
   availableCoins: BigCoinData[];
 }
 
-export const coinDefinitions: TierDefinition[] = [
-  {
-    name: "Tier 1",
-    availableCoins: [
-      {
+const SnakeCoin_Tier1: BigCoinData = {
         texture: "moneda_vida",
         name: "Snake Coin",
         passCost: 55,
@@ -45,8 +41,9 @@ export const coinDefinitions: TierDefinition[] = [
             };
           },
         },
-      },
-      {
+      };
+
+const AresCoin_Tier1: BigCoinData = {
         texture: "moneda_ares",
         name: "Ares Coin",
         passCost: 85,
@@ -82,8 +79,9 @@ export const coinDefinitions: TierDefinition[] = [
             };
           },
         },
-      },
-      {
+      };
+
+const SmellCoin: BigCoinData = {
         texture: "moneda_bomba",
         name: "Smell Coin",
         passCost: 100,
@@ -136,7 +134,14 @@ export const coinDefinitions: TierDefinition[] = [
             
           },
         },
-      },
+      };
+export const coinDefinitions: TierDefinition[] = [
+  {
+    name: "Tier 1",
+    availableCoins: [
+      SnakeCoin_Tier1,
+      AresCoin_Tier1,
+      SmellCoin,
     ],
   },
 ];
