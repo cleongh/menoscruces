@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { BigCoinData } from "../sceneObjects/BigCoin";
+import { Button } from "../UI/Button";
 
 export interface NewCoinSceneConfig {
   // Aquí se pueden añadir configuraciones específicas para la escena de nueva moneda
@@ -12,6 +13,7 @@ export interface NewCoinSceneConfig {
    */
   onCoinFlippedResult: (pass: boolean, isHead: boolean) => void;
 }
+
 /**
  * Escena para el lanzamiento de moneda cuando se consigue una moneda de tipo especial
  * de esas que la cara te da buffo pero la cruz te putea
@@ -30,7 +32,14 @@ export class NewCoinScene extends Phaser.Scene {
 
   bonusCoinText: Phaser.GameObjects.Text; // Texto que muestra la cantidad de monedas normales que tiene el jugador
 
+  elementsToHideOnRoll: Button[]; // Elementos que se ocultan al lanzar la moneda
+
+  continueButton: Button; // Botón para continuar con el juego tras el lanzamiento de moneda
+
   callbackAtTheEnd: (pass: boolean, isHead: boolean) => void; //Función callback para llamar una vez se ha resuelto el lanzamiento de moneda.
+
+  coinResult: boolean; //Resultado de haber lanzado la moneda
+  skipResult: boolean; //Indica si se ha skipeado el lanzamiento de moneda
 
   constructor() {
     super({ key: "NewCoinScene" });
@@ -75,6 +84,18 @@ export class NewCoinScene extends Phaser.Scene {
     const width = this.scale.width;
     const height = this.scale.height;
 
+    const bgRect = this.add
+      .rectangle(
+        width / 2,
+        height / 2,
+        width * 0.9,
+        height * 0.9,
+        0x000000,
+        0.8,
+      )
+      .setOrigin(0.5); // fondo semitransparente
+    bgRect.setStrokeStyle(4, 0xffffff);
+
     // Moneda a cada lado de la escena, necesitaré saber los efectos y la info (por ahora, asumo que viene en init).
     const centerY = height * 0.32; //posición en eje Y de las monedas cuando se pinten
     const sideOffset = width * 0.25; // offset desde el borde para pintar las monedas
@@ -90,25 +111,42 @@ export class NewCoinScene extends Phaser.Scene {
     const btnWidth = 180;
     const btnHeight = 56;
 
+    this.elementsToHideOnRoll = [];
     // Botoncico de "roll", pos eso, lanza la monedica y a ver que sale
-    this.drawButton(
-      "ROLL",
-      width / 2,
-      height - 240,
-      btnWidth,
-      btnHeight,
-      this.rollCoin,
+    this.elementsToHideOnRoll.push(
+      this.drawButton(
+        "ROLL",
+        width / 2,
+        height - 240,
+        btnWidth,
+        btnHeight,
+        this.rollCoin,
+      ),
     );
 
     // Botoncico de "skip", descuenta monedas
-    this.drawButton(
-      "SKIP",
+    this.elementsToHideOnRoll.push(
+      this.drawButton(
+        "SKIP",
+        width / 2,
+        height - 320,
+        btnWidth,
+        btnHeight,
+        this.skipCoin,
+      ),
+    );
+
+    this.continueButton = this.drawButton(
+      "CONTINUE",
       width / 2,
-      height - 320,
+      height - 200,
       btnWidth,
       btnHeight,
-      this.skipCoin,
+      () => {
+        this.finishRollScene(this.skipResult, this.coinResult);
+      },
     );
+    this.continueButton.hide();
 
     // Texto de bonus de monedas normales
     this.drawBonusCoinInfo();
@@ -120,6 +158,11 @@ export class NewCoinScene extends Phaser.Scene {
       .setScale(2, 1);
     this.coinToThrow.setDepth(10); // ensure it's above the button/label
   }
+
+  /**
+   *
+   */
+  private hideButtons(): void {}
 
   /**
    * Escribe el texto que representa la bonificación, las monedas normales que tiene el
@@ -157,49 +200,22 @@ export class NewCoinScene extends Phaser.Scene {
     width: number,
     height: number,
     callbackFun: Function,
-  ): void {
+  ): Button {
     // Botoncico de "roll", pos eso, lanza la monedica y a ver que sale
     const btnWidth = 180;
     const btnHeight = 56;
 
-    const button = this.add
-      .rectangle(x, y, btnWidth, btnHeight, 0x777777)
-      .setStrokeStyle(2, 0xffffff)
-      .setOrigin(0.5)
-      .setInteractive({ useHandCursor: true });
+    let button = new Button(this, text, x, y, btnWidth, btnHeight);
 
-    const label = this.add
-      .text(x, y, text, {
-        fontSize: "22px",
-        color: "#ffffff",
-        fontFamily: "Arial",
-      })
-      .setOrigin(0.5);
-
-    // INTERACCIONES CON EL BOTÓN
-    button.on("pointerdown", () => {
-      button.setScale(0.96);
-      label.setScale(0.96);
-    });
-    button.on("pointerup", () => {
-      button.setScale(1);
-      label.setScale(1);
-
-      //CALLBACK
-
+    button.setPointerUpCallback(() => {
       callbackFun.bind(this)();
-      //button.disableInteractive(); // desactiva el botón una vez lanzada la moneda
-      //button.setVisible(false)
-      button.fillColor = 0x333333;
+
+      this.elementsToHideOnRoll.forEach((element) => {
+        element.hide();
+      });
     });
-    button.on("pointerout", () => {
-      button.setScale(1);
-      label.setScale(1);
-    });
-    button.on("pointerover", () => {
-      button.setScale(1.1);
-      label.setScale(1.1);
-    });
+
+    return button;
   }
 
   /**
@@ -284,7 +300,8 @@ export class NewCoinScene extends Phaser.Scene {
     const costToSkip = 1000; // coste fijo por omitir el lanzamiento de moneda
     this.bonusCoin -= costToSkip;
     this.bonusCoinText.setText(`Monedas normales: ${this.bonusCoin}`);
-    this.finishRollScene(false, false);
+
+    this.skipResult = true;
   }
 
   /**
@@ -332,7 +349,10 @@ export class NewCoinScene extends Phaser.Scene {
       ease: "Quad.easeOut",
       onComplete: () => {
         // Al completar el lanzamiento, llamar al callback con el resultado
-        this.finishRollScene(true, isHeads);
+        //this.finishRollScene(true, isHeads);
+        this.coinResult = isHeads;
+        this.skipResult = false;
+        this.continueButton.show();
       },
     });
   }
@@ -345,10 +365,10 @@ export class NewCoinScene extends Phaser.Scene {
    */
   private finishRollScene(pass: boolean, isHead: boolean): void {
     //if (this.callbackAtTheEnd) {
-    this.time.addEvent({
-      delay: 1000,
-      callback: () => this.callbackAtTheEnd(pass, isHead), // true indica que se ha lanzado la moneda
-    });
+    //this.time.addEvent({
+    //    delay: 1000,
+    this.callbackAtTheEnd(pass, isHead); // true indica que se ha lanzado la moneda
+    //});
     //}
   }
 }

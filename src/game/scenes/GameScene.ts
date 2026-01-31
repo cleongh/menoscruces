@@ -15,6 +15,8 @@ export class GameScene extends Phaser.Scene {
   private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   private inventory: InventoryUI;
   private coins: Phaser.Physics.Arcade.Group;
+  private width: number = 2000;
+  private height: number = 2000;
 
   public fatManager: FatManager;
 
@@ -68,6 +70,10 @@ export class GameScene extends Phaser.Scene {
     this.cursors = this.input.keyboard!.createCursorKeys();
 
     this.inventory = new InventoryUI(this, 50, 40);
+
+    this.physics.world.setBounds(0, 0, this.width, this.height);
+    this.cameras.main.setBounds(0, 0, this.width, this.height);
+    this.cameras.main.startFollow(this.player);
   }
 
   spawnEnemy() {

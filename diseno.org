@@ -1,10 +1,17 @@
 #+title: Menos cruces (aka backflips vs portaviones)
 
-* dinámica global
+* índice
+
+- [[#conceptos-generales][conceptos generales]]
+- [[#elementos-de-juego][elementos de juego]]
+- [[#screen-flow][screen flow]]
+
+* conceptos generales
+** dinámica global
 
 Vampire survivors, top-down 2D. se acumulan "monedas", que son buffs temporales hasta que se asientan en el mercader. Dificultad creciente de enemigos para gestionar gráfica de dificultad. La ronda es una acumulación de dificultad/buff que hay que "resetear" en el mercader.
 
-* Mecánicas
+** Mecánicas
 
 - Moverse 8D
 - coger monedas "pequeñas" para multiplicador
@@ -16,24 +23,40 @@ Vampire survivors, top-down 2D. se acumulan "monedas", que son buffs temporales 
   - puede salir positivo o negativo
   - se puede cancelar el "roll" con pérdida de monedas (parámetro)
 
-* player
-** stats
+* elementos de juego
 
-- ataque
-- velocidad de ataque
-- distancia de ataque
-- velocidad de movimiento
-- escudo
-- recuperación de vida
-- vida (al llegar a 0, se acaba la partida)
-- monedas
+Todas las distancias se definen aquí en función de $L$, que es la anchura del jugador. El jugador mide $L\times L$.
 
-** ataques
+** player
 
-*** La goma de la máscara
+*** stats
+
+los stats son realmente *funciones*, no variables
+
+- ataque: $1+ataque(ronda\_local, ronda\_global,monedas\_grandes)$.
+- velocidad de ataque (en ataques por segundo): $0.5+velocidad(ronda\_local, ronda\_global,monedas\_grandes)$
+- distancia de ataque: $2 \times L + ataque(ronda\_local, ronda\_global,monedas\_grandes)$.
+- velocidad de movimiento (en $\frac{L}{s}$): $L + velocidad(ronda\_local, ronda\_global,monedas\_grandes)$.
+- escudo: $velocidad(ronda\_local, ronda\_global,monedas\_grandes)$.
+- recuperación de vida: $velocidad(ronda\_local, ronda\_global,monedas\_grandes)$
+- vida máxima: =vida máxima inicial= + $velocidad(ronda\_local, ronda\_global,monedas\_grandes)$)
+
+variables que se modifican:
+
+- monedas: variable que *sí* se actualiza durante el /gameplay/.
+- vida actual:  (al llegar a 0, se acaba la partida). Comienza siendo la vida máxima. *cada vez que se coge una moneda, hay que restar la nueva vida máxima menos la actual, y si es mayor que cero, se suma eso a la vida actual*.
+
+*** ataques
+
+**** La goma de la máscara
 Genera un área rectangular de daño (WxH). Está activa durante D segundos y luego se desactiva
 
-* monedas "grandes"
+** monedas y buffs
+*** Monedas pequeñas
+
+Simplemente son un contador, hay un porcentaje global de "enemigo deja moneda". Al cogerlas por overlap se suma 1 a "monedas" (de [[#player][player]])
+
+*** monedas "grandes"
 :PROPERTIES:
 :ID:       92c25efe-3ef4-4183-a975-ada5a4443947
 :END:
@@ -44,40 +67,39 @@ estas son las monedas que pueden ser cara a cruz. Al cogerlas, sale un menú:
 
 y =roll= puede ser cara o cruz. Salga lo que salga, se aplica un buff.
 
-** buffs
+**** buffs
 
 Los buffs van conceptualmente juntos. Todo buff tiene cara positiva o negativa. Algunos buffs *tienen precondiciones*.
 
-*** Buffs
+***** Buffs
 
-**** Hedor infernal I
+****** Hedor infernal I
 Genera un área circular de radio R que genera daño D
 
-**** Hedor infernal II [precondición: HEDOR INFERNAL I]
+****** Hedor infernal II [precondición: HEDOR INFERNAL I]
 Desactiva hedor infernal I
 
-**** Halitosis I
+****** Halitosis I
 Dispara un objeto en la dirección en la que se mueve cada S segundos
 
 
-*** buffs de stats
+***** buffs de stats
 
-*** buffs temporales
+***** buffs temporales
 
-
-* rondas
+** rondas
 El juego tiene un =int= que es el número de ronda actual local, que se resetea en el mercader. También hay un =int= de veces total, que son las rondas reales desde el principio.
 
-* enemigos
+** enemigos
 
 
 =enemigos= es los enemigos que se esperan hasta maximizar sistema general de ronda (correlaciona con el tiempo de juego con "enemigos por segundo" )
 
 Progresión de enemigos en crecimiento exponencial basado en máximo esperado de enemigos
 
-** tipos de enemigos
+*** tipos de enemigos
 
-*** enemigo que va hacia ti en línea recta
+**** enemigo que va hacia ti en línea recta
 
 Parámetros:
 
@@ -90,7 +112,7 @@ cuando está a menos de =distacia de ataque= (param) se activa el DPS. Al recibi
 
 Cuando está a distancia de ataque o menos, no se mueve.
 
-*** enemigo que dispara
+**** enemigo que dispara
 
 - velocidad
 - vida
@@ -102,7 +124,7 @@ Cuando está a distancia de ataque o menos, no se mueve.
 
 mismos parámetros que enemigo en línea recta. Pero cuando =distancia-a-personaje < distancia-disparo= lanza ataque (un proyectil que va en línea recta hacia personaje). Al impactar el proyectil, se quita =daño proyectil=.
 
-*** Spawn de enemigos
+**** Spawn de enemigos
 
 
 Hay una una función $f(número\_ronda\_local, número\_ronda\_global)$ que, dada un número de ronda, devuelve el tiempo que falta para la siguiente ronda. Al cumplirse este, se suman los contadores de ronda y se hace un /spawn/.
@@ -135,8 +157,6 @@ Y se espera que la posición de cada enemigo sea aleatoria con una función que,
 # | # |     1 |            5 |      100 |                1.0 |                        0.0001 |          0.01 |
 # | # |     2 |              |          |                    |                               |             0 |
 # #+TBLFM: $7='(* $enemigos $dano_medio_enemigo $probabilidad_dano_por_enemigo);N
-
-
 
 * screen flow
 
