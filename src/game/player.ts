@@ -1,9 +1,10 @@
 import AbstractEnemy from "./enemies/AbstractEnemy";
+import RubberBand from "./RubberBand"
+import { GameScene } from "./scenes/GameScene";
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   declare body: Phaser.Physics.Arcade.Body;
 
-  public speed: number = 160;
   private dir: Phaser.Math.Vector2;
   private lastDir: Phaser.Math.Vector2;
 
@@ -12,13 +13,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   private sKey: Phaser.Input.Keyboard.Key;
   private wKey: Phaser.Input.Keyboard.Key;
 
-  private attackLength: number = 300;
   private attackCooldown: number = 1000;
   private attackTime: number = 500;
-  private attackCollider: Phaser.GameObjects.Zone;
-  private damage: number = 250;
+  private attackCollider: RubberBand;
 
-  private health: number = 1000;
+  private health: number;
   private cooldownDamage: number = 200;
   private canRecieveDamage:boolean;
 
@@ -43,18 +42,26 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.sKey = scene.input.keyboard!.addKey("s");
     this.wKey = scene.input.keyboard!.addKey("w");
 
-    this.attackCollider = scene.add.zone(x, y, this.attackLength * this.scale, this.height * this.scale / 2);
+    this.attackCollider = new RubberBand(scene, this.x, this.y);
     this.attackCollider.setOrigin(0.5, 0.5);
-    scene.physics.add.existing(this.attackCollider);
-    scene.physics.add.overlap(this.attackCollider, enemyGroup, (p, e) => {
-      (e as AbstractEnemy).quitHealth(this.damage);
+    scene.physics.add.overlap(this.attackCollider, enemyGroup, (_, e) => {
+      const fatManager = (this.scene as GameScene).fatManager;
+      (e as AbstractEnemy).quitHealth(fatManager.getTransformedState().baseStats.attackBase);
     });
     this.attackCollider.active = false;
     (this.attackCollider.body as Phaser.Physics.Arcade.Body).enable = false;
+    this.attackCollider.visible = false;
 
     this.scene.time.addEvent({
       delay: this.attackCooldown,
       callback: this.onAttack,
+      callbackScope: this,
+      loop: true,
+    });
+
+    this.scene.time.addEvent({
+      delay: 1000,
+      callback: this.heal,
       callbackScope: this,
       loop: true,
     });
@@ -99,19 +106,26 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     this.dir.normalize();
-    this.body?.setVelocity(this.dir.x * this.speed, this.dir.y * this.speed);
+
+    const fatManager = (this.scene as GameScene).fatManager;
+    let speed = fatManager.getTransformedState().baseStats.speedBase;
+    this.body?.setVelocity(this.dir.x * speed, this.dir.y * speed);
 
     this.play(animKey, true);
 
     this.attackCollider.setX(
       this.x +
-        this.lastDir.x * (this.width * this.scale / 2 + this.attackCollider.width / 2),
+        this.lastDir.x * (this.width * this.scale / 2 + this.attackCollider.width * this.attackCollider.scale / 2),
     );
     this.attackCollider.setY(this.y);
   }
 
   onAttack() {
     (this.attackCollider.body as Phaser.Physics.Arcade.Body).enable = true;
+    
+    this.attackCollider.active = true;
+    this.attackCollider.visible = true;
+    this.attackCollider.play("gomilla", true);
 
     this.scene.time.addEvent({
       delay: this.attackTime,
@@ -122,6 +136,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
   onStopAttacking() {
     (this.attackCollider.body as Phaser.Physics.Arcade.Body).enable = false;
+    this.attackCollider.visible = false;
+    this.attackCollider.stop();
+    this.attackCollider.active = false;
   }
 
   public receiveDamage(damage: number) {
@@ -135,10 +152,17 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       callbackScope: this,
     })
 
+    const fatManager = (this.scene as GameScene).fatManager;
+    damage = damage - fatManager.getTransformedState().baseStats.defenseBase > 0 ? damage - fatManager.getTransformedState().baseStats.defenseBase : 0;
     this.health -= damage;
 
     if (this.health <= 0) {
       this.destroy();
     }
+  }
+
+  heal(){
+    const fatManager = (this.scene as GameScene).fatManager;
+    this.health = this.health + fatManager.getTransformedState().baseStats.regenBase < fatManager.getTransformedState().baseStats.healthBase ? this.health + fatManager.getTransformedState().baseStats.regenBase : fatManager.getTransformedState().baseStats.healthBase
   }
 }
