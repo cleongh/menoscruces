@@ -56,7 +56,8 @@ Genera un área rectangular de daño (WxH). Está activa durante D segundos y lu
 
 Simplemente son un contador, hay un porcentaje global de "enemigo deja moneda". Al cogerlas por overlap se suma 1 a "monedas" (de [[#player][player]])
 
-Cada enemigo da monedas de $random([rglobal, rlocal + rglobal])$. Tienen un 85% de dejar moneda.
+
+Cada enemigo un token de $random([rglobal, rlocal + rglobal])$ monedas. Tienen un 85% de dejar token. 
 
 *** monedas "grandes"
 :PROPERTIES:
@@ -67,7 +68,9 @@ estas son las monedas que pueden ser cara a cruz. Al cogerlas, sale un menú:
 #+DOWNLOADED: screenshot @ 2026-01-31 11:10:47
 [[file:menú_monedas/2026-01-31_11-10-47_screenshot.png]]
 
-y =roll= puede ser cara o cruz. Salga lo que salga, se aplica un buff. Al aplicar un buff, 
+y =roll= puede ser cara o cruz. Salga lo que salga, se aplica un buff. Cuando se visita al mercader, se fija el valor de las "monedas grandes" con el multiplicador actual de las pequeñas, y esas ya no cambian.
+
+Hay unos 2500 enemigos por ronda (ver [[#tabla-enemigos][tabla de enemigos]]). En 30 rondas de juego, 75000 enemigos, en la ronda 10, eso serían $85\% \times 75000 \times 10 \approx 20000$ monedas. Así que cada moneda me da $\frac{1}{20000} = 0.0005$ de buff... Digamos que cada moneda me da un multiplicador de 0.001 (positivo o negativo).
 
 **** buffs
 
@@ -83,15 +86,22 @@ Los buffs de mecánicas se acumulan: se pueden tener varios y se activan en cuan
 - Cruz: Genera un área circular de radio $2\times L$ que genera un escudo a los enemigos de la mitad del daño del jugador, cada 7 segundos. 
 
 ****** Halitosis
-Dispara un objeto en la dirección en la que se mueve cada 2.5 segundos. El objeto viaja 2 veces la velocidad de la pantalla, y va a $4\times$ de la velocidad del jugador.
+
+- Cara: Dispara un objeto en la dirección en la que se mueve cada 2.5 segundos. El objeto viaja 2 veces la velocidad de la pantalla, y va a $4\times$ de la velocidad del jugador.
+- Cruz: Te quedas parado durante 1 segundo, cada 10 segundos.
 
 ***** buffs de stats
 
-****** 
+****** Pincho
+- Cara: +2 en ataque
+- Cruz: -2 en ataque
 
 ***** buffs temporales
 
-****** 
+****** Locura
+
+- Durante 10 segundos eres invulnerable
+- Durante 10 segundos recibes el doble de daño
 
 ** rondas
 El juego tiene un =int= que es el número de ronda actual local, que se resetea en el mercader. También hay un =int= de veces total, que son las rondas reales desde el principio.
@@ -102,7 +112,6 @@ Cada ronda es:
 - un tiempo de generación (se generan durante $N$ segundos)
 - un tiempo de espera (que puede ser 0) entre rondas (desde que acaba una hasta que empieza otra)
 - los enemigos que salen
-
 
 ** enemigos
 
@@ -183,6 +192,10 @@ Y se espera que la posición de cada enemigo sea aleatoria con una función que,
 | daño inicial enemigos                |    1 |
 | enemigos medios por segundo          |   30 |
 
+
+#+name: consecuencias
+| enemigos aprox. por ronda | 2700 |
+#+TBLFM: $2=remote(constantes, @7$2) * remote(constantes, @1$2)
 
 #+name: crecimiento-enemigos
 #+plot: file:"./crecimiento.svg"

@@ -3,6 +3,7 @@ import AbstractEnemy from "./AbstractEnemy";
 import Boss from "./Boss";
 import { EnemyType, WaveConfig } from "./enemyWave";
 import { ProjectileEnemy } from "./ProjectileEnemy";
+import BasicEnemy from "./basicEnemy";
 
 export class EnemySpawner {
   private scene: Phaser.Scene;
@@ -85,6 +86,9 @@ export class EnemySpawner {
       case "projectileEnemy":
         enemy = new ProjectileEnemy(this.scene, point.x, point.y);
         break;
+      case "basic":
+        enemy = new BasicEnemy(this.scene, point.x, point.y);
+        break;
     }
     this.enemies.add(enemy, true);
     console.log(`Spawned enemy of type ${type} at (${point.x}, ${point.y})`);
@@ -96,8 +100,8 @@ export class EnemySpawner {
     // We use sqrt to ensure uniform density across the area
     const r = Math.sqrt(
       Math.random() *
-        (Math.pow(this.outerRadius, 2) - Math.pow(this.innerRadius, 2)) +
-        Math.pow(this.innerRadius, 2),
+      (Math.pow(this.outerRadius, 2) - Math.pow(this.innerRadius, 2)) +
+      Math.pow(this.innerRadius, 2),
     );
 
     return new Phaser.Math.Vector2(
