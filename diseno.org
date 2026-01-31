@@ -62,7 +62,7 @@ cuando está a menos de =distacia de ataque= (param) se activa el DPS. Al recibi
 - daño proyectil
 - distancia disparo
 
-mismos parámetros que enemigo en línea recta. Pero cuando distancia-a-personaje <= distancia-de-ataque lanza ataque (un proyectil que va en línea recta hacia personaje). Al impactar el proyectil
+mismos parámetros que enemigo en línea recta. Pero cuando =distancia-a-personaje < distancia-disparo= lanza ataque (un proyectil que va en línea recta hacia personaje). Al impactar el proyectil, se quita =daño proyectil=
 
 
 * menú monedas
