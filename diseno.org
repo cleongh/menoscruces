@@ -170,6 +170,7 @@ Y se espera que la posición de cada enemigo sea aleatoria con una función que,
 | velocidad inicial (en $L$ por segundo) |    1 |
 | velocidad inicial bala                 | 0.75 |
 | velocidad inicial enemigos             |  0.5 |
+| daño inicial enemigos                  |    1 |
 
 
 
@@ -186,6 +187,8 @@ Y se espera que la posición de cada enemigo sea aleatoria con una función que,
 | # |            7 |           4 |             1.1008 | 1.1671999999999998 |             180 |
 | # |            8 |           5 | 1.1671999999999998 | 1.2511999999999999 |             225 |
 #+TBLFM: $4='(+ 1 (* 0.0008 (expt (- $ronda_global 1) 2)) (* 0.008 (expt  (- $ronda_local 1) 2)));N::$5='(+ 1 (* 0.0008 (expt $ronda_global 2)) (* 0.008 (expt  $ronda_local 2)));N::$6='(* $ronda_local remote(constantes, @1$2));N
+
+$movimiento = 1 + 0.008 \times r_{local}^2 + 0.0008 \times r_{global}^2$
 
 [[file:./crecimiento.svg]]
 
