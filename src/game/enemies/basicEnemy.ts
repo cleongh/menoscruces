@@ -7,7 +7,7 @@ export default class BasicEnemy extends AbstractEnemy {
       speed: 80,
       attack: 0.15,
       distanceAttack: 25,
-      sprite: "eleph",
+      sprite: "cloud",
     });
 
     this.setDisplaySize(50, 50);

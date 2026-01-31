@@ -39,11 +39,33 @@ export class Preloader extends Scene {
       frameHeight: 256,
     });
 
+    /* ENEMIES */
     this.load.spritesheet("eleph", "enemies/eleph.png", {
       frameWidth: 256,
       frameHeight: 256,
     });
 
+    this.load.spritesheet("shootmachine", "enemies/shootmachine.png", {
+      frameWidth: 256,
+      frameHeight: 256,
+    });
+
+    this.load.spritesheet("grr", "enemies/grr.png", {
+      frameWidth: 512,
+      frameHeight: 512,
+    });
+
+    this.load.spritesheet("fatbat", "enemies/fatbat.png", {
+      frameWidth: 512,
+      frameHeight: 512,
+    });
+
+    this.load.spritesheet("cloud", "enemies/cloud.png", {
+      frameWidth: 512,
+      frameHeight: 512,
+    });
+
+    /** WEAPONS */
     this.load.spritesheet("gomilla", "weapons/gomilla.png", {
       frameWidth: 512,
       frameHeight: 256,
@@ -85,6 +107,34 @@ export class Preloader extends Scene {
       key: "eleph",
       frames: this.anims.generateFrameNumbers("eleph", { start: 0, end: 3 }),
       frameRate: 12, // Velocidad de la animación
+      repeat: -1, // Animación en bucle
+    });
+
+    this.anims.create({
+      key: "shootmachine",
+      frames: this.anims.generateFrameNumbers("shootmachine", { start: 0, end: 3 }),
+      frameRate: 12, // Velocidad de la animación
+      repeat: -1, // Animación en bucle
+    });
+
+    this.anims.create({
+      key: "grr",
+      frames: this.anims.generateFrameNumbers("grr", { start: 0, end: 1 }),
+      frameRate: 6, // Velocidad de la animación
+      repeat: -1, // Animación en bucle
+    });
+
+    this.anims.create({
+      key: "fatbat",
+      frames: this.anims.generateFrameNumbers("fatbat", { start: 0, end: 1 }),
+      frameRate: 6, // Velocidad de la animación
+      repeat: -1, // Animación en bucle
+    });
+
+    this.anims.create({
+      key: "cloud",
+      frames: this.anims.generateFrameNumbers("cloud", { start: 0, end: 1 }),
+      frameRate: 6, // Velocidad de la animación
       repeat: -1, // Animación en bucle
     });
     //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
