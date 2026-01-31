@@ -10,22 +10,19 @@ export class Button {
     pointerOutCallback?: () => void;
 
     constructor(scene: Phaser.Scene, text: string, x: number, y: number, imagen: string = "", imagenHover: string = "", imagenPressed: string = "") {
-        this.bg =  scene.add.image(x,y,imagen)
-        .setInteractive({ useHandCursor: true })
+        this.bg = scene.add.image(x, y, imagen)
+            .setInteractive({ useHandCursor: true })
 
-        this.imgHover = scene.add.image(x,y,imagenHover);
+        this.imgHover = scene.add.image(x, y, imagenHover);
         this.imgHover.visible = false;
-        this.imgPressed = scene.add.image(x,y,imagenPressed);
+        this.imgPressed = scene.add.image(x, y, imagenPressed);
         this.imgPressed.visible = false;
-
-            
-
 
         this.label = scene.add
             .text(x, y, text, {
-                fontSize: "22px",
-                color: "#0",
-                fontFamily: "Arial",
+                fontSize: "34px",
+                color: '#000000',
+                fontFamily: "salpicaduraFont",
             })
             .setOrigin(0.5);
 
@@ -36,7 +33,7 @@ export class Button {
             this.imgPressed.setScale(0.96);
             this.imgHover.visible = false;
             this.imgPressed.visible = true;
-                
+
             this.label.setScale(0.96);
             this.pointerDownCallback && this.pointerDownCallback();
         });

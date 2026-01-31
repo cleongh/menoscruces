@@ -13,3 +13,8 @@ body {
     justify-content: center;
     align-items: center;
 }
+
+@font-face {
+    font-family: 'salpicaduraFont';
+    src: url('./assets/pistola_agua/salpicadura.ttf') format('truetype');
+}
