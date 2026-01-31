@@ -15,10 +15,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   private attackLength: number = 200;
   private attackCooldown: number = 1000;
   private attackTime: number = 500;
-  private timerAttack: Phaser.Time.TimerEvent;
   private attackCollider: Phaser.GameObjects.Zone;
-  private damage: number = 100;
+  private damage: number = 250;
+
   private health: number = 1000;
+  private cooldownDamage: number = 200;
+  private canRecieveDamage:boolean;
 
   constructor(
     scene: Phaser.Scene,
@@ -48,12 +50,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.attackCollider.active = false;
     (this.attackCollider.body as Phaser.Physics.Arcade.Body).enable = false;
 
-    this.timerAttack = this.scene.time.addEvent({
+    this.scene.time.addEvent({
       delay: this.attackCooldown,
       callback: this.onAttack,
       callbackScope: this,
       loop: true,
     });
+
+    this.canRecieveDamage = true;
   }
 
   protected preUpdate(time: number, delta: number): void {
@@ -105,9 +109,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   onAttack() {
-    // this.attackCollider.setX(this.x + this.lastDir.x * (this.width / 2 + this.attackCollider.width / 2));
-    // this.attackCollider.setY(this.y);
-
     (this.attackCollider.body as Phaser.Physics.Arcade.Body).enable = true;
 
     this.scene.time.addEvent({
@@ -122,6 +123,16 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   public receiveDamage(damage: number) {
+    if(!this.canRecieveDamage)
+      return;
+    
+    this.canRecieveDamage = false;
+    this.scene.time.addEvent({
+      delay: this.cooldownDamage,
+      callback: ()=>{this.canRecieveDamage = true;},
+      callbackScope: this,
+    })
+
     this.health -= damage;
 
     if (this.health <= 0) {

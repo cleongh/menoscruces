@@ -16,7 +16,9 @@ Vampire survivors, top-down 2D. se acumulan "monedas", que son buffs temporales 
   - puede salir positivo o negativo
   - se puede cancelar el "roll" con pérdida de monedas (parámetro)
 
-* stats
+
+* player
+** stats
 
 - ataque
 - velocidad de ataque
@@ -26,6 +28,16 @@ Vampire survivors, top-down 2D. se acumulan "monedas", que son buffs temporales 
 - recuperación de vida
 - vida (al llegar a 0, se acaba la partida)
 - monedas
+
+** ataques
+
+
+*** La goma de la máscara
+Genera un área rectangular de daño (WxH). Está activa durante D segundos y luego se desactiva
+*** El hedor infernal
+Genera un área circular de radio R que genera daño. 
+*** Halitosis
+Dispara un objeto en la dirección en la que se mueve cada S segundos
 
 * enemigos
 
@@ -50,8 +62,19 @@ cuando está a menos de =distacia de ataque= (param) se activa el DPS. Al recibi
 - daño proyectil
 - distancia disparo
 
-mismos parámetros que enemigo en línea recta. Pero cuando distancia-a-personaje <= distancia-de-ataque lanza ataque (un proyectil que va en línea recta hacia personaje). Al impactar el proyectil
-  
+mismos parámetros que enemigo en línea recta. Pero cuando =distancia-a-personaje < distancia-disparo= lanza ataque (un proyectil que va en línea recta hacia personaje). Al impactar el proyectil, se quita =daño proyectil=
+
+
+* menú monedas
+:PROPERTIES:
+:ID:       92c25efe-3ef4-4183-a975-ada5a4443947
+:END:
+
+
+#+DOWNLOADED: screenshot @ 2026-01-31 11:10:47
+[[file:menú_monedas/2026-01-31_11-10-47_screenshot.png]]
+
+
 * equilibrio  
   
 | ! | ronda | vida inicial | daño esperado | enemigos |
