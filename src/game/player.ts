@@ -29,7 +29,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     enemyGroup: Phaser.Physics.Arcade.Group,
   ) {
     super(scene, x, y, "player");
-    this.scale = 1/4;
+    this.scale = 1/2;
+    this.setTint(0xb8fb27)
     scene.add.existing(this);
     scene.physics.add.existing(this);
     this.setCollideWorldBounds(true);

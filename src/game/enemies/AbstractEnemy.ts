@@ -21,7 +21,7 @@ export default abstract class AbstractEnemy
   private stunTime: number;
 
   private cooldownDamage: number = 500;
-  private canRecieveDamage:boolean;
+  private canRecieveDamage: boolean;
 
   constructor(scene: Phaser.Scene, x: number, y: number, data: EnemyData) {
     super(scene, x, y, data.sprite);
@@ -39,8 +39,7 @@ export default abstract class AbstractEnemy
   update(player: Player){
     if(this.canMove && Phaser.Math.Distance.Between(player.x, player.y, this.x, this.y) > this.distanceAttack){
       this.followPlayer(player);
-    }
-    else{
+    } else {
       this.body!.stop();
     }
   }
@@ -50,22 +49,25 @@ export default abstract class AbstractEnemy
   }
 
   quitHealth(damage: number) {
-    if(!this.canRecieveDamage)
-      return;
+    if (!this.canRecieveDamage) return;
 
     this.canRecieveDamage = false;
     this.scene.time.addEvent({
       delay: this.cooldownDamage,
-      callback: ()=>{this.canRecieveDamage = true;},
+      callback: () => {
+        this.canRecieveDamage = true;
+      },
       callbackScope: this,
-    })
+    });
 
     this.health -= damage;
 
     this.canMove = false;
     this.scene.time.addEvent({
       delay: this.stunTime,
-      callback: ()=>{this.canMove = true;},
+      callback: () => {
+        this.canMove = true;
+      },
       callbackScope: this,
     });
 
@@ -79,14 +81,7 @@ export default abstract class AbstractEnemy
   }
 
   die() {
-    const coin = new PickableCoin(
-      this.scene,
-      this.x,
-      this.y,
-      "coin",
-      10,
-      "love",
-    );
+    const coin = new PickableCoin(this.scene, this.x, this.y, "coin");
     (this.scene as any).coins.add(coin, true);
     this.destroy();
   }
