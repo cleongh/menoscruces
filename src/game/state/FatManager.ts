@@ -107,6 +107,13 @@ export class FatManager {
     this.gameState.currentCoins = [];
     this.scene.events.emit("current-coins-reset");
   }
+
+  public increaseRound() {
+    this.gameState.localRound += 1;
+    this.scene.events.emit("local-round-changed", this.gameState.localRound);
+    this.gameState.globalRound += 1;
+    this.scene.events.emit("global-round-changed", this.gameState.globalRound);
+  }
 }
 
 export const baseStats: BaseStats = {
