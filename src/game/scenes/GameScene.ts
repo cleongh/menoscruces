@@ -9,8 +9,11 @@ import { Projectile, ProjectileEnemy } from "../enemies/ProjectileEnemy";
 import Landmark from "./Landmark";
 import { EnemySpawner } from "../enemies/EnemySpawner";
 import { enemyWaves } from "../enemies/enemyWave";
+import { Physics } from "phaser";
 
 export class GameScene extends Phaser.Scene {
+  declare body: Phaser.Physics.Arcade.Body;
+
   private player: Player;
   private merchant: Merchant;
   private enemies: Phaser.Physics.Arcade.Group;
@@ -149,5 +152,43 @@ export class GameScene extends Phaser.Scene {
       this.landmarks.add(l);
       l.body!.immovable = true;
     }
+  }
+
+  public infernallSmell_Cara(){
+    this.enemies.getChildren().forEach((enemy: any) => {
+      enemy.update(this.player);
+      if (
+        Phaser.Math.Distance.Between(
+          this.player.x,
+          this.player.y,
+          enemy.x,
+          enemy.y,
+        ) <= 2 * this.player.width
+      ) {
+        let damage = this.fatManager.getTransformedState().baseStats.attackBase;
+        enemy.quitHealth(damage * 3);
+
+        console.log("Quita vida");
+      }
+    });
+  }
+
+  public infernallSmell_Cruz(){
+    this.enemies.getChildren().forEach((enemy: any) => {
+      enemy.update(this.player);
+      if (
+        Phaser.Math.Distance.Between(
+          this.player.x,
+          this.player.y,
+          enemy.x,
+          enemy.y,
+        ) <= 2* this.player.width
+      ) {
+        let damage = this.fatManager.getTransformedState().baseStats.attackBase;
+        enemy.quitHealth(-damage/2);
+
+        console.log("Da vida");
+      }
+    });
   }
 }

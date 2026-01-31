@@ -82,7 +82,61 @@ export const coinDefinitions: TierDefinition[] = [
             };
           },
         },
-      }
+      },
+      {
+        texture: "big-coin",
+        name: "Smell Coin",
+        passCost: 100,
+        option1: {
+          name: "What a stench!",
+          description: "Generates a smell that harms enemies.",
+          kind: "active",
+          texture: "coin",
+          onEffectStart(scene) {
+            scene.time.addEvent({
+              delay: 5000,
+              callback: scene.infernallSmell_Cara,
+              callbackScope: scene,
+              loop: true,
+              }
+            )
+          },
+          onEffectTick(scene) {
+            
+          },
+          onEffectEnd(scene) {
+            
+          },
+        },
+        option2: {
+          name: "Good Smell",
+          description: "Generates a smell that heals enemies.",
+          kind: "active",
+          texture: "coin",
+          onEffectStart(scene) {
+            scene.time.addEvent({
+              delay: 7000,
+              callback: () => {
+                scene.time.addEvent({
+                  delay: 5000,
+                  callback: scene.infernallSmell_Cruz,
+                  callbackScope: scene,
+                  loop: true,
+                })
+              },
+              callbackScope: scene,
+              loop: true,
+              }
+            )
+          },
+          onEffectTick(scene) {
+            
+          },
+          onEffectEnd(scene) {
+            
+          },
+        },
+      },
     ],
   },
 ];
