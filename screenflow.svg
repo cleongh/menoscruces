@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="329.94791mm"
-   height="291.08972mm"
-   viewBox="0 0 329.94791 291.08972"
+   width="367.21976mm"
+   height="299.61734mm"
+   viewBox="0 0 367.21976 299.61734"
    version="1.1"
    id="svg1"
    inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
@@ -23,9 +23,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="0.28863636"
-     inkscape:cx="762.20472"
-     inkscape:cy="471.1811"
+     inkscape:zoom="0.40819346"
+     inkscape:cx="685.94926"
+     inkscape:cy="524.26122"
      inkscape:window-width="1536"
      inkscape:window-height="901"
      inkscape:window-x="0"
@@ -45,7 +45,7 @@
      inkscape:label="Capa 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-5.7552082,30.094938)">
+     transform="translate(31.516649,24.579603)">
     <rect
        style="fill:none;stroke:#000000;stroke-width:1.32292;stroke-dasharray:none"
        id="rect1"
@@ -177,7 +177,7 @@
          id="tspan12"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:none;fill-opacity:1;stroke-width:0.714256;stroke-dasharray:none"
          x="101.30472"
-         y="255.31029">créditos</tspan></text>
+         y="255.31029">menú</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.71406px;font-family:sans-serif;-inkscape-font-specification:sans-serif;writing-mode:lr-tb;direction:ltr;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.714256;stroke-dasharray:none"
@@ -300,5 +300,54 @@
        d="m 313.71971,102.41263 c 14.25998,-71.948114 8.42634,-88.800825 3.88908,-93.338093 -4.53726,-4.5372683 -74.68231,-32.434886 -125.85837,-32.474205 -51.17606,-0.03932 -91.940317,-5.06041 -117.857762,9.139681 C 47.975213,-0.05989597 35.001784,31.760879 35.001784,31.760879 l 5.833631,9.074536 7.778176,-13.611804 -22.686343,7.778173 14.908167,5.833631"
        id="path26"
        sodipodi:nodetypes="czzzccccc" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:1.32292;stroke-dasharray:none"
+       id="rect26"
+       width="120.54166"
+       height="60.958336"
+       x="212.20833"
+       y="131.54167" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.1209px;font-family:sans-serif;-inkscape-font-specification:sans-serif;writing-mode:lr-tb;direction:ltr;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.39011;stroke-dasharray:none"
+       x="218.07866"
+       y="146.64574"
+       id="text27"><tspan
+         sodipodi:role="line"
+         id="tspan27"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:none;fill-opacity:1;stroke-width:1.39011;stroke-dasharray:none"
+         x="218.07866"
+         y="146.64574">tutorial</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.01087px;font-family:sans-serif;-inkscape-font-specification:sans-serif;writing-mode:lr-tb;direction:ltr;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.751357;stroke-dasharray:none"
+       x="227.25502"
+       y="149.69379"
+       id="text31"
+       transform="scale(0.94815732,1.0546773)"><tspan
+         sodipodi:role="line"
+         id="tspan31"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:none;fill-opacity:1;stroke-width:0.751357;stroke-dasharray:none"
+         x="227.25502"
+         y="149.69379">texto porque hacer tutorial no da tiempo</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.71406px;font-family:sans-serif;-inkscape-font-specification:sans-serif;writing-mode:lr-tb;direction:ltr;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.714256;stroke-dasharray:none"
+       x="306.42249"
+       y="184.73131"
+       id="text32"><tspan
+         sodipodi:role="line"
+         id="tspan32"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:none;fill-opacity:1;stroke-width:0.714256;stroke-dasharray:none"
+         x="306.42249"
+         y="184.73131">menú</tspan></text>
+    <path
+       style="fill:none;fill-opacity:1;stroke:#d70530;stroke-width:0.555625;stroke-dasharray:none;stroke-opacity:1"
+       d="m 117.56647,82.688593 c 95.28263,70.975837 95.28263,70.975837 95.28263,70.975837 l -8.75044,-13.6118 -1.62045,14.90817 9.72271,-0.97228"
+       id="path32" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#d70530;stroke-width:0.555625;stroke-dasharray:none;stroke-opacity:1"
+       d="m 320.12309,185.10122 c -35.00178,48.61359 17.50089,53.79905 -56.39176,70.00358 -73.89266,16.20452 -148.4335,20.7418 -160.74894,19.44542 -12.315443,-1.29635 -109.5426249,1.94456 -125.747156,-5.18543 -16.20453,-7.12999 -4.537268,-41.48361 -2.592724,-51.85451 1.944545,-10.3709 9.722718,-120.561701 12.315443,-127.043514 2.592725,-6.481812 17.5008928,-21.38998 17.5008928,-21.38998 L -22.116585,65.1877 -5.2638723,91.763129 3.1624834,69.724968"
+       id="path33" />
   </g>
 </svg>
