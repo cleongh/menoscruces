@@ -37,13 +37,17 @@ export default abstract class AbstractEnemy
     this.play(data.sprite);
   }
 
-  update(player: Player){
-    if(this.canMove && Phaser.Math.Distance.Between(player.x, player.y, this.x, this.y) > this.distanceAttack){
+  update(player: Player) {
+    if (
+      this.canMove &&
+      Phaser.Math.Distance.Between(player.x, player.y, this.x, this.y) >
+        this.distanceAttack
+    ) {
       this.followPlayer(player);
     } else {
       this.body!.stop();
     }
-    if (this.body && this.body.velocity.x<0) {
+    if (this.body && this.body.velocity.x < 0) {
       this.setFlipX(true);
     } else {
       this.setFlipX(false);
@@ -87,8 +91,11 @@ export default abstract class AbstractEnemy
   }
 
   die() {
-    const coin = new PickableCoin(this.scene, this.x, this.y, "coin");
-    (this.scene as any).coins.add(coin, true);
+    if (Math.random() < 0.85) {
+      // sólo instanciar moneda con probabilidad 0.85
+      const coin = new PickableCoin(this.scene, this.x, this.y, "coin");
+      (this.scene as any).coins.add(coin, true);
+    }
     this.destroy();
   }
 }

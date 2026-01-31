@@ -6,7 +6,7 @@ import { ProjectileEnemy } from "./ProjectileEnemy";
 import BasicEnemy from "./basicEnemy";
 
 export class EnemySpawner {
-  private scene: Phaser.Scene;
+  private scene: GameScene;
   private waves: WaveConfig[];
   private currentWaveIndex: number = 0;
 
@@ -21,7 +21,7 @@ export class EnemySpawner {
   public outerRadius: number = 600;
 
   constructor(
-    scene: Phaser.Scene,
+    scene: GameScene,
     waves: WaveConfig[],
     player: Phaser.GameObjects.Components.Transform,
     enemies: Phaser.Physics.Arcade.Group,
@@ -41,6 +41,7 @@ export class EnemySpawner {
     }
 
     this.currentWaveIndex = index;
+    this.scene.fatManager.increaseRound();
     const config = this.waves[index];
 
     // 1. Prepare the randomized pool of enemies for this wave
@@ -100,8 +101,8 @@ export class EnemySpawner {
     // We use sqrt to ensure uniform density across the area
     const r = Math.sqrt(
       Math.random() *
-      (Math.pow(this.outerRadius, 2) - Math.pow(this.innerRadius, 2)) +
-      Math.pow(this.innerRadius, 2),
+        (Math.pow(this.outerRadius, 2) - Math.pow(this.innerRadius, 2)) +
+        Math.pow(this.innerRadius, 2),
     );
 
     return new Phaser.Math.Vector2(

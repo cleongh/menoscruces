@@ -120,6 +120,7 @@ export class GameScene extends Phaser.Scene {
 
   update() {
     this.player.update(this.cursors);
+    this.fatManager.tickActiveCoins();
 
     this.enemies.getChildren().forEach((enemy: any) => {
       enemy.update(this.player);

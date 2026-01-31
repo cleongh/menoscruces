@@ -1,3 +1,5 @@
+import { GameScene } from "../scenes/GameScene";
+
 export interface IBaseCoin {
   readonly kind: "passive";
   readonly texture: string;
@@ -8,9 +10,9 @@ export interface IBaseCoin {
 
 export interface IActiveCoin extends Omit<IBaseCoin, "kind"> {
   readonly kind: "active";
-  readonly onEffectTick: () => void;
-  readonly onEffectStart: () => void;
-  readonly onEffectEnd: () => void;
+  readonly onEffectTick: (scene: GameScene) => void;
+  readonly onEffectStart: (scene: GameScene) => void;
+  readonly onEffectEnd: (scene: GameScene) => void;
 }
 
 export type Coin = IBaseCoin | IActiveCoin;
