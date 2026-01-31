@@ -39,7 +39,7 @@ los stats son realmente *funciones*, no variables
 - velocidad de movimiento (en $\frac{L}{s}$): $L + velocidad(ronda\_local, ronda\_global,monedas\_grandes)$.
 - escudo: $velocidad(ronda\_local, ronda\_global,monedas\_grandes)$.
 - recuperación de vida: $velocidad(ronda\_local, ronda\_global,monedas\_grandes)$
-- vida máxima: =vida máxima inicial= + $velocidad(ronda\_local, ronda\_global,monedas\_grandes)$)
+- vida máxima: =vida máxima inicial= + $velocidad(ronda\_local, ronda\_global,monedas\_grandes)$ )
 
 variables que se modifican:
 
@@ -85,7 +85,11 @@ Dispara un objeto en la dirección en la que se mueve cada S segundos
 
 ***** buffs de stats
 
+****** 
+
 ***** buffs temporales
+
+****** 
 
 ** rondas
 El juego tiene un =int= que es el número de ronda actual local, que se resetea en el mercader. También hay un =int= de veces total, que son las rondas reales desde el principio.
@@ -158,12 +162,35 @@ Y se espera que la posición de cada enemigo sea aleatoria con una función que,
 # | # |     2 |              |          |                    |                               |             0 |
 # #+TBLFM: $7='(* $enemigos $dano_medio_enemigo $probabilidad_dano_por_enemigo);N
 
+*** tabla enemigos
+
+Minutos por ronda
+
+#+name: constantes
+| tiempo_por_wave |
+|-----------------|
+|              45 |
+
+
+#+name: crecimiento-enemigos
+#+plot: file:"./crecimiento.svg"
+| ! | ronda_global | ronda_local |         movimiento |               dano | tiempo_mercader |
+|---+--------------+-------------+--------------------+--------------------+-----------------|
+| # |            1 |           1 |             1.0088 |             1.0088 |              45 |
+| # |            2 |           2 | 1.0352000000000001 | 1.0352000000000001 |              90 |
+| # |            3 |           3 | 1.0792000000000002 | 1.0792000000000002 |             135 |
+| # |            4 |           4 |             1.1408 |             1.1408 |             180 |
+| # |            5 |           1 |              1.028 |              1.028 |              45 |
+| # |            6 |           2 |             1.0608 |             1.0608 |              90 |
+| # |            7 |           4 | 1.1671999999999998 | 1.1671999999999998 |             180 |
+| # |            8 |           5 | 1.2511999999999999 | 1.2511999999999999 |             225 |
+#+TBLFM: $4='(+ 1 (* 0.0008 (expt $ronda_global 2)) (* 0.008 (expt  $ronda_local 2)));N::$5='(+ 1 (* 0.0008 (expt $ronda_global 2)) (* 0.008 (expt  $ronda_local 2)));N::$6='(* $ronda_local remote(constantes, @2$1));N
+
+[[file:./crecimiento.svg]]
+
+El daño medio por enemigo es directamente proporcional a los enemigos en pantalla y su velocidad, e inversamente proporcional al poder del jugador.
+
 * screen flow
 
 [[file:screenflow.svg]]
 
-* Pendiente
-
-** TODO hacer "enemigos por segundo"
-
-** TODO hacer buffs temporales
