@@ -274,7 +274,15 @@ export class NewCoinScene extends Phaser.Scene {
     height: number,
     callbackFun: Function,
   ): Button {
-    let button = new Button(this, text, x, y, width, height);
+    let button = new Button(
+      this,
+      text,
+      x,
+      y,
+      "buttonNormal",
+      "buttonHover",
+      "buttonPressed",
+    );
 
     button.setPointerUpCallback(() => {
       callbackFun.bind(this)();
