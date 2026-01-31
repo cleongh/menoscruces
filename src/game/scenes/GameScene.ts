@@ -1,9 +1,9 @@
 import Player from "../player";
 import { InventoryUI } from "../UI/InventoryUI";
 import Merchant from "../merchant";
-import { PickableCoin } from "../sceneObjects/PickableCoin";
 import Boss from "../enemies/Boss";
 import AbstractEnemy from "../enemies/AbstractEnemy";
+import { AbstractCoin } from "../sceneObjects/AbstractCoin";
 
 export class GameScene extends Phaser.Scene {
   private player: Player;
@@ -20,24 +20,20 @@ export class GameScene extends Phaser.Scene {
   create() {
     this.enemies = this.physics.add.group({
       classType: AbstractEnemy,
-      runChildUpdate: true,
     });
     this.player = new Player(this, 0, 0, this.enemies);
 
     this.merchant = new Merchant(this, 0, 0);
 
     this.coins = this.physics.add.group({
-      classType: PickableCoin,
-      runChildUpdate: true,
+      classType: AbstractCoin,
     });
 
     // recoger moneda al tocarla
-    this.physics.add.overlap(this.player, this.coins, (_, coin) => {
-      const c = coin as PickableCoin;
-
-      this.events.emit("coin-collected", c.coinData);
-
-      c.destroy();
+    this.physics.add.collider(this.player, this.coins, (_, coin) => {
+      console.log("DAME DINERO");
+      const c = coin as AbstractCoin;
+      c.handleCoinPickup();
     });
 
     this.time.addEvent({
@@ -45,10 +41,6 @@ export class GameScene extends Phaser.Scene {
       callback: this.spawnEnemy,
       callbackScope: this,
       loop: true,
-    });
-
-    this.physics.add.overlap(this.player, this.enemies, (p, e) => {
-      console.log("Pero te quiero...");
     });
 
     this.cursors = this.input.keyboard!.createCursorKeys();
@@ -73,7 +65,11 @@ export class GameScene extends Phaser.Scene {
     this.player.update(this.cursors);
 
     this.enemies.getChildren().forEach((enemy: any) => {
-      enemy.followPlayer(this.player);
+      enemy.update(this.player);
+      if(Phaser.Math.Distance.Between(this.player.x, this.player.y, enemy.x, enemy.y) <= enemy.distanceAttack){
+        console.log("Pero te quiero...");
+        this.player.receiveDamage(enemy.attack);
+      }
     });
 
     this.merchant.update();

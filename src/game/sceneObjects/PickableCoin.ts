@@ -1,6 +1,6 @@
-export class PickableCoin extends Phaser.Physics.Arcade.Sprite {
-  declare body: Phaser.Physics.Arcade.Body;
+import { AbstractCoin } from "./AbstractCoin";
 
+export class PickableCoin extends AbstractCoin {
   public coinData: { texture: string; value: number; stat: string };
 
   constructor(
@@ -11,15 +11,15 @@ export class PickableCoin extends Phaser.Physics.Arcade.Sprite {
     value: number,
     stat: string,
   ) {
-    super(scene, x, y, texture);
+    super(scene, x, y, texture, 20);
     this.coinData = { texture, value, stat };
-
-    scene.add.existing(this);
-    scene.physics.add.existing(this);
-
-    this.setDisplaySize(20, 20);
 
     // TODO: tunear cuerpo para que se sienta natural al chocar
     this.body.setCircle(this.width / 2);
+  }
+
+  public handleCoinPickup(): void {
+    this.scene.events.emit("coin-collected", this.coinData);
+    this.destroy();
   }
 }
