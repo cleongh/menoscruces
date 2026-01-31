@@ -164,27 +164,28 @@ Y se espera que la posición de cada enemigo sea aleatoria con una función que,
 
 *** tabla enemigos
 
-Minutos por ronda
-
 #+name: constantes
-| tiempo_por_wave |
-|-----------------|
-|              45 |
+| tiempo aproximado por wave             |   45 |
+| vida inicial                           |    5 |
+| velocidad inicial (en $L$ por segundo) |    1 |
+| velocidad inicial bala                 | 0.75 |
+| velocidad inicial enemigos             |  0.5 |
+
 
 
 #+name: crecimiento-enemigos
 #+plot: file:"./crecimiento.svg"
 | ! | ronda_global | ronda_local |         movimiento |               dano | tiempo_mercader |
 |---+--------------+-------------+--------------------+--------------------+-----------------|
-| # |            1 |           1 |             1.0088 |             1.0088 |              45 |
-| # |            2 |           2 | 1.0352000000000001 | 1.0352000000000001 |              90 |
-| # |            3 |           3 | 1.0792000000000002 | 1.0792000000000002 |             135 |
-| # |            4 |           4 |             1.1408 |             1.1408 |             180 |
-| # |            5 |           1 |              1.028 |              1.028 |              45 |
-| # |            6 |           2 |             1.0608 |             1.0608 |              90 |
-| # |            7 |           4 | 1.1671999999999998 | 1.1671999999999998 |             180 |
-| # |            8 |           5 | 1.2511999999999999 | 1.2511999999999999 |             225 |
-#+TBLFM: $4='(+ 1 (* 0.0008 (expt $ronda_global 2)) (* 0.008 (expt  $ronda_local 2)));N::$5='(+ 1 (* 0.0008 (expt $ronda_global 2)) (* 0.008 (expt  $ronda_local 2)));N::$6='(* $ronda_local remote(constantes, @2$1));N
+| # |            1 |           1 |                1.0 |             1.0088 |              45 |
+| # |            2 |           2 |             1.0088 | 1.0352000000000001 |              90 |
+| # |            3 |           3 | 1.0352000000000001 | 1.0792000000000002 |             135 |
+| # |            4 |           4 | 1.0792000000000002 |             1.1408 |             180 |
+| # |            5 |           1 |             1.0128 |              1.028 |              45 |
+| # |            6 |           2 |              1.028 |             1.0608 |              90 |
+| # |            7 |           4 |             1.1008 | 1.1671999999999998 |             180 |
+| # |            8 |           5 | 1.1671999999999998 | 1.2511999999999999 |             225 |
+#+TBLFM: $4='(+ 1 (* 0.0008 (expt (- $ronda_global 1) 2)) (* 0.008 (expt  (- $ronda_local 1) 2)));N::$5='(+ 1 (* 0.0008 (expt $ronda_global 2)) (* 0.008 (expt  $ronda_local 2)));N::$6='(* $ronda_local remote(constantes, @1$2));N
 
 [[file:./crecimiento.svg]]
 
