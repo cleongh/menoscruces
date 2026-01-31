@@ -27,7 +27,9 @@ export class Preloader extends Scene {
     this.load.setPath("assets");
 
     this.load.image("logo", "logo.png");
-    this.load.image("coin", "coin.png");
+    this.load.image("moneda_ares", "coins/moneda_ares.png");
+    this.load.image("moneda_bomba", "coins/moneda_bomba.png");
+    this.load.image("moneda_vida", "coins/moneda_vida.png");
     this.load.image("boss", "placeholder/boss.jpg");
     this.load.image("big-coin", "placeholder/big-coin.png");
     this.load.image("projectileEnemy", "placeholder/projectileEnemy.jpg");
@@ -72,8 +74,8 @@ export class Preloader extends Scene {
     });
 
     this.load.spritesheet("flares", "particles/flares.png", {
-      frameWidth: 128, 
-      frameHeight: 128
+      frameWidth: 128,
+      frameHeight: 128,
     });
 
     this.load.audio("music", "music/MainSongLoop.mp3");
@@ -100,7 +102,7 @@ export class Preloader extends Scene {
       key: "gomilla",
       frames: this.anims.generateFrameNumbers("gomilla", { start: 0, end: 1 }),
       frameRate: 10,
-      repeat: 5
+      repeat: 5,
     });
 
     this.anims.create({
@@ -112,7 +114,10 @@ export class Preloader extends Scene {
 
     this.anims.create({
       key: "shootmachine",
-      frames: this.anims.generateFrameNumbers("shootmachine", { start: 0, end: 3 }),
+      frames: this.anims.generateFrameNumbers("shootmachine", {
+        start: 0,
+        end: 3,
+      }),
       frameRate: 12, // Velocidad de la animación
       repeat: -1, // Animación en bucle
     });
