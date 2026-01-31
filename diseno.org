@@ -31,13 +31,8 @@ Vampire survivors, top-down 2D. se acumulan "monedas", que son buffs temporales 
 
 ** ataques
 
-
 *** La goma de la máscara
 Genera un área rectangular de daño (WxH). Está activa durante D segundos y luego se desactiva
-*** El hedor infernal
-Genera un área circular de radio R que genera daño. 
-*** Halitosis
-Dispara un objeto en la dirección en la que se mueve cada S segundos
 
 * enemigos
 
@@ -65,6 +60,10 @@ cuando está a menos de =distacia de ataque= (param) se activa el DPS. Al recibi
 mismos parámetros que enemigo en línea recta. Pero cuando =distancia-a-personaje < distancia-disparo= lanza ataque (un proyectil que va en línea recta hacia personaje). Al impactar el proyectil, se quita =daño proyectil=
 
 
+* spawn de enemigos
+
+Hay una una función $f(número-ronda)$
+
 * menú monedas
 :PROPERTIES:
 :ID:       92c25efe-3ef4-4183-a975-ada5a4443947
@@ -77,10 +76,11 @@ mismos parámetros que enemigo en línea recta. Pero cuando =distancia-a-persona
 
 * equilibrio  
   
-| ! | ronda | vida inicial | daño esperado | enemigos |
-|---+-------+--------------+---------------+----------|
-| # |     1 |            5 |             0 |          |
-|   |       |              |               |          |
+| ! | ronda | vida-inicial | enemigos | dano_medio_enemigo | probabilidad_dano_por_enemigo | dano_esperado |
+|---+-------+--------------+----------+--------------------+-------------------------------+---------------|
+| # |     1 |            5 |      100 |                1.0 |                        0.0001 |          0.01 |
+| # |     2 |              |          |                    |                               |             0 |
+#+TBLFM: $7='(* $enemigos $dano_medio_enemigo $probabilidad_dano_por_enemigo);N
 
 
 =enemigos= es los enemigos que se esperan hasta maximizar sistema general de ronda (correlaciona con el tiempo de juego con "enemigos por segundo" )
@@ -88,6 +88,21 @@ mismos parámetros que enemigo en línea recta. Pero cuando =distancia-a-persona
 Progresión de enemigos en crecimiento exponencial basado en máximo esperado de enemigos
 
 * buffs
+
+Los buffs van conceptualmente juntos. Todo buff tiene cara positiva o negativa. Algunos buffs *tienen precondiciones*.
+
+** Buffs
+
+*** Hedor infernal I
+Genera un área circular de radio R que genera daño D
+
+*** Hedor infernal II [precondición: HEDOR INFERNAL I]
+Desactiva hedor infernal I
+
+
+*** Halitosis I
+Dispara un objeto en la dirección en la que se mueve cada S segundos
+
 
 ** buffs de stats
 
