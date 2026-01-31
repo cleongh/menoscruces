@@ -14,7 +14,6 @@ export class InventoryUI extends Phaser.GameObjects.Container {
 
   // UI Text elements
   private localCounterText: Phaser.GameObjects.Text;
-  private permanentCounterText: Phaser.GameObjects.Text;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y);

@@ -56,6 +56,8 @@ Genera un área rectangular de daño (WxH). Está activa durante D segundos y lu
 
 Simplemente son un contador, hay un porcentaje global de "enemigo deja moneda". Al cogerlas por overlap se suma 1 a "monedas" (de [[#player][player]])
 
+Cada enemigo da monedas de $random([rglobal, rlocal + rglobal])$. Tienen un 85% de dejar moneda.
+
 *** monedas "grandes"
 :PROPERTIES:
 :ID:       92c25efe-3ef4-4183-a975-ada5a4443947
@@ -65,23 +67,23 @@ estas son las monedas que pueden ser cara a cruz. Al cogerlas, sale un menú:
 #+DOWNLOADED: screenshot @ 2026-01-31 11:10:47
 [[file:menú_monedas/2026-01-31_11-10-47_screenshot.png]]
 
-y =roll= puede ser cara o cruz. Salga lo que salga, se aplica un buff.
+y =roll= puede ser cara o cruz. Salga lo que salga, se aplica un buff. Al aplicar un buff, 
 
 **** buffs
 
-Los buffs van conceptualmente juntos. Todo buff tiene cara positiva o negativa. Algunos buffs *tienen precondiciones*.
+Los buffs van conceptualmente juntos. Todo buff tiene cara positiva o negativa. Se pueden acumular los buffs.
 
-***** Buffs
+***** Buffs de mecánicas
 
-****** Hedor infernal I
-Genera un área circular de radio R que genera daño D
+Los buffs de mecánicas se acumulan: se pueden tener varios y se activan en cuanto se cogen. 
 
-****** Hedor infernal II [precondición: HEDOR INFERNAL I]
-Desactiva hedor infernal I
+****** Hedor infernal
 
-****** Halitosis I
-Dispara un objeto en la dirección en la que se mueve cada S segundos
+- Cara: Genera un área circular de radio $2\times L$ que genera el triple del daño de jugador cada 5 segundos.
+- Cruz: Genera un área circular de radio $2\times L$ que genera un escudo a los enemigos de la mitad del daño del jugador, cada 7 segundos. 
 
+****** Halitosis
+Dispara un objeto en la dirección en la que se mueve cada 2.5 segundos. El objeto viaja 2 veces la velocidad de la pantalla, y va a $4\times$ de la velocidad del jugador.
 
 ***** buffs de stats
 
@@ -93,6 +95,14 @@ Dispara un objeto en la dirección en la que se mueve cada S segundos
 
 ** rondas
 El juego tiene un =int= que es el número de ronda actual local, que se resetea en el mercader. También hay un =int= de veces total, que son las rondas reales desde el principio.
+
+
+Cada ronda es:
+
+- un tiempo de generación (se generan durante $N$ segundos)
+- un tiempo de espera (que puede ser 0) entre rondas (desde que acaba una hasta que empieza otra)
+- los enemigos que salen
+
 
 ** enemigos
 
@@ -165,12 +175,13 @@ Y se espera que la posición de cada enemigo sea aleatoria con una función que,
 *** tabla enemigos
 
 #+name: constantes
-| tiempo aproximado por wave             |   45 |
-| vida inicial                           |    5 |
-| velocidad inicial (en $L$ por segundo) |    1 |
-| velocidad inicial bala                 | 0.75 |
-| velocidad inicial enemigos             |  0.5 |
-
+| tiempo aproximado por ronda          |   90 |
+| vida inicial                         |    5 |
+| velocidad inicial (en L por segundo) |    1 |
+| velocidad inicial bala               | 0.75 |
+| velocidad inicial enemigos           |  0.5 |
+| daño inicial enemigos                |    1 |
+| enemigos medios por segundo          |   30 |
 
 
 #+name: crecimiento-enemigos
@@ -187,6 +198,8 @@ Y se espera que la posición de cada enemigo sea aleatoria con una función que,
 | # |            8 |           5 | 1.1671999999999998 | 1.2511999999999999 |             225 |
 #+TBLFM: $4='(+ 1 (* 0.0008 (expt (- $ronda_global 1) 2)) (* 0.008 (expt  (- $ronda_local 1) 2)));N::$5='(+ 1 (* 0.0008 (expt $ronda_global 2)) (* 0.008 (expt  $ronda_local 2)));N::$6='(* $ronda_local remote(constantes, @1$2));N
 
+$movimiento = 1 + 0.008 \times rlocal^2 + 0.0008 \times rglobal^2$
+
 [[file:./crecimiento.svg]]
 
 El daño medio por enemigo es directamente proporcional a los enemigos en pantalla y su velocidad, e inversamente proporcional al poder del jugador.
@@ -194,4 +207,3 @@ El daño medio por enemigo es directamente proporcional a los enemigos en pantal
 * screen flow
 
 [[file:screenflow.svg]]
-

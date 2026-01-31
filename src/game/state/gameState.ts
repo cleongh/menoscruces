@@ -79,4 +79,13 @@ export interface BaseStats {
    * Rango base del personaje
    */
   rangeBase: number;
+
+  /**
+   * Daño base que infligen los enemigos
+   */
+  enemyDamageBase: number;
+  /**
+   * Velocidad base de los enemigos (en píxeles por segundo)
+   */
+  enemySpeedBase: number;
 }
