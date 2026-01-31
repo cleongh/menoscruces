@@ -29,6 +29,7 @@ export class GameScene extends Phaser.Scene {
     })
 
     this.player = new Player(this, 0, 0, this.enemies);
+    
 
     this.merchant = new Merchant(this, 0, 0);
 
