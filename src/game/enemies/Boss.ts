@@ -18,8 +18,40 @@ export default class Boss extends AbstractEnemy {
   die(): void {
     const coin = new BigCoin(this.scene, this.x, this.y, {
       texture: "big-coin",
-      option1: "love",
-      option2: "toni",
+      name: "Moneda Vital",
+      passCost: 55,
+      option1: {
+        name: "+10 Extra Health",
+        description: "Increases your maximum health by 10 points.",
+        kind: "passive",
+        texture: "coin",
+        modifier: (state) => {
+          const newMaxHealth = state.baseStats.healthBase + 10;
+          return {
+            ...state,
+            baseStats: {
+              ...state.baseStats,
+              healthBase: newMaxHealth,
+            },
+          };
+        },
+      },
+      option2: {
+        name: "-10 Extra Health",
+        description: "Decreases your maximum health by 10 points.",
+        kind: "passive",
+        texture: "coin",
+        modifier: (state) => {
+          const newMaxHealth = state.baseStats.healthBase - 10;
+          return {
+            ...state,
+            baseStats: {
+              ...state.baseStats,
+              healthBase: newMaxHealth,
+            },
+          };
+        },
+      },
     });
 
     (this.scene as any).coins.add(coin, true);
