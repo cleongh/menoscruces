@@ -45,7 +45,9 @@ Parámetros:
 - dps
 - distacia de ataque
 
-cuando está a menos de =distacia de ataque= (param) se activa el DPS. Al recibir impacto de héroe pierde vida. cuando vida <= 0, muere
+cuando está a menos de =distacia de ataque= (param) se activa el DPS. Al recibir impacto de héroe pierde vida. cuando vida <= 0, muere.
+
+Cuando está a distancia de ataque o menos, no se mueve.
 
 ** enemigo que dispara
 
