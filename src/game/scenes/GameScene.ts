@@ -118,7 +118,7 @@ export class GameScene extends Phaser.Scene {
 
     this.tweens.add({
       targets: this.music,
-      volume: { from: 0, to: 0.5 },
+      volume: { from: 0, to: 0.2 },
       duration: 3000,
       ease: "Linear",
     });
@@ -164,7 +164,7 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
-  public infernallSmell_Cara(){
+  public infernallSmell_Cara() {
     this.smellImage.active = true;
     this.smellImage.setX(this.player.x);
     this.smellImage.setY(this.player.y);
@@ -199,13 +199,13 @@ export class GameScene extends Phaser.Scene {
     })
   }
 
-  public infernallSmell_Cruz(){
+  public infernallSmell_Cruz() {
     this.smellImage.active = true;
     this.smellImage.setX(this.player.x);
     this.smellImage.setY(this.player.y);
     this.smellImage.radius = 2 * this.player.width * this.fatManager.getTransformedState().baseStats.rangeBase;
     this.smellImage.alpha = 0.4;
-    
+
     this.enemies.getChildren().forEach((enemy: any) => {
       enemy.update(this.player);
       if (
@@ -217,7 +217,7 @@ export class GameScene extends Phaser.Scene {
         ) <= 2 * this.player.width * this.fatManager.getTransformedState().baseStats.rangeBase
       ) {
         let damage = this.fatManager.getTransformedState().baseStats.attackBase;
-        enemy.quitHealth(-damage/2);
+        enemy.quitHealth(-damage / 2);
 
         console.log("Da vida");
       }
