@@ -4,14 +4,16 @@ import Merchant from "../merchant";
 import Boss from "../enemies/Boss";
 import AbstractEnemy from "../enemies/AbstractEnemy";
 import { AbstractCoin } from "../sceneObjects/AbstractCoin";
-import { Projectile, ProjectileEnemy } from "../enemies/ProjectileEnemy";
 import { baseStats, FatManager } from "../state/FatManager";
+import {Projectile, ProjectileEnemy} from "../enemies/ProjectileEnemy"
+import Landmark from "./Landmark";
 
 export class GameScene extends Phaser.Scene {
   private player: Player;
   private merchant: Merchant;
   private enemies: Phaser.Physics.Arcade.Group;
   private projectiles: Phaser.Physics.Arcade.Group;
+  private landmarks: Phaser.Physics.Arcade.StaticGroup;
   private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   private inventory: InventoryUI;
   private coins: Phaser.Physics.Arcade.Group;
@@ -32,34 +34,37 @@ export class GameScene extends Phaser.Scene {
 
     this.projectiles = this.physics.add.group({
       classType: Projectile,
-    });
+    })
 
+    this.landmarks = this.physics.add.staticGroup({
+      classType: Landmark,
+    })
+    
     this.player = new Player(this, 0, 0, this.enemies);
-
+    
     this.merchant = new Merchant(this, 0, 0);
 
     this.coins = this.physics.add.group({
       classType: AbstractCoin,
     });
 
+    
     // recoger moneda al tocarla
     this.physics.add.collider(this.player, this.coins, (_, coin) => {
       const c = coin as AbstractCoin;
       c.handleCoinPickup();
     });
 
-    this.physics.add.overlap(
-      this.player,
-      this.projectiles,
-      (player, projectile) => {
-        const pr = projectile as Projectile;
-        const pl = player as Player;
-
-        pl.receiveDamage(pr.damage);
-        pr.destroy();
-      },
-    );
-
+    this.physics.add.collider(this.player, this.landmarks);
+    
+    this.physics.add.overlap(this.player, this.projectiles, (player, projectile) =>{
+      const pr = projectile as Projectile;
+      const pl = player as Player;
+      
+      pl.receiveDamage(pr.damage);
+      pr.destroy();
+    })
+    
     this.time.addEvent({
       delay: 1000,
       callback: this.spawnEnemy,
@@ -74,6 +79,8 @@ export class GameScene extends Phaser.Scene {
     this.physics.world.setBounds(0, 0, this.width, this.height);
     this.cameras.main.setBounds(0, 0, this.width, this.height);
     this.cameras.main.startFollow(this.player);
+
+    this.createLandmarks();
   }
 
   spawnEnemy() {
@@ -109,5 +116,17 @@ export class GameScene extends Phaser.Scene {
     });
 
     this.merchant.update();
+  }
+
+
+  createLandmarks(numLandMarks: number = 10){
+    for(let i = 0; i < numLandMarks; ++i){
+      let x = Phaser.Math.Between(0, this.width);
+      let y = Phaser.Math.Between(0, this.height);
+
+      const l = new Landmark(this, x, y);
+      this.landmarks.add(l);
+      l.body!.immovable = true;
+    }
   }
 }
