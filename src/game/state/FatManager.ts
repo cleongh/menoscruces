@@ -94,7 +94,15 @@ export class FatManager {
     );
   }
 
+  /**
+   * El jugador le entrega todas sus monedas al mercader: 
+   * - las monedas pequeñas se añaden al contador global del mercader, las del jugador se quedan en 0
+   * - las monedas grandes se convierten en bufos y debufos permanentes (monedas grandes del mercader)
+   * - el jugador se queda sin monedas grandes
+   * - comienza una ronda nueva (local)
+   */
   public commitCoinsToMerchant(): void {
+    console.log("DAME TODAS TUS MONEDASSSS")
     this.gameState.merchantCoins += this.gameState.localCoins;
 
     this.gameState.localCoins = 0;
