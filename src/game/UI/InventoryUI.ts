@@ -50,8 +50,8 @@ export class InventoryUI extends Phaser.GameObjects.Container {
       this.localCoins.addItem(coinData.texture);
     });
 
-    scene.typedEvents.on("coin-commited", (coinData: Coin) => {
-      this.permanentCoins.addItem(coinData.texture);
+    scene.typedEvents.on("coins-commited", (coins: Coin[]) => {
+      this.permanentCoins.addItems(coins.map((c) => c.texture));
     });
 
     scene.typedEvents.on("local-coins-changed", (newValue) => {

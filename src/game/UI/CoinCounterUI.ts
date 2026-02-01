@@ -8,7 +8,7 @@ export class CoinCounterUI extends Phaser.GameObjects.Container {
   private readonly padding = 15;
   private readonly targetHeight = 65;
   private readonly targetWidth = 120;
-  private readonly coinSize = 55;
+  private readonly coinSize = 53;
 
   constructor(
     scene: Phaser.Scene,
