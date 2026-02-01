@@ -49,6 +49,8 @@ export class Preloader extends Scene {
     this.load.image("buttonHover", "ui/ButtonHover.png");
     this.load.image("buttonPressed", "ui/ButtonPressed.png");
 
+    this.load.image("clouds", "clouds.png");
+
     this.load.image("coin", "coins/monedilla.png");
 
     this.load.spritesheet("player", "player.png", {
