@@ -36,21 +36,21 @@ export class GameScene extends Phaser.Scene {
   //private smellImage: Phaser.GameObjects.Arc;
   private smellImage: Phaser.GameObjects.Sprite;
 
-  private vibratingPipeline : VibratingPipeline;
+  private vibratingPipeline: VibratingPipeline;
 
   constructor() {
     super("GameScene");
-    this.fatManager = new FatManager(this, baseStats);
-    this.typedEvents = new TypedEventEmitter();
   }
 
   create() {
+    this.fatManager = new FatManager(this, baseStats);
+    this.typedEvents = new TypedEventEmitter();
 
     if (this.game.renderer instanceof Phaser.Renderer.WebGL.WebGLRenderer) {
       this.vibratingPipeline = new VibratingPipeline(this.game);
       this.game.renderer.pipelines.add(
         VibratingPipeline.KEY,
-        this.vibratingPipeline
+        this.vibratingPipeline,
       );
     }
 
@@ -145,6 +145,10 @@ export class GameScene extends Phaser.Scene {
     this.smellImage.play("hodor");
     this.smellImage.active = false;
     this.smellImage.alpha = 0;
+
+    this.typedEvents.on("player-dead", () => {
+      this.scene.start("GameOver");
+    });
   }
 
   update() {
@@ -175,10 +179,9 @@ export class GameScene extends Phaser.Scene {
     // Parámetros al "pipeline" (shader) de vibración usado en el
     // player.
     if (this.vibratingPipeline) {
-      this.vibratingPipeline.set1f('scale', 0.007); // Cantidad de desplazamiento
-      this.vibratingPipeline.set1f('speed', 5); // > 1. Cambios por segundo
+      this.vibratingPipeline.set1f("scale", 0.007); // Cantidad de desplazamiento
+      this.vibratingPipeline.set1f("speed", 5); // > 1. Cambios por segundo
     }
-
   }
 
   createLandmarks(numLandMarks: number = 80) {
@@ -196,9 +199,10 @@ export class GameScene extends Phaser.Scene {
     this.smellImage.active = true;
     this.smellImage.setX(this.player.x);
     this.smellImage.setY(this.player.y);
-    this.smellImage.setScale(this.fatManager.getTransformedState().baseStats.rangeBase);
+    this.smellImage.setScale(
+      this.fatManager.getTransformedState().baseStats.rangeBase,
+    );
     this.smellImage.alpha = 0.8;
-
 
     this.enemies.getChildren().forEach((enemy: any) => {
       enemy.update(this.player);
@@ -208,7 +212,9 @@ export class GameScene extends Phaser.Scene {
           this.player.y,
           enemy.x,
           enemy.y,
-        ) <= this.smellImage.width / 2 * this.fatManager.getTransformedState().baseStats.rangeBase
+        ) <=
+        (this.smellImage.width / 2) *
+          this.fatManager.getTransformedState().baseStats.rangeBase
       ) {
         let damage = this.fatManager.getTransformedState().baseStats.attackBase;
         enemy.quitHealth(damage * 3);
@@ -224,14 +230,17 @@ export class GameScene extends Phaser.Scene {
         this.smellImage.alpha = 0;
       },
       callbackScope: this,
-    })
+    });
   }
 
   public infernallSmell_Cruz() {
     this.smellImage.active = true;
     this.smellImage.setX(this.player.x);
     this.smellImage.setY(this.player.y);
-    this.smellImage.setScale(this.fatManager.getTransformedState().baseStats.rangeBase); this.smellImage.alpha = 0.4;
+    this.smellImage.setScale(
+      this.fatManager.getTransformedState().baseStats.rangeBase,
+    );
+    this.smellImage.alpha = 0.4;
     this.smellImage.alpha = 0.4;
     this.enemies.getChildren().forEach((enemy: any) => {
       enemy.update(this.player);
@@ -241,7 +250,9 @@ export class GameScene extends Phaser.Scene {
           this.player.y,
           enemy.x,
           enemy.y,
-        ) <= this.smellImage.width / 2 * this.fatManager.getTransformedState().baseStats.rangeBase
+        ) <=
+        (this.smellImage.width / 2) *
+          this.fatManager.getTransformedState().baseStats.rangeBase
       ) {
         let damage = this.fatManager.getTransformedState().baseStats.attackBase;
         enemy.quitHealth(-damage / 2);
@@ -257,6 +268,6 @@ export class GameScene extends Phaser.Scene {
         this.smellImage.alpha = 0;
       },
       callbackScope: this,
-    })
+    });
   }
 }
