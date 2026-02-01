@@ -1,14 +1,15 @@
 import { BigCoin } from "../sceneObjects/BigCoin";
 import { GameScene } from "../scenes/GameScene";
 import AbstractEnemy from "./AbstractEnemy";
+import { baseStats } from "../state/FatManager";
 
 export default class Boss extends AbstractEnemy {
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, {
-      health: 500,
-      speed: 80,
-      attack: 0.15,
-      distanceAttack: 25,
+      health: baseStats.enemyHealthBase * 2,
+      speed: baseStats.enemySpeedBase * 1.2,
+      attack: baseStats.enemyDamageBase * 2,
+      distanceAttack: baseStats.enemyRangedAttack,
       sprite: "eleph",
     });
 

@@ -36,20 +36,30 @@ export class Preloader extends Scene {
     this.load.image("moneda_sonic", "coins/moneda_sonic.png");
     this.load.image("moneda_caracol", "coins/moneda_caracol.png");
     this.load.image("moneda_pulpo", "coins/moneda_pulpo.png");
+    this.load.image("moneda_cuchillito", "coins/moneda_cuchillito.png");
 
     this.load.image("boss", "placeholder/boss.jpg");
     this.load.image("big-coin", "placeholder/big-coin.png");
     this.load.image("projectileEnemy", "placeholder/projectileEnemy.jpg");
-    this.load.image("projectile", "placeholder/projectile.jpg");
+    this.load.image("projectile", "enemies/cobete.png");
+
+    //this.load.image("projectile", "placeholder/projectile.jpg");
     this.load.image("landmark", "placeholder/landmark.jpg");
     this.load.image("buttonNormal", "ui/ButtonNormal.png");
     this.load.image("buttonHover", "ui/ButtonHover.png");
     this.load.image("buttonPressed", "ui/ButtonPressed.png");
     this.load.image("MainMenuBg", "ui/MainMenuBg.png");
 
-    this.load.image("coin", "coins/monedilla.png")
+    this.load.image("clouds", "clouds.png");
+
+    this.load.image("coin", "coins/monedilla.png");
 
     this.load.spritesheet("player", "player.png", {
+      frameWidth: 256,
+      frameHeight: 256,
+    });
+
+    this.load.spritesheet("merchant", "merchant.png", {
       frameWidth: 256,
       frameHeight: 256,
     });
@@ -93,19 +103,19 @@ export class Preloader extends Scene {
 
     this.load.spritesheet("flares", "particles/flares.png", {
       frameWidth: 128,
-      frameHeight: 128
+      frameHeight: 128,
     });
 
     /** PROPS (landmarks) */
     this.load.spritesheet("bush", "props/bush.png", {
-      frameWidth: 256, 
-      frameHeight: 256
-    })
+      frameWidth: 256,
+      frameHeight: 256,
+    });
 
     this.load.spritesheet("grass", "props/grass.png", {
-      frameWidth: 256, 
-      frameHeight: 256
-    })
+      frameWidth: 256,
+      frameHeight: 256,
+    });
 
     this.load.audio("music", "music/MainSongLoop.mp3");
 
@@ -129,6 +139,14 @@ export class Preloader extends Scene {
       frames: this.anims.generateFrameNumbers("player", { start: 0, end: 0 }),
     });
 
+        
+    this.anims.create({
+      key: "merchant",
+      frames: this.anims.generateFrameNumbers("merchant", { start: 0, end: 3 }),
+      frameRate: 8, // Velocidad de la animación
+      repeat: -1, // Animación en bucle
+    });
+    
     this.anims.create({
       key: "gomilla",
       frames: this.anims.generateFrameNumbers("gomilla", { start: 0, end: 1 }),
@@ -182,5 +200,6 @@ export class Preloader extends Scene {
     });
     //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
     this.scene.start("MainMenu");
+    // this.scene.start("GameScene");
   }
 }

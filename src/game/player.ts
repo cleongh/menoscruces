@@ -1,6 +1,8 @@
 import AbstractEnemy from "./enemies/AbstractEnemy";
-import RubberBand from "./RubberBand"
+import RubberBand from "./RubberBand";
 import { GameScene } from "./scenes/GameScene";
+
+import VibratingPipeline from "./pipelines/VibratingPipeline";
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   declare body: Phaser.Physics.Arcade.Body;
@@ -17,7 +19,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   private attackTime: number = 500;
   private attackCollider: RubberBand;
 
-  private health: number;
   private cooldownDamage: number = 200;
   private canRecieveDamage: boolean;
 
@@ -31,10 +32,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   ) {
     super(scene, x, y, "player");
     this.scale = 1 / 4;
-    this.setTint(0xb8fb27)
+    this.setTint(0xb8fb27);
     scene.add.existing(this);
     scene.physics.add.existing(this);
     this.setCollideWorldBounds(true);
+
+    this.setPipeline(VibratingPipeline.KEY);
 
     this.dir = new Phaser.Math.Vector2(0, 0);
     this.lastDir = new Phaser.Math.Vector2(1, 0);
@@ -48,7 +51,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.attackCollider.setOrigin(0.5, 0.5);
     scene.physics.add.overlap(this.attackCollider, enemyGroup, (_, e) => {
       const fatManager = (this.scene as GameScene).fatManager;
-      (e as AbstractEnemy).quitHealth(fatManager.getTransformedState().baseStats.attackBase);
+      (e as AbstractEnemy).quitHealth(
+        fatManager.getTransformedState().baseStats.attackBase,
+      );
     });
     this.attackCollider.active = false;
     (this.attackCollider.body as Phaser.Physics.Arcade.Body).enable = false;
@@ -112,21 +117,28 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.dir.normalize();
 
     const fatManager = (this.scene as GameScene).fatManager;
-    let speed = fatManager.getTransformedState().baseStats.speedBase;
+    let speed =
+      fatManager.getTransformedState().baseStats.speedBase * this.width;
     this.body?.setVelocity(this.dir.x * speed, this.dir.y * speed);
 
     this.play(animKey, true);
 
     this.attackCollider.setX(
       this.x +
-      this.lastDir.x * (-this.attackOffset + this.width * this.scale / 2 + this.attackCollider.width * this.attackCollider.scale / 2),
+        this.lastDir.x *
+          (-this.attackOffset +
+            (this.width * this.scale) / 2 +
+            (this.attackCollider.width * this.attackCollider.scale) / 2),
     );
     this.attackCollider.setY(this.y);
     this.attackCollider.setFlipX(this.lastDir.x < 0);
   }
 
   onAttack() {
-    this.attackCollider.updateRangeFactor((this.scene as GameScene).fatManager.getTransformedState().baseStats.rangeBase);
+    this.attackCollider.updateRangeFactor(
+      (this.scene as GameScene).fatManager.getTransformedState().baseStats
+        .rangeBase,
+    );
     (this.attackCollider.body as Phaser.Physics.Arcade.Body).enable = true;
 
     this.attackCollider.active = true;
@@ -148,29 +160,26 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   public receiveDamage(damage: number) {
-    if (!this.canRecieveDamage)
-      return;
+    if (!this.canRecieveDamage) return;
 
     this.canRecieveDamage = false;
     this.scene.time.addEvent({
       delay: this.cooldownDamage,
-      callback: () => { this.canRecieveDamage = true; },
+      callback: () => {
+        this.canRecieveDamage = true;
+      },
       callbackScope: this,
-    })
+    });
 
     const fatManager = (this.scene as GameScene).fatManager;
-    damage = damage - fatManager.getTransformedState().baseStats.defenseBase > 0 ? damage - fatManager.getTransformedState().baseStats.defenseBase : 0;
-    this.health -= damage;
-    fatManager.playerHealthUpdated(100, this.health)
-
-    if (this.health <= 0) {
-      this.destroy();
-    }
+    // si morimos, el manager lo va a notificar con un evento, no hace falta gestionar aquí nada más
+    fatManager.damagePlayer(damage);
   }
 
   heal() {
     const fatManager = (this.scene as GameScene).fatManager;
-    this.health = this.health + fatManager.getTransformedState().baseStats.regenBase < fatManager.getTransformedState().baseStats.healthBase ? this.health + fatManager.getTransformedState().baseStats.regenBase : fatManager.getTransformedState().baseStats.healthBase
-    fatManager.playerHealthUpdated(100, this.health);
+    // OJO: esto se hace con el valor del regen calculado, así que no es equivalente a damage negativo, por
+    // si a alguien le tienta hacer esa maldad
+    fatManager.regenPlayer();
   }
 }

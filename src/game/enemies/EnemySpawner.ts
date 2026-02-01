@@ -44,7 +44,7 @@ export class EnemySpawner {
     this.scene.fatManager.increaseRound();
     const config = this.waves[index];
 
-    // 1. Prepare the randomized pool of enemies for this wave
+    // pool de enemigos aleatorios a ir instanciando en la oleada
     const enemyPool: EnemyType[] = [];
     config.enemies.forEach((group) => {
       for (let i = 0; i < group.count; i++) {
@@ -53,11 +53,11 @@ export class EnemySpawner {
     });
     Phaser.Utils.Array.Shuffle(enemyPool);
 
-    // 2. Calculate uniform timing
+    // tiempo uniforme (por el momento)
     const totalEnemies = enemyPool.length;
     const spawnInterval = (config.lengthInSeconds * 1000) / totalEnemies;
 
-    // 3. Setup the Spawn Loop
+    // Spawn Loop
     this.spawnTimer = this.scene.time.addEvent({
       delay: spawnInterval,
       repeat: totalEnemies - 1,
@@ -66,7 +66,7 @@ export class EnemySpawner {
       paused: this.isPaused,
     });
 
-    // 4. Setup the Transition to next wave
+    // setup de la transición a la siguiente oleada
     this.waveTimer = this.scene.time.delayedCall(
       (config.lengthInSeconds + config.waitBeforeNextWaveInSeconds) * 1000,
       () => this.startWave(index + 1),
@@ -78,7 +78,7 @@ export class EnemySpawner {
   private spawnSingleEnemy(type: EnemyType) {
     const point = this.getRandomPointInCorona();
 
-    // Logic to instantiate your specific enemy classes
+    // Aquí todo lo que sea enemigos nuevos
     let enemy: AbstractEnemy;
     switch (type) {
       case "boss":
@@ -92,13 +92,11 @@ export class EnemySpawner {
         break;
     }
     this.enemies.add(enemy, true);
-    console.log(`Spawned enemy of type ${type} at (${point.x}, ${point.y})`);
   }
 
   private getRandomPointInCorona(): Phaser.Math.Vector2 {
-    // Uniform distribution in a circular ring (corona)
+    // Distribución uniforme en la corona circular
     const angle = Math.random() * Math.PI * 2;
-    // We use sqrt to ensure uniform density across the area
     const r = Math.sqrt(
       Math.random() *
         (Math.pow(this.outerRadius, 2) - Math.pow(this.innerRadius, 2)) +

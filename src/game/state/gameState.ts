@@ -49,6 +49,11 @@ export interface GameState {
    * Monedas actuales que posee el jugador
    */
   currentCoins: Coin[];
+
+  /**
+   * Vida actual del personaje
+   */
+  currentHealth: number;
 }
 
 /**
@@ -90,4 +95,10 @@ export interface BaseStats {
    * Velocidad base de los enemigos (en píxeles por segundo)
    */
   enemySpeedBase: number;
+
+  enemyHealthBase: number;
+
+  enemyDistanceAttack: number;
+
+  enemyRangedAttack: number;
 }

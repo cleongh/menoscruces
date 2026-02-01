@@ -11,6 +11,8 @@ import { enemyWaves } from "../enemies/enemyWave";
 import { TypedEventEmitter } from "../state/typedEvents";
 import HealthBar from "../UI/HealthBar";
 
+import VibratingPipeline from "../pipelines/VibratingPipeline";
+
 export class GameScene extends Phaser.Scene {
   declare body: Phaser.Physics.Arcade.Body;
 
@@ -34,6 +36,8 @@ export class GameScene extends Phaser.Scene {
   //private smellImage: Phaser.GameObjects.Arc;
   private smellImage: Phaser.GameObjects.Sprite;
 
+  private vibratingPipeline : VibratingPipeline;
+
   constructor() {
     super("GameScene");
     this.fatManager = new FatManager(this, baseStats);
@@ -41,6 +45,15 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
+
+    if (this.game.renderer instanceof Phaser.Renderer.WebGL.WebGLRenderer) {
+      this.vibratingPipeline = new VibratingPipeline(this.game);
+      this.game.renderer.pipelines.add(
+        VibratingPipeline.KEY,
+        this.vibratingPipeline
+      );
+    }
+
     this.enemies = this.physics.add.group({
       classType: AbstractEnemy,
     });
@@ -101,7 +114,7 @@ export class GameScene extends Phaser.Scene {
 
     this.inventory = new InventoryUI(this, 50, 40);
 
-    this.healthbar = new HealthBar(this, 0, 0);
+    this.healthbar = new HealthBar(this, 0, 35);
 
     this.physics.world.setBounds(0, 0, this.width, this.height);
     this.cameras.main.setBounds(0, 0, this.width, this.height);
@@ -134,7 +147,7 @@ export class GameScene extends Phaser.Scene {
     this.smellImage.alpha = 0;
   }
 
-  update() {
+  update(time : number) {
     this.player.update(this.cursors);
     this.fatManager.tickActiveCoins();
 
@@ -158,6 +171,15 @@ export class GameScene extends Phaser.Scene {
 
     this.smellImage.setX(this.player.x);
     this.smellImage.setY(this.player.y);
+
+    // Parámetros al "pipeline" (shader) de vibración usado en el
+    // player.
+    if (this.vibratingPipeline) {
+      this.vibratingPipeline.set1f('time', time);
+      this.vibratingPipeline.set1f('scale', 0.007); // Cantidad de desplazamiento
+      this.vibratingPipeline.set1f('speed', 5); // > 1. Cambios por segundo
+    }
+
   }
 
   createLandmarks(numLandMarks: number = 80) {

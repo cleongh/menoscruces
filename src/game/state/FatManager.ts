@@ -2,8 +2,7 @@ import { enemyWaves } from "../enemies/enemyWave";
 import { BigCoinData } from "../sceneObjects/BigCoin";
 import { coinDefinitions } from "../sceneObjects/coinDefinitions";
 import { GameScene } from "../scenes/GameScene";
-import { BaseStats, Coin, GameState } from "./GameState";
-import { CurrentPlayerHealth } from "./typedEvents";
+import { BaseStats, Coin, GameState } from "./gameState";
 
 export class FatManager {
   private gameState: GameState;
@@ -36,14 +35,21 @@ export class FatManager {
        * monedas grandes recogidas en la ronda actual, no entregadas (temporales)
        */
       currentCoins: [],
+      currentHealth: baseStats.healthBase,
     };
     this.scene = gameScene;
   }
 
   public registerNewLocalCoin(coinData: Coin): void {
+    // vida máxima previa al cambio
+    const oldMaxHealth = this.getTransformedState().baseStats.healthBase;
+
     // Las monedas van: [nueva, vieja1, vieja2, vieja3, vieja4]
     if (this.gameState.currentCoins.length >= 5) {
-      this.gameState.currentCoins.pop();
+      const oldCoin = this.gameState.currentCoins.pop();
+      if (oldCoin && oldCoin.kind === "active") {
+        oldCoin.onEffectEnd(this.scene);
+      }
     }
 
     this.gameState.currentCoins = [coinData, ...this.gameState.currentCoins];
@@ -53,6 +59,15 @@ export class FatManager {
     }
 
     this.scene.typedEvents.emit("big-coin-collected", coinData);
+
+    // vida máxima después del cambio
+    const newMaxHealth = this.getTransformedState().baseStats.healthBase;
+    const currentHealth = this.getTransformedState().currentHealth;
+
+    // ñapa para que actualizar la vida máxima también actualice la vida actual
+    this.updatePlayerHealth(
+      Math.max(0, currentHealth + (newMaxHealth - oldMaxHealth)),
+    );
   }
 
   public tickActiveCoins(): void {
@@ -144,13 +159,13 @@ export class FatManager {
     );
   }
 
-  // TODO use this function, and make function update the healthbard
-  public playerHealthUpdated(maxHealth: number, currentHealth: number) {
-    console.log("Fat manager updatehealth called", currentHealth);
-    this.scene.typedEvents.emit(
-      "player-health-updated",
-      new CurrentPlayerHealth(maxHealth, currentHealth),
-    );
+  private updatePlayerHealth(currentHealth: number) {
+    this.gameState.currentHealth = currentHealth;
+    this.scene.typedEvents.emit("player-health-updated", currentHealth);
+
+    if (currentHealth <= 0) {
+      this.scene.typedEvents.emit("player-dead");
+    }
   }
 
   /**
@@ -168,15 +183,33 @@ export class FatManager {
       Math.floor(Math.random() * currentTierCoins.availableCoins.length)
     ];
   }
+
+  public damagePlayer(damage: number) {
+    // valor actual transformado de la defensa
+    const defense = this.getTransformedState().baseStats.defenseBase;
+    damage = Math.max(damage - defense, 0);
+    this.updatePlayerHealth(Math.max(0, this.gameState.currentHealth - damage));
+  }
+
+  public regenPlayer() {
+    const regen = this.getTransformedState().baseStats.regenBase;
+    const health = this.getTransformedState().currentHealth;
+    const maxHealth = this.getTransformedState().baseStats.healthBase;
+    this.updatePlayerHealth(Math.min(maxHealth, health + regen));
+  }
 }
 
 export const baseStats: BaseStats = {
-  attackBase: 250,
-  defenseBase: 5,
-  speedBase: 100,
-  healthBase: 100,
-  regenBase: 1,
+  attackBase: 1,
+  defenseBase: 0,
+  speedBase: 1,
+  healthBase: 5,
+  regenBase: 0,
   rangeBase: 1,
-  enemyDamageBase: 20,
-  enemySpeedBase: 80,
+
+  enemyDamageBase: 1,
+  enemySpeedBase: 0.5,
+  enemyHealthBase: 1.0,
+  enemyDistanceAttack: 0.5,
+  enemyRangedAttack: 5,
 };
