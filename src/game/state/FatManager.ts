@@ -2,7 +2,7 @@ import { enemyWaves } from "../enemies/enemyWave";
 import { BigCoinData } from "../sceneObjects/BigCoin";
 import { coinDefinitions } from "../sceneObjects/coinDefinitions";
 import { GameScene } from "../scenes/GameScene";
-import { BaseStats, Coin, GameState } from "./gameState";
+import { BaseStats, Coin, fixCoin, GameState } from "./gameState";
 
 export class FatManager {
   private gameState: GameState;
@@ -129,20 +129,6 @@ export class FatManager {
    * - comienza una ronda nueva (local)
    */
   public commitCoinsToMerchant(): void {
-    this.gameState.merchantCoins += this.gameState.localCoins;
-
-    this.gameState.localCoins = 0;
-    this.scene.typedEvents.emit(
-      "local-coins-changed",
-      this.gameState.localCoins,
-    );
-
-    this.gameState.localRound = 1;
-    this.scene.typedEvents.emit(
-      "local-round-changed",
-      this.gameState.localRound,
-    );
-
     // Creo que la ronda global sólo depende de las waves
     /*
     this.gameState.globalRound += 1;
@@ -152,7 +138,11 @@ export class FatManager {
     );
     */
 
-    this.gameState.permanentCoins.push(...this.gameState.currentCoins);
+    this.gameState.permanentCoins.push(
+      ...this.gameState.currentCoins.map((c) =>
+        c.kind === "passive" ? fixCoin(c, this.getTransformedState()) : c,
+      ),
+    );
     this.scene.typedEvents.emit("coins-commited", this.gameState.currentCoins);
     this.gameState.currentCoins = [];
     this.scene.typedEvents.emit("current-coins-reset");
@@ -168,6 +158,21 @@ export class FatManager {
     this.scene.typedEvents.emit(
       "global-round-changed",
       this.gameState.globalRound,
+    );
+
+    this.gameState.merchantCoins += this.gameState.localCoins;
+
+    // IMPORTANTE CUIDAR EL ORDEN 
+    this.gameState.localCoins = 0;
+    this.scene.typedEvents.emit(
+      "local-coins-changed",
+      this.gameState.localCoins,
+    );
+
+    this.gameState.localRound = 1;
+    this.scene.typedEvents.emit(
+      "local-round-changed",
+      this.gameState.localRound,
     );
   }
 
@@ -216,7 +221,7 @@ export const baseStats: BaseStats = {
   defenseBase: 0,
   speedBase: 1,
   healthBase: 5,
-  regenBase: 0,
+  regenBase: 0.05,
   rangeBase: 1,
 
   enemyDamageBase: 1,

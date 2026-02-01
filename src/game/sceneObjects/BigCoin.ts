@@ -4,6 +4,7 @@ import { Coin } from "../state/gameState";
 import { AbstractCoin } from "./AbstractCoin";
 
 export interface BigCoinData {
+  tier: number;
   /** Textura de esta moneda en el mundo */
   texture: string;
   name: string;
@@ -43,7 +44,7 @@ export class BigCoin extends AbstractCoin {
           fatManager.registerNewLocalCoin(selectedCoin);
         }
 
-        if(fatManager.getTransformedState().currentHealth <= 0){
+        if (fatManager.getTransformedState().currentHealth <= 0) {
           this.scene.scene.start("GameOver");
           this.scene.scene.stop("NewCoinScene");
           return;

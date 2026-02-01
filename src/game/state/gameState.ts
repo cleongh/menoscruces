@@ -1,6 +1,7 @@
 import { GameScene } from "../scenes/GameScene";
 
 export interface IBaseCoin {
+  readonly tier: number;
   readonly kind: "passive";
   readonly texture: string;
   readonly name: string;
@@ -17,6 +18,29 @@ export interface IActiveCoin extends Omit<IBaseCoin, "kind"> {
 }
 
 export type Coin = IBaseCoin | IActiveCoin;
+
+/**
+ * Toma una cara de moneda (IBaseCoin) y devuelve una copia donde
+ * el cálculo de poder ignorará las localCoins futuras, usando las actuales.
+ * TODO: no funciona para cosas activas.
+ */
+export const fixCoin = (coin: IBaseCoin, state: GameState): IBaseCoin => {
+  const capturedLocalCoins = state.localCoins;
+
+  return {
+    ...coin,
+    // Si es pasiva, envolvemos el modifier para inyectar las monedas capturadas
+    modifier: coin.modifier
+      ? (currentState: GameState) => {
+          const fixedState = {
+            ...currentState,
+            localCoins: capturedLocalCoins,
+          };
+          return coin.modifier!(fixedState);
+        }
+      : undefined,
+  };
+};
 
 export interface GameState {
   /**
