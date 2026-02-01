@@ -9,11 +9,13 @@ import Landmark from "./Landmark";
 import { EnemySpawner } from "../enemies/EnemySpawner";
 import { enemyWaves } from "../enemies/enemyWave";
 import { TypedEventEmitter } from "../state/typedEvents";
+import HealthBar from "../UI/HealthBar";
 
 export class GameScene extends Phaser.Scene {
   declare body: Phaser.Physics.Arcade.Body;
 
   private player: Player;
+  private healthbar: HealthBar;
   private merchant: Merchant;
   private enemies: Phaser.Physics.Arcade.Group;
   private projectiles: Phaser.Physics.Arcade.Group;
@@ -98,6 +100,8 @@ export class GameScene extends Phaser.Scene {
 
     this.inventory = new InventoryUI(this, 50, 40);
 
+    this.healthbar = new HealthBar(this, 0, 0);
+
     this.physics.world.setBounds(0, 0, this.width, this.height);
     this.cameras.main.setBounds(0, 0, this.width, this.height);
     this.cameras.main.startFollow(this.player);
@@ -118,7 +122,7 @@ export class GameScene extends Phaser.Scene {
 
     this.tweens.add({
       targets: this.music,
-      volume: { from: 0, to: 0.2 },
+      volume: { from: 0, to: 0.5 },
       duration: 3000,
       ease: "Linear",
     });
@@ -142,7 +146,8 @@ export class GameScene extends Phaser.Scene {
           enemy.y,
         ) <= enemy.distanceAttack
       ) {
-        console.log("Pero te quiero...");
+        // TODO y si quitamos el log
+        //console.log("Pero te quiero...");
         enemy.physicalAttack(this.player);
       }
     });
@@ -164,7 +169,7 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
-  public infernallSmell_Cara() {
+  public infernallSmell_Cara(){
     this.smellImage.active = true;
     this.smellImage.setX(this.player.x);
     this.smellImage.setY(this.player.y);
@@ -199,13 +204,13 @@ export class GameScene extends Phaser.Scene {
     })
   }
 
-  public infernallSmell_Cruz() {
+  public infernallSmell_Cruz(){
     this.smellImage.active = true;
     this.smellImage.setX(this.player.x);
     this.smellImage.setY(this.player.y);
     this.smellImage.radius = 2 * this.player.width * this.fatManager.getTransformedState().baseStats.rangeBase;
     this.smellImage.alpha = 0.4;
-
+    
     this.enemies.getChildren().forEach((enemy: any) => {
       enemy.update(this.player);
       if (
@@ -217,7 +222,7 @@ export class GameScene extends Phaser.Scene {
         ) <= 2 * this.player.width * this.fatManager.getTransformedState().baseStats.rangeBase
       ) {
         let damage = this.fatManager.getTransformedState().baseStats.attackBase;
-        enemy.quitHealth(-damage / 2);
+        enemy.quitHealth(-damage/2);
 
         console.log("Da vida");
       }

@@ -3,6 +3,7 @@ import { BigCoinData } from "../sceneObjects/BigCoin";
 import { coinDefinitions } from "../sceneObjects/coinDefinitions";
 import { GameScene } from "../scenes/GameScene";
 import { BaseStats, Coin, GameState } from "./GameState";
+import { CurrentPlayerHealth } from "./typedEvents";
 
 export class FatManager {
   private gameState: GameState;
@@ -102,7 +103,7 @@ export class FatManager {
    * - comienza una ronda nueva (local)
    */
   public commitCoinsToMerchant(): void {
-    console.log("DAME TODAS TUS MONEDASSSS")
+    console.log("DAME TODAS TUS MONEDAS")
     this.gameState.merchantCoins += this.gameState.localCoins;
 
     this.gameState.localCoins = 0;
@@ -144,6 +145,15 @@ export class FatManager {
     );
   }
 
+  // TODO use this function, and make function update the healthbard
+  public playerHealthUpdated(maxHealth: number, currentHealth: number) {
+    console.log("Fat manager updatehealth called", currentHealth)
+    this.scene.typedEvents.emit(
+      "player-health-updated",
+      new CurrentPlayerHealth(maxHealth, currentHealth)
+    );
+  }
+
   /**
    * Consigue una definición aleatoria de moneda en base a la ronda actual
    */
@@ -164,7 +174,7 @@ export class FatManager {
 export const baseStats: BaseStats = {
   attackBase: 250,
   defenseBase: 5,
-  speedBase: 100,
+  speedBase: 500, //TODO restore after testing
   healthBase: 100,
   regenBase: 1,
   rangeBase: 1,
