@@ -113,7 +113,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.dir.normalize();
 
     const fatManager = (this.scene as GameScene).fatManager;
-    let speed = fatManager.getTransformedState().baseStats.speedBase;
+    let speed =
+      fatManager.getTransformedState().baseStats.speedBase * this.width;
     this.body?.setVelocity(this.dir.x * speed, this.dir.y * speed);
 
     this.play(animKey, true);

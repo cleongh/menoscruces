@@ -29,7 +29,7 @@ const SnakeCoin_Tier1: BigCoinData = {
     name: "-10 Extra Health",
     description: "Decreases your maximum health by 10 points.",
     kind: "passive",
-    texture: "moneda_vida",
+    texture: "moneda_vida_mala",
     modifier: (state) => {
       const newMaxHealth = state.baseStats.healthBase - 10;
       return {
@@ -67,7 +67,7 @@ const AresCoin_Tier1: BigCoinData = {
     name: "-1 Attack",
     description: "Decreases your attack by 1 point.",
     kind: "passive",
-    texture: "moneda_ares",
+    texture: "moneda_cuchillito",
     modifier: (state) => {
       const newAttack = state.baseStats.attackBase - 1;
       return {

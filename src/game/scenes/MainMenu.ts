@@ -3,7 +3,7 @@ import { Button } from "../UI/Button";
 
 export class MainMenu extends Scene {
   background: GameObjects.Image;
-  logo: GameObjects.Image;
+  logo: GameObjects.Text;
   title: GameObjects.Text;
   playButton: Button;
   credits: Button;
@@ -15,19 +15,47 @@ export class MainMenu extends Scene {
   create() {
     this.background = this.add.image(512, 384, "background");
 
-    this.logo = this.add.image(512, 300, "logo");
-    this.playButton = new Button(this, "PLAY", 512, 400, "buttonNormal", "buttonHover", "buttonPressed");
+    // this.logo = this.add.image(512, 300, "logo");
+    this.logo = this.add
+      .text(
+        this.cameras.main.worldView.x + this.cameras.main.width / 2,
+        this.cameras.main.worldView.y + this.cameras.main.height / 3.5, //this.config.height / 2,
+        "MENOS CRUCES",
+        {
+          fontSize: "64px",
+          fontStyle: "bold",
+          color: "#000000",
+          fontFamily: "salpicaduraFont",
+        },
+      )
+      .setOrigin(0.5, 0.5);
+    this.playButton = new Button(
+      this,
+      "PLAY",
+      512,
+      400,
+      "buttonNormal",
+      "buttonHover",
+      "buttonPressed",
+    );
 
     this.playButton.setPointerUpCallback(() => {
       this.scene.start("GameScene");
     });
 
-    this.credits = new Button(this, "CREDITS", 512, 512, "buttonNormal", "buttonHover", "buttonPressed");
+    this.credits = new Button(
+      this,
+      "CREDITS",
+      512,
+      512,
+      "buttonNormal",
+      "buttonHover",
+      "buttonPressed",
+    );
 
     this.credits.setPointerUpCallback(() => {
       this.scene.start("Credicts");
     });
-
 
     /*this.input.once("pointerdown", () => {
       this.scene.start("GameScene");
@@ -35,27 +63,26 @@ export class MainMenu extends Scene {
   }
 
   credictsButtonHoverState() {
-    this.credits.setStyle({ fill: '#ff0' });
+    this.credits.setStyle({ fill: "#ff0" });
   }
 
   credictsButtonRestState() {
-    this.credits.setStyle({ fill: '#ffffff' });
+    this.credits.setStyle({ fill: "#ffffff" });
   }
 
   credictsButtonActiveState() {
-    this.credits.setStyle({ fill: '#0ff' });
+    this.credits.setStyle({ fill: "#0ff" });
   }
 
-
   playButtonHoverState() {
-    this.playButton.setStyle({ fill: '#ff0' });
+    this.playButton.setStyle({ fill: "#ff0" });
   }
 
   playButtonRestState() {
-    this.playButton.setStyle({ fill: '#ffffff' });
+    this.playButton.setStyle({ fill: "#ffffff" });
   }
 
   playButtonActiveState() {
-    this.playButton.setStyle({ fill: '#0ff' });
+    this.playButton.setStyle({ fill: "#0ff" });
   }
 }
