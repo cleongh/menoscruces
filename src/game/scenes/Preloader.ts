@@ -78,6 +78,11 @@ export class Preloader extends Scene {
       frameHeight: 256,
     });
 
+    this.load.spritesheet("hodor", "weapons/hodor.png", {
+      frameWidth: 256,
+      frameHeight: 256,
+    });
+
     this.load.spritesheet("flares", "particles/flares.png", {
       frameWidth: 128,
       frameHeight: 128
@@ -110,6 +115,13 @@ export class Preloader extends Scene {
       frames: this.anims.generateFrameNumbers("gomilla", { start: 0, end: 1 }),
       frameRate: 10,
       repeat: 5,
+    });
+
+    this.anims.create({
+      key: "hodor",
+      frames: this.anims.generateFrameNumbers("hodor", { start: 0, end: 2 }),
+      frameRate: 6,
+      repeat: -1,
     });
 
     this.anims.create({
