@@ -6,6 +6,7 @@ export interface IBaseCoin {
   readonly name: string;
   readonly description: string;
   readonly modifier?: GameStateTransformer;
+  readonly face: "head" | "tail";
 }
 
 export interface IActiveCoin extends Omit<IBaseCoin, "kind"> {
