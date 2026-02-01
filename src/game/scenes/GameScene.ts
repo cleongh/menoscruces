@@ -147,6 +147,7 @@ export class GameScene extends Phaser.Scene {
     this.smellImage.alpha = 0;
 
     this.typedEvents.on("player-dead", () => {
+      this.music.stop();
       this.scene.start("GameOver");
     });
   }
