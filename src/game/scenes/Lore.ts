@@ -42,6 +42,12 @@ export class Lore extends Scene {
       }
     });
 
+    this.input.keyboard?.on("keydown-ENTER", () => {
+      if (selected) {
+        this.scene.start("GameScene");
+      }
+    });
+
     this.input.keyboard?.on("keydown-W", () => {
       if (this.ret.isVisible()) {
         this.ret.select();

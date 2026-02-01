@@ -13,8 +13,8 @@ export class MainMenu extends Scene {
   }
 
   create() {
+    
     this.background = this.add.image(512, 384, "MainMenuBg");
-
 
     this.playButton = new Button(
       this,
@@ -52,6 +52,20 @@ export class MainMenu extends Scene {
     
     this.playButton.select();
     this.input.keyboard?.on("keydown-SPACE", () => {
+      if (state === 0) {
+        return;
+      }
+      if (state === 1) {
+        this.scene.start("Lore");
+      } else if (state === 2) {
+        this.scene.start("Credicts");
+      }
+      this.playButton.deselect();
+      this.credits.deselect();
+      state = 0;
+    });
+
+    this.input.keyboard?.on("keydown-ENTER", () => {
       if (state === 0) {
         return;
       }

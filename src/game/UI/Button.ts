@@ -9,7 +9,7 @@ export class Button {
     pointerOverCallback?: () => void;
     pointerOutCallback?: () => void;
 
-    constructor(scene: Phaser.Scene, text: string, x: number, y: number, imagen: string = "", imagenHover: string = "", imagenPressed: string = "") {
+    constructor(scene: Phaser.Scene, text: string, x: number, y: number, imagen: string = "", imagenHover: string = "", imagenPressed: string = "", wide: integer = -1, height : integer = -1) {
         this.bg = scene.add.image(x, y, imagen)
             .setInteractive({ useHandCursor: true })
 
@@ -17,6 +17,13 @@ export class Button {
         this.imgHover.visible = false;
         this.imgPressed = scene.add.image(x, y, imagenPressed);
         this.imgPressed.visible = false;
+
+        if(wide >= 0 && height >= 0)
+        {
+            this.bg.setSize(wide,height);
+            this.imgHover.setSize(wide,height);
+            this.imgPressed.setSize(wide,height);
+        }
 
         this.label = scene.add
             .text(x, y, text, {
