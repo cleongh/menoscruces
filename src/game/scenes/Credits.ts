@@ -26,10 +26,10 @@ export class Credits extends Scene {
     //   align: "center",
     // });
     // this.credits.setOrigin(0.5);
-    this.ret= new Button(this, "Main Menu", 512, 100, "buttonNormal", "buttonHover", "buttonPressed");
+    this.ret = new Button(this, "Main Menu", 512, 100, "buttonNormal", "buttonHover", "buttonPressed");
 
     this.ret.setPointerUpCallback(() => {
-            this.scene.start("MainMenu");
+      this.scene.start("MainMenu");
     });
 
     /*this.return = this.add
@@ -50,10 +50,26 @@ export class Credits extends Scene {
         this.returnButtonHoverState();
         this.scene.start("MainMenu");
       });*/
+    let selected = false;
+    this.input.keyboard?.on("keydown-SPACE", () => {
+      if (selected) {
+        this.scene.start("MainMenu");
+      }
+    });
+
+    this.input.keyboard?.on("keydown-W", () => {
+      this.ret.select();
+      selected = true;
+    });
+
+    this.input.keyboard?.on("keydown-S", () => {
+      this.ret.select();
+      selected = true;
+    });
   }
 
   returnButtonHoverState() {
-    this.credits.setStyle({ fill: '#ff0'});
+    this.credits.setStyle({ fill: '#ff0' });
   }
 
   returnButtonRestState() {
