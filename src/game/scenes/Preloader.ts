@@ -38,7 +38,7 @@ export class Preloader extends Scene {
     this.load.image("moneda_pulpo", "coins/moneda_pulpo.png");
     this.load.image("moneda_cuchillito", "coins/moneda_cuchillito.png");
     this.load.image("moneda_peste", "coins/moneda_peste.png");
-    this.load.image("moneda_curita", "coins/moneda_curitapng");
+    this.load.image("moneda_curita", "coins/moneda_curita.png");
 
     this.load.image("boss", "placeholder/boss.jpg");
     this.load.image("big-coin", "placeholder/big-coin.png");
