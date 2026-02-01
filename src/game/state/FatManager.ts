@@ -2,7 +2,7 @@ import { enemyWaves } from "../enemies/enemyWave";
 import { BigCoinData } from "../sceneObjects/BigCoin";
 import { coinDefinitions } from "../sceneObjects/coinDefinitions";
 import { GameScene } from "../scenes/GameScene";
-import { BaseStats, Coin, GameState } from "./GameState";
+import { BaseStats, Coin, GameState } from "./gameState";
 
 export class FatManager {
   private gameState: GameState;

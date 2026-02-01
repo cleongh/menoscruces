@@ -1,5 +1,6 @@
 import { GameScene } from "../scenes/GameScene";
-import { Coin } from "../state/GameState";
+import { Coin } from "../state/gameState";
+
 import { CoinCounterUI } from "./CoinCounterUI";
 import { CoinInventoryUI } from "./CoinInventoryUI";
 

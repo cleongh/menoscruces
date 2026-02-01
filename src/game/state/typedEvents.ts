@@ -1,4 +1,4 @@
-import { Coin } from "./GameState";
+import { Coin } from "./gameState";
 
 type EventMap = {
   "big-coin-collected": [coinData: Coin];
