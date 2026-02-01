@@ -1,4 +1,5 @@
 import { GameScene } from "../scenes/GameScene";
+import { basicColors } from "./colors";
 
 export default class HealthBar extends Phaser.GameObjects.Container {
   private barWidth: number;
@@ -7,14 +8,14 @@ export default class HealthBar extends Phaser.GameObjects.Container {
 
   // Colores originales preservados
   private backgroundColor: number =
-    Phaser.Display.Color.HexStringToColor("#979797").color;
+    Phaser.Display.Color.HexStringToColor(basicColors.creamGrey).color;
   private colorFull: number =
-    Phaser.Display.Color.HexStringToColor("#1eff00").color;
+    Phaser.Display.Color.HexStringToColor(basicColors.green).color;
   private colorHalf: number =
-    Phaser.Display.Color.HexStringToColor("#fff200").color;
+    Phaser.Display.Color.HexStringToColor(basicColors.yellow).color;
   private colorQuarter: number =
-    Phaser.Display.Color.HexStringToColor("#ff4000").color;
-  private goldBorder: number = 0xffd700; // Color dorado de tus otros contenedores
+    Phaser.Display.Color.HexStringToColor(basicColors.pink).color;
+  private goldBorder: number = Phaser.Display.Color.HexStringToColor(basicColors.creamGrey).color; // Color dorado de tus otros contenedores
 
   private totalHealth: number = 100;
   private currentHealth: number = 100;
@@ -94,7 +95,7 @@ export default class HealthBar extends Phaser.GameObjects.Container {
     this.graphics.clear();
 
     // Fondo oscuro del contenedor
-    this.graphics.fillStyle(0x222222, 0.8);
+    this.graphics.fillStyle(Phaser.Display.Color.HexStringToColor(basicColors.darkGrey).color, 0.8);
     this.graphics.lineStyle(3, this.goldBorder, 1);
 
     // Dibujamos el marco centrado verticalmente

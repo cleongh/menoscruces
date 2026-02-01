@@ -1,7 +1,9 @@
+import { basicColors } from "../UI/colors";
+
 export default class Landmark extends Phaser.Physics.Arcade.Sprite {
 
     propsArray = ["bush", "grass", "grass"]
-    tintsArray = ["#ffb1b1", "#a0abff", "#fbffc3"]
+    tintsArray = [basicColors.green, basicColors.pink, basicColors.teal, basicColors.yellow]
         .map((colorString) => { return Phaser.Display.Color.HexStringToColor(colorString).color })
 
     constructor(scene: Phaser.Scene, x: number, y: number) {

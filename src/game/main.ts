@@ -7,6 +7,7 @@ import { GameScene } from "./scenes/GameScene";
 import { NewCoinScene } from "./scenes/NewCoinScene";
 import { Credits } from "./scenes/Credits";
 import { Lore } from "./scenes/Lore";
+import { basicColors } from "./UI/colors";
 
 //  Find out more information about the Game Config at:
 //  https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
@@ -15,7 +16,7 @@ const config: Phaser.Types.Core.GameConfig = {
   width: 1024,
   height: 768,
   parent: "game-container",
-  backgroundColor: "rgb(231, 184, 236)",
+  backgroundColor: basicColors.bone,
   scene: [Boot, Preloader, MainMenu, Lore, GameScene, GameOver, NewCoinScene, Credits],
   physics: {
     default: "arcade",

@@ -1,6 +1,7 @@
 import Player from "./player";
 import { GameScene } from "./scenes/GameScene";
 import { FatManager } from "./state/FatManager";
+import { basicColors } from "./UI/colors";
 
 export default class Merchant extends Phaser.Physics.Arcade.Sprite {
   // zona a la que se desplaza el mercader
@@ -33,7 +34,7 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
 
   // indicador visual de que se puede interactuar con el mercader
   interactionSign: Phaser.GameObjects.Text;
-  interactionSignBackgroundDefault = "#d2d2d2";
+  interactionSignBackgroundDefault = basicColors.blueGrey;
   interactionSignBg: Phaser.GameObjects.Rectangle;
 
   // pulsar tecla M para interactuar con mercader
@@ -301,7 +302,7 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
     this.interactionSign = this.scene.add
       .text(signCoordinates[0], signCoordinates[1], "M", {
         fontSize: "20px",
-        color: "#000000",
+        color: basicColors.black,
         align: "center",
         fixedWidth: 30,
         backgroundColor: this.interactionSignBackgroundDefault,
