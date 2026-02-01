@@ -1,6 +1,7 @@
 import { GameScene } from "../scenes/GameScene";
 import { NewCoinSceneConfig } from "../scenes/NewCoinScene";
 import { Coin } from "../state/gameState";
+import { basicColors } from "../UI/colors";
 import { AbstractCoin } from "./AbstractCoin";
 
 export interface BigCoinData {
@@ -20,6 +21,7 @@ export class BigCoin extends AbstractCoin {
 
   constructor(scene: Phaser.Scene, x: number, y: number, data: BigCoinData) {
     super(scene, x, y, data.texture, 30);
+    this.setTint( Phaser.Display.Color.HexStringToColor(basicColors.pink).color)
     this.coinData = data;
   }
 
