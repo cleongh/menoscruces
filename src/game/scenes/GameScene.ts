@@ -127,7 +127,9 @@ export class GameScene extends Phaser.Scene {
     this.physics.world.setBounds(0, 0, this.width, this.height);
     this.cameras.main.setBounds(0, 0, this.width, this.height);
     this.cameras.main.startFollow(this.player);
-
+    this.input.keyboard?.on("keydown-ESC", () => {
+        this.exitScene("MainMenu");
+    });
     this.createLandmarks();
 
     const config = {
