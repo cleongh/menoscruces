@@ -1,3 +1,4 @@
+import { GameState } from "../state/gameState";
 import { BigCoinData } from "./BigCoin";
 
 interface TierDefinition {
@@ -5,217 +6,259 @@ interface TierDefinition {
   availableCoins: BigCoinData[];
 }
 
-const SnakeCoin_Tier1: BigCoinData = {
+export const ScalingLogics = {
+  linear: (coins: number) => 1 + coins / 100,
+  logarithmic: (coins: number) => 1 + Math.log10(coins + 1),
+  squareRoot: (coins: number) => 1 + Math.sqrt(coins) / 10,
+  flat: () => 1,
+};
+
+const CURRENT_SCALING_LOGIC = ScalingLogics.logarithmic;
+
+const getLocalCoinPower = (state: GameState, tier: number) => {
+  return tier * CURRENT_SCALING_LOGIC(state.localCoins);
+};
+
+// --- SNAKE COIN (Health) ---
+export const generateSnakeCoin = (tier: number): BigCoinData => ({
   texture: "moneda_vida",
-  name: "Snake Coin",
-  passCost: 55,
+  name: `Snake Coin T${tier}`,
+  passCost: 55 * tier,
   option1: {
     face: "head",
-    name: "+10 Extra Health",
-    description: "Increases your maximum health by 10 points.",
+    name: "Viper Vitality",
+    description: `Multiplies Max Health (Tier ${tier}).`,
     kind: "passive",
     texture: "moneda_vida",
     modifier: (state) => {
-      const newMaxHealth = state.baseStats.healthBase + 10;
+      const multiplier = 1 + 0.2 * getLocalCoinPower(state, tier);
       return {
         ...state,
         baseStats: {
           ...state.baseStats,
-          healthBase: newMaxHealth,
+          healthBase: state.baseStats.healthBase * multiplier,
         },
       };
     },
   },
   option2: {
     face: "tail",
-    name: "-10 Extra Health",
-    description: "Decreases your maximum health by 10 points.",
+    name: "Snake Bite",
+    description: `Reduces Max Health % (Tier ${tier}).`,
     kind: "passive",
     texture: "moneda_vida_mala",
     modifier: (state) => {
-      const newMaxHealth = state.baseStats.healthBase - 10;
+      const divider = 1 + 0.2 * getLocalCoinPower(state, tier);
       return {
         ...state,
         baseStats: {
           ...state.baseStats,
-          healthBase: newMaxHealth,
+          healthBase: state.baseStats.healthBase / divider,
         },
       };
     },
   },
-};
+});
 
-const AresCoin_Tier1: BigCoinData = {
+// --- ARES COIN (Attack) ---
+export const generateAresCoin = (tier: number): BigCoinData => ({
   texture: "moneda_ares",
-  name: "Ares Coin",
-  passCost: 85,
+  name: `Ares Coin T${tier}`,
+  passCost: 85 * tier,
   option1: {
     face: "head",
-    name: "+1 Attack",
-    description: "Increases your attack by 1 point.",
+    name: "God of War",
+    description: `Multiplies Attack Power (Tier ${tier}).`,
     kind: "passive",
     texture: "moneda_ares",
     modifier: (state) => {
-      const newAttack = state.baseStats.attackBase + 1;
+      const multiplier = 1 + 0.15 * getLocalCoinPower(state, tier);
       return {
         ...state,
         baseStats: {
           ...state.baseStats,
-          attackBase: newAttack,
+          attackBase: state.baseStats.attackBase * multiplier,
         },
       };
     },
   },
   option2: {
     face: "tail",
-    name: "-1 Attack",
-    description: "Decreases your attack by 1 point.",
+    name: "Cowardice",
+    description: `Reduces Attack Power % (Tier ${tier}).`,
     kind: "passive",
     texture: "moneda_cuchillito",
     modifier: (state) => {
-      const newAttack = state.baseStats.attackBase - 1;
+      const divider = 1 + 0.15 * getLocalCoinPower(state, tier);
       return {
         ...state,
         baseStats: {
           ...state.baseStats,
-          attackBase: newAttack,
+          attackBase: state.baseStats.attackBase / divider,
         },
       };
     },
   },
-};
+});
 
-const SmellCoin: BigCoinData = {
+// --- SMELL COIN (Active - Frequency) ---
+export const generateSmellCoin = (tier: number): BigCoinData => ({
   texture: "moneda_peste",
-  name: "Smell Coin",
-  passCost: 100,
+  name: `Smell Coin T${tier}`,
+  passCost: 100 * tier,
   option1: {
     face: "head",
-    name: "What a stench!",
-    description: "Generates a smell that harms enemies.",
+    name: "Toxic Cloud",
+    description: `Emits a deadly stench (Tier ${tier}).`,
     kind: "active",
     texture: "moneda_peste",
+    onEffectEnd: () => {},
+    onEffectTick: () => {},
     onEffectStart(scene) {
+      const freqMultiplier =
+        1 +
+        0.5 * getLocalCoinPower(scene.fatManager.getTransformedState(), tier);
       scene.time.addEvent({
-        delay: 5000,
+        delay: 5000 / freqMultiplier,
         callback: scene.infernallSmell_Cara,
         callbackScope: scene,
         loop: true,
       });
     },
-    onEffectTick(scene) { },
-    onEffectEnd(scene) { },
   },
   option2: {
     face: "tail",
-    name: "Good Smell",
-    description: "Generates a smell that heals enemies.",
+    name: "Sweet Aroma",
+    description: `Emits a healing smell (Tier ${tier}).`,
     kind: "active",
     texture: "moneda_curita",
+    onEffectEnd: () => {},
+    onEffectTick: () => {},
     onEffectStart(scene) {
+      const freqMultiplier =
+        1 +
+        0.5 * getLocalCoinPower(scene.fatManager.getTransformedState(), tier);
       scene.time.addEvent({
-        delay: 7000,
-        callback: () => {
-          scene.time.addEvent({
-            delay: 5000,
-            callback: scene.infernallSmell_Cruz,
-            callbackScope: scene,
-            loop: true,
-          });
-        },
+        delay: 7000 / freqMultiplier,
+        callback: scene.infernallSmell_Cruz,
         callbackScope: scene,
         loop: true,
       });
     },
-    onEffectTick(scene) { },
-    onEffectEnd(scene) { },
   },
-};
+});
 
-const RunCoin: BigCoinData = {
+// --- RUN COIN (Speed) ---
+export const generateRunCoin = (tier: number): BigCoinData => ({
   texture: "moneda_sonic",
-  name: "Run Coin",
-  passCost: 100,
+  name: `Run Coin T${tier}`,
+  passCost: 100 * tier,
   option1: {
     face: "head",
-    name: "Run!",
-    description: "Increases your movement speed.",
+    name: "Sonic Speed",
+    description: `Multiplies Movement Speed (Tier ${tier}).`,
     kind: "passive",
     texture: "moneda_sonic",
     modifier: (state) => {
-      const newSpeed = state.baseStats.speedBase + 1;
+      const multiplier = 1 + 0.05 * getLocalCoinPower(state, tier);
       return {
         ...state,
         baseStats: {
           ...state.baseStats,
-          speedBase: newSpeed,
+          speedBase: state.baseStats.speedBase * multiplier,
         },
       };
     },
   },
   option2: {
     face: "tail",
-    name: "Snail Coin",
-    description: "Decreases your movement speed.",
+    name: "Heavy Legs",
+    description: `Reduces Movement Speed % (Tier ${tier}).`,
     kind: "passive",
     texture: "moneda_caracol",
     modifier: (state) => {
-      const newSpeed = state.baseStats.speedBase - 1;
+      const divider = 1 + 0.05 * getLocalCoinPower(state, tier);
       return {
         ...state,
         baseStats: {
           ...state.baseStats,
-          speedBase: newSpeed,
+          speedBase: state.baseStats.speedBase / divider,
         },
       };
     },
   },
-};
+});
 
-const ReviveCoin: BigCoinData = {
+// --- REVIVE COIN (Regen) ---
+export const generateReviveCoin = (tier: number): BigCoinData => ({
   texture: "moneda_pulpo",
-  name: "Revivify",
-  passCost: 100,
+  name: `Revive Coin T${tier}`,
+  passCost: 100 * tier,
   option1: {
     face: "head",
-    name: "Health, comrade",
-    description: "Makes your life better and refreshing.",
+    name: "Eternal Spirit",
+    description: `Multiplies Regeneration (Tier ${tier}).`,
     kind: "passive",
     texture: "moneda_pulpo",
     modifier: (state) => {
-      const newSpeed = state.baseStats.regenBase + 0.01;
+      const multiplier = 1 + 0.1 * getLocalCoinPower(state, tier);
       return {
         ...state,
         baseStats: {
           ...state.baseStats,
-
-          regenBase: newSpeed,
+          regenBase: state.baseStats.regenBase * multiplier,
         },
       };
     },
   },
   option2: {
     face: "tail",
-    name: "Ye' Olde",
-    description: "Makes you get older faster.",
+    name: "Old Age",
+    description: `Reduces Regeneration % (Tier ${tier}).`,
     kind: "passive",
     texture: "moneda_pulpo",
     modifier: (state) => {
-      const newSpeed = state.baseStats.regenBase - 0.01;
+      const divider = 1 + 0.1 * getLocalCoinPower(state, tier);
       return {
         ...state,
         baseStats: {
           ...state.baseStats,
-          regenBase: newSpeed,
+          regenBase: state.baseStats.regenBase / divider,
         },
       };
     },
   },
-};
+});
 
 export const coinDefinitions: TierDefinition[] = [
   {
     name: "Tier 1",
-    availableCoins: [SnakeCoin_Tier1, AresCoin_Tier1, SmellCoin, ReviveCoin],
+    availableCoins: [
+      generateSnakeCoin(1),
+      generateAresCoin(1),
+      generateSmellCoin(1),
+      generateReviveCoin(1),
+      generateRunCoin(1),
+    ],
+  },
+  {
+    name: "Tier 2",
+    availableCoins: [
+      generateSnakeCoin(2),
+      generateAresCoin(2),
+      generateSmellCoin(2),
+      generateReviveCoin(2),
+      generateRunCoin(2),
+    ],
+  },
+  {
+    name: "Tier 3",
+    availableCoins: [
+      generateSnakeCoin(3),
+      generateAresCoin(3),
+      generateSmellCoin(3),
+      generateReviveCoin(3),
+      generateRunCoin(3),
+    ],
   },
 ];
