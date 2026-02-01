@@ -1,3 +1,5 @@
+import { basicColors } from "./colors";
+
 export class CoinCounterUI extends Phaser.GameObjects.Container {
   private background: Phaser.GameObjects.Graphics;
   private icon: Phaser.GameObjects.Sprite;
@@ -22,8 +24,8 @@ export class CoinCounterUI extends Phaser.GameObjects.Container {
 
     // Fondo con el borde redondeado y que contenga al multiplicador
     this.background = scene.add.graphics();
-    this.background.fillStyle(0x222222, 0.8);
-    this.background.lineStyle(3, 0xffd700, 1);
+    this.background.fillStyle(Phaser.Display.Color.HexStringToColor(basicColors.cream).color, 0.8);    
+    this.background.lineStyle(3, Phaser.Display.Color.HexStringToColor(basicColors.creamGrey).color, 1);
     this.background.fillRoundedRect(
       0,
       -this.targetHeight / 2,

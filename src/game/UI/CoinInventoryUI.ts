@@ -1,4 +1,4 @@
-import { colors } from "./colors";
+import { basicColors, colors } from "./colors";
 
 export class CoinInventoryUI extends Phaser.GameObjects.Container {
   private coins: Phaser.GameObjects.Sprite[] = [];
@@ -41,8 +41,8 @@ export class CoinInventoryUI extends Phaser.GameObjects.Container {
     const bgHeight = this.coinSize + padding * 2;
 
     // --- DIBUJO DEL MARCO PRINCIPAL ---
-    graphics.fillStyle(0x222222, 0.8);
-    graphics.lineStyle(3, 0xffd700, 1);
+    graphics.fillStyle(Phaser.Display.Color.HexStringToColor(basicColors.cream).color, 0.8);
+    graphics.lineStyle(3, Phaser.Display.Color.HexStringToColor(basicColors.creamGrey).color, 1);
 
     // Para alinear verticalmente desde la izquierda,
     // el rectángulo empieza en x = 0. (SI NO SE VA AL LADO)
@@ -54,6 +54,8 @@ export class CoinInventoryUI extends Phaser.GameObjects.Container {
 
     // --- DIBUJO DE LOS SLOTS ---
     for (let i = 0; i < this.maxSlots; i++) {
+
+      // TODO change colors¿
       graphics.fillStyle(0x000000, 0.5);
       graphics.lineStyle(1, 0x555555, 1);
 

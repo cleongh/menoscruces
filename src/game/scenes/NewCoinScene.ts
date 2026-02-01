@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { BigCoinData } from "../sceneObjects/BigCoin";
 import { Button } from "../UI/Button";
-import { colors } from "../UI/colors";
+import { basicColors, colors } from "../UI/colors";
 
 export interface NewCoinSceneConfig {
     // número de monedas disponible actualmente (no commiteadas)
@@ -242,7 +242,7 @@ export class NewCoinScene extends Phaser.Scene {
                 `${coinsName}: ${this.bonusCoin}`,
                 {
                     fontSize: "36px",
-                    color: "#ffff00",
+                    color: basicColors.purple,
                     fontFamily: "salpicaduraFont",
                 },
             )
@@ -255,7 +255,7 @@ export class NewCoinScene extends Phaser.Scene {
                 `>> skip cost: ${this.passCost} <<`,
                 {
                     fontSize: "30px",
-                    color: "#ffaaaa",
+                    color: basicColors.pink,
                     fontFamily: "salpicaduraFont",
                 },
             )

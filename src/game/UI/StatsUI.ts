@@ -1,5 +1,6 @@
 import { GameScene } from "../scenes/GameScene";
 import { PlayerStats } from "../state/gameState";
+import { basicColors } from "./colors";
 
 const statConfigs = [
   { key: "attackBase", icon: "moneda_ares" },
@@ -17,7 +18,7 @@ export class StatsPanelUI extends Phaser.GameObjects.Container {
 
   private readonly boxSize = 50;
   private readonly spacing = 15;
-  private readonly goldBorder = 0xffd700;
+  private readonly goldBorder = Phaser.Display.Color.HexStringToColor(basicColors.creamGrey).color;
 
   constructor(
     scene: Phaser.Scene,
@@ -55,7 +56,7 @@ export class StatsPanelUI extends Phaser.GameObjects.Container {
     const graphics = this.scene.add.graphics();
 
     // Marco de la caja (copy paste de otros menús)
-    graphics.fillStyle(0x222222, 0.8);
+    graphics.fillStyle(Phaser.Display.Color.HexStringToColor(basicColors.cream).color, 0.8);
     graphics.lineStyle(3, this.goldBorder, 1);
     graphics.fillRoundedRect(0, y, this.boxSize, this.boxSize, 8);
     graphics.strokeRoundedRect(0, y, this.boxSize, this.boxSize, 8);
