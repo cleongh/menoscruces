@@ -2,12 +2,12 @@ import { Scene } from "phaser";
 import { Button } from "../UI/Button";
 
 export class Lore extends Scene {
-    camera: Phaser.Cameras.Scene2D.Camera;
-    background: Phaser.GameObjects.Image;
-    lore: Phaser.GameObjects.Text;
-    ret: Button;
-    loreText: string = "Eres feo\nAl nacer el médico dijo \"si no llora es un tumor\"\nTu madre, en lugar del pecho, te dio la espalda\nY hoy, fuiste a comprar una MÁSCARA...\n... y solo te vendieron la goma\n\nVan a sufrir haberte vendido esa goma...";
-    tween: Phaser.Tweens.Tween;
+  camera: Phaser.Cameras.Scene2D.Camera;
+  background: Phaser.GameObjects.Image;
+  lore: Phaser.GameObjects.Text;
+  ret: Button;
+  loreText: string = "Eres feo\nAl nacer el médico dijo \"si no llora es un tumor\"\nTu madre, en lugar del pecho, te dio la espalda\nY hoy, fuiste a comprar una MÁSCARA...\n... y solo te vendieron la goma\n\nVan a sufrir haberte vendido esa goma...";
+  tween: Phaser.Tweens.Tween;
 
   constructor() {
     super("Lore");
@@ -27,28 +27,49 @@ export class Lore extends Scene {
     });
 
     this.lore.setOrigin(0.5);
-    this.ret= new Button(this, "Continue", 512, 600, "buttonNormal", "buttonHover", "buttonPressed");
+    this.ret = new Button(this, "Continue", 512, 600, "buttonNormal", "buttonHover", "buttonPressed");
 
     this.ret.setPointerUpCallback(() => {
-            this.scene.start("GameScene");
+      this.scene.start("GameScene");
     });
 
     this.ret.hide();
 
-    this.tween = this.tweens.add({
-        targets: { i: 0 },
-        i: this.loreText.length,
-        duration: 5000,
-        ease: "Linear",
-        onUpdate: () => {
-            const progress = this.tween.progress; // valor entre 0 y 1
-            const j = Math.floor(progress * this.loreText.length);
-            this.lore.text = this.loreText.substring(0, j);
-        },
-        onComplete:() => {
-            console.log("Complete");
-            this.ret.show();
-        },
+    let selected = false;
+    this.input.keyboard?.on("keydown-SPACE", () => {
+      if (selected) {
+        this.scene.start("GameScene");
+      }
     });
-    }
+
+    this.input.keyboard?.on("keydown-W", () => {
+      if (this.ret.isVisible()) {
+        this.ret.select();
+        selected = true;
+      }
+    });
+
+    this.input.keyboard?.on("keydown-S", () => {
+      if (this.ret.isVisible()) {
+        this.ret.select();
+        selected = true;
+      }
+    });
+
+    this.tween = this.tweens.add({
+      targets: { i: 0 },
+      i: this.loreText.length,
+      duration: 5000,
+      ease: "Linear",
+      onUpdate: () => {
+        const progress = this.tween.progress; // valor entre 0 y 1
+        const j = Math.floor(progress * this.loreText.length);
+        this.lore.text = this.loreText.substring(0, j);
+      },
+      onComplete: () => {
+        console.log("Complete");
+        this.ret.show();
+      },
+    });
+  }
 }

@@ -67,7 +67,7 @@ export class MainMenu extends Scene {
         return;
       }
       if (state === 1) {
-        this.scene.start("GameScene");
+        this.scene.start("Lore");
       } else if (state === 2) {
         this.scene.start("Credicts");
       }
