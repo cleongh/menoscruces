@@ -6,7 +6,7 @@ type EventMap = {
   "local-round-changed": [newValue: number];
   "global-round-changed": [newValue: number];
   "current-coins-reset": [];
-  "coin-commited": [coinData: Coin];
+  "coins-commited": [coins: Coin[]];
   "player-health-updated": [playerHealth: CurrentPlayerHealth]
 };
 

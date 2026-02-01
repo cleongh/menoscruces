@@ -99,23 +99,38 @@ export class CoinInventoryUI extends Phaser.GameObjects.Container {
     });
   }
 
-  public addItem(texture: string) {
-    // Gestión de la cola (FIFO)
-    if (this.coins.length >= this.maxSlots) {
-      const oldest = this.coins.shift();
-      oldest?.destroy();
-    }
+  /**
+   * Añade múltiples monedas secuencialmente.
+   * @param textures Array de nombres de las texturas de las monedas a añadir
+   */
+  public addItems(textures: string[]) {
+    textures.forEach((texture) => {
+      // Gestión de la cola (FIFO) por cada moneda nueva
+      if (this.coins.length >= this.maxSlots) {
+        const oldest = this.coins.shift();
+        oldest?.destroy();
+      }
 
-    // Instanciamos la moneda.
-    // Empezamos en la posición del último slot (derecha) para que "entre" visualmente
-    const sprite = this.scene.add
-      .sprite((this.maxSlots - 1) * this.slotSpacing, 0, texture)
-      .setDisplaySize(this.coinSize, this.coinSize);
+      // Calculamos el padding para posicionar el spawn inicial
+      const padding = 15;
+      const spawnX =
+        (this.maxSlots - 1) * this.slotSpacing + (this.coinSize / 2 + padding);
 
-    this.coins.push(sprite);
-    this.add(sprite);
+      // Instanciamos la moneda en la posición final (derecha)
+      const sprite = this.scene.add
+        .sprite(spawnX, 0, texture)
+        .setDisplaySize(this.coinSize, this.coinSize);
 
+      this.coins.push(sprite);
+      this.add(sprite);
+    });
+
+    // Refrescamos posiciones una sola vez al final para que no se nos solape todo
     this.refreshPositions();
+  }
+
+  public addItem(texture: string) {
+    this.addItems([texture]);
   }
 
   public clearInventory() {
