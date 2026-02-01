@@ -18,7 +18,9 @@ export class StatsPanelUI extends Phaser.GameObjects.Container {
 
   private readonly boxSize = 50;
   private readonly spacing = 15;
-  private readonly goldBorder = Phaser.Display.Color.HexStringToColor(basicColors.creamGrey).color;
+  private readonly goldBorder = Phaser.Display.Color.HexStringToColor(
+    basicColors.creamGrey,
+  ).color;
 
   constructor(
     scene: Phaser.Scene,
@@ -45,6 +47,13 @@ export class StatsPanelUI extends Phaser.GameObjects.Container {
     (scene as GameScene).typedEvents.on("stats-changed", (stats) => {
       statConfigs.forEach((elem) => this.updateStat(elem.key, stats[elem.key]));
     });
+    (scene as GameScene).typedEvents.on("local-coins-changed", (_) => {
+      const playerStats = (scene as GameScene).fatManager.getTransformedState()
+        .baseStats;
+      statConfigs.forEach((elem) =>
+        this.updateStat(elem.key, playerStats[elem.key]),
+      );
+    });
   }
 
   private createStatBox(
@@ -56,7 +65,10 @@ export class StatsPanelUI extends Phaser.GameObjects.Container {
     const graphics = this.scene.add.graphics();
 
     // Marco de la caja (copy paste de otros menús)
-    graphics.fillStyle(Phaser.Display.Color.HexStringToColor(basicColors.cream).color, 0.8);
+    graphics.fillStyle(
+      Phaser.Display.Color.HexStringToColor(basicColors.cream).color,
+      0.8,
+    );
     graphics.lineStyle(3, this.goldBorder, 1);
     graphics.fillRoundedRect(0, y, this.boxSize, this.boxSize, 8);
     graphics.strokeRoundedRect(0, y, this.boxSize, this.boxSize, 8);
