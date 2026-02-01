@@ -40,6 +40,14 @@ export class FatManager {
     this.scene = gameScene;
   }
 
+  adjustLocalCoins(change: number) {
+    this.gameState.localCoins += change;
+    this.scene.typedEvents.emit(
+      "local-coins-changed",
+      this.gameState.localCoins,
+    );
+  }
+
   public registerNewLocalCoin(coinData: Coin): void {
     // vida máxima previa al cambio
     const oldMaxHealth = this.getTransformedState().baseStats.healthBase;
