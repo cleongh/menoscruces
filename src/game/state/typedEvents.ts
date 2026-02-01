@@ -1,4 +1,4 @@
-import { Coin } from "./gameState";
+import { Coin, PlayerStats } from "./gameState";
 
 type EventMap = {
   "big-coin-collected": [coinData: Coin];
@@ -9,6 +9,7 @@ type EventMap = {
   "coins-commited": [coins: Coin[]];
   "player-health-updated": [playerHealth: number];
   "player-dead": [];
+  "stats-changed": [newStats: PlayerStats];
 };
 
 export class TypedEventEmitter extends Phaser.Events.EventEmitter {

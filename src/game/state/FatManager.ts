@@ -51,6 +51,8 @@ export class FatManager {
   public registerNewLocalCoin(coinData: Coin): void {
     // vida máxima previa al cambio
     const oldMaxHealth = this.getTransformedState().baseStats.healthBase;
+    // stats base previos a la moneda
+    const oldStats = this.getTransformedState().baseStats;
 
     // Las monedas van: [nueva, vieja1, vieja2, vieja3, vieja4]
     if (this.gameState.currentCoins.length >= 5) {
@@ -76,6 +78,10 @@ export class FatManager {
     this.updatePlayerHealth(
       Math.max(0, currentHealth + (newMaxHealth - oldMaxHealth)),
     );
+
+    // stats base posteriores a la moneda
+    const newStats = this.getTransformedState().baseStats;
+    this.scene.typedEvents.emit("stats-changed", newStats);
   }
 
   public tickActiveCoins(): void {

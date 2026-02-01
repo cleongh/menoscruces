@@ -3,10 +3,12 @@ import { Coin } from "../state/gameState";
 
 import { CoinCounterUI } from "./CoinCounterUI";
 import { CoinInventoryUI } from "./CoinInventoryUI";
+import { StatsPanelUI } from "./StatsUI";
 
 export class InventoryUI extends Phaser.GameObjects.Container {
   private localCoins: CoinInventoryUI;
   private permanentCoins: CoinInventoryUI;
+  private statsUI: StatsPanelUI;
 
   private readonly maxLocalSlots = 5;
   private readonly maxPermanentSlots = 25;
@@ -24,6 +26,13 @@ export class InventoryUI extends Phaser.GameObjects.Container {
 
     this.localCounterUI = new CoinCounterUI(this.scene, 280, 97);
     this.add([this.localCounterUI]);
+
+    this.statsUI = new StatsPanelUI(
+      this.scene,
+      20,
+      200,
+      scene.fatManager.getTransformedState().baseStats,
+    );
 
     this.localCoins = new CoinInventoryUI(
       scene,
