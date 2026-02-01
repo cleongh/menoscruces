@@ -9,7 +9,7 @@
 * conceptos generales
 ** dinámica global
 
-Vampire survivors, top-down 2D. se acumulan "monedas", que son buffs temporales hasta que se asientan en el mercader. Dificultad creciente de enemigos para gestionar gráfica de dificultad. La ronda es una acumulación de dificultad/buff que hay que "resetear" en el mercader.
+Vampire survivors-like, horde-survival, top-down 2D. se acumulan "monedas", que son buffs temporales hasta que se asientan en el mercader. Dificultad creciente de enemigos para gestionar gráfica de dificultad. La ronda es una acumulación de dificultad/buff que hay que "resetear" en el mercader.
 
 ** Mecánicas
 
@@ -174,14 +174,9 @@ Y se espera que la posición de cada enemigo sea aleatoria con una función que,
 #+DOWNLOADED: screenshot @ 2026-01-31 11:10:47
 [[file:area_spawn.svg]]
 
-
-# | ! | ronda | vida-inicial | enemigos | dano_medio_enemigo | probabilidad_dano_por_enemigo | dano_esperado |
-# |---+-------+--------------+----------+--------------------+-------------------------------+---------------|
-# | # |     1 |            5 |      100 |                1.0 |                        0.0001 |          0.01 |
-# | # |     2 |              |          |                    |                               |             0 |
-# #+TBLFM: $7='(* $enemigos $dano_medio_enemigo $probabilidad_dano_por_enemigo);N
-
 *** tabla enemigos
+
+Las progresiones son cíclicas, basadas en rondas. En general, la función es: $movimiento = 1 + 0.008 \times rlocal^2 + 0.0008 \times rglobal^2$.
 
 #+name: constantes
 | tiempo aproximado por ronda          |   90 |
@@ -198,20 +193,30 @@ Y se espera que la posición de cada enemigo sea aleatoria con una función que,
 #+TBLFM: $2=remote(constantes, @7$2) * remote(constantes, @1$2)
 
 #+name: crecimiento-enemigos
-#+plot: file:"./crecimiento.svg"
-| ! | ronda_global | ronda_local |         movimiento |               dano | tiempo_mercader |
-|---+--------------+-------------+--------------------+--------------------+-----------------|
-| # |            1 |           1 |                1.0 |             1.0088 |              45 |
-| # |            2 |           2 |             1.0088 | 1.0352000000000001 |              90 |
-| # |            3 |           3 | 1.0352000000000001 | 1.0792000000000002 |             135 |
-| # |            4 |           4 | 1.0792000000000002 |             1.1408 |             180 |
-| # |            5 |           1 |             1.0128 |              1.028 |              45 |
-| # |            6 |           2 |              1.028 |             1.0608 |              90 |
-| # |            7 |           4 |             1.1008 | 1.1671999999999998 |             180 |
-| # |            8 |           5 | 1.1671999999999998 | 1.2511999999999999 |             225 |
-#+TBLFM: $4='(+ 1 (* 0.0008 (expt (- $ronda_global 1) 2)) (* 0.008 (expt  (- $ronda_local 1) 2)));N::$5='(+ 1 (* 0.0008 (expt $ronda_global 2)) (* 0.008 (expt  $ronda_local 2)));N::$6='(* $ronda_local remote(constantes, @1$2));N
+#+plot: file:"./crecimiento.svg" deps:(2 3)
+| ! | ronda_global | ronda_local | movimiento | dano | tiempo_mercader |
+|---+--------------+-------------+------------+------+-----------------|
+| # |            1 |           1 |       1.00 | 1.01 |              90 |
+| # |            2 |           2 |       1.01 | 1.04 |             180 |
+| # |            3 |           3 |       1.04 | 1.08 |             270 |
+| # |            4 |           4 |       1.08 | 1.14 |             360 |
+| # |            5 |           1 |       1.01 | 1.03 |              90 |
+| # |            6 |           2 |       1.03 | 1.06 |             180 |
+| # |            7 |           4 |       1.10 | 1.17 |             360 |
+| # |            8 |           5 |       1.17 | 1.25 |             450 |
+| # |            9 |           1 |       1.05 | 1.07 |              90 |
+| # |           10 |           2 |       1.07 | 1.11 |             180 |
+| # |           11 |           3 |       1.11 | 1.17 |             270 |
+| # |           12 |           4 |       1.17 | 1.24 |             360 |
+| # |           13 |           1 |       1.12 | 1.14 |              90 |
+| # |           14 |           2 |       1.14 | 1.19 |             180 |
+| # |           15 |           3 |       1.19 | 1.25 |             270 |
+| # |           16 |           4 |       1.25 | 1.33 |             360 |
+| # |           17 |           5 |       1.33 | 1.43 |             450 |
+| # |           18 |           6 |       1.43 | 1.55 |             540 |
+#+TBLFM: $4='(format "%.2f" (+ 1 (* 0.0008 (expt (- $ronda_global 1) 2)) (* 0.008 (expt  (- $ronda_local 1) 2))));N::$5='(format "%.2f" (+ 1 (* 0.0008 (expt $ronda_global 2)) (* 0.008 (expt  $ronda_local 2))));N::$6='(* $ronda_local remote(constantes, @1$2));N
 
-$movimiento = 1 + 0.008 \times rlocal^2 + 0.0008 \times rglobal^2$
+
 
 [[file:./crecimiento.svg]]
 
