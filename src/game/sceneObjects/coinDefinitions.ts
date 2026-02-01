@@ -29,7 +29,7 @@ const SnakeCoin_Tier1: BigCoinData = {
     name: "-10 Extra Health",
     description: "Decreases your maximum health by 10 points.",
     kind: "passive",
-    texture: "moneda_vida",
+    texture: "moneda_vida_mala",
     modifier: (state) => {
       const newMaxHealth = state.baseStats.healthBase - 10;
       return {

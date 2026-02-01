@@ -27,9 +27,16 @@ export class Preloader extends Scene {
     this.load.setPath("assets");
 
     this.load.image("logo", "logo.png");
+
+    //Monedas varias
     this.load.image("moneda_ares", "coins/moneda_ares.png");
     this.load.image("moneda_bomba", "coins/moneda_bomba.png");
     this.load.image("moneda_vida", "coins/moneda_vida.png");
+    this.load.image("moneda_vida_mala", "coins/moneda_vida_mala.png");
+    this.load.image("moneda_sonic", "coins/moneda_sonic.png");
+    this.load.image("moneda_caracol", "coins/moneda_caracol.png");
+    this.load.image("moneda_pulpo", "coins/moneda_pulpo.png");
+
     this.load.image("boss", "placeholder/boss.jpg");
     this.load.image("big-coin", "placeholder/big-coin.png");
     this.load.image("projectileEnemy", "placeholder/projectileEnemy.jpg");
@@ -87,6 +94,17 @@ export class Preloader extends Scene {
       frameWidth: 128,
       frameHeight: 128
     });
+
+    /** PROPS (landmarks) */
+    this.load.spritesheet("bush", "props/bush.png", {
+      frameWidth: 256, 
+      frameHeight: 256
+    })
+
+    this.load.spritesheet("grass", "props/grass.png", {
+      frameWidth: 256, 
+      frameHeight: 256
+    })
 
     this.load.audio("music", "music/MainSongLoop.mp3");
 

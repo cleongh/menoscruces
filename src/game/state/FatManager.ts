@@ -42,7 +42,10 @@ export class FatManager {
 
   public registerNewLocalCoin(coinData: Coin): void {
     // Las monedas van: [nueva, vieja1, vieja2, vieja3, vieja4]
-    this.gameState.currentCoins.pop();
+    if (this.gameState.currentCoins.length >= 5) {
+      this.gameState.currentCoins.pop();
+    }
+
     this.gameState.currentCoins = [coinData, ...this.gameState.currentCoins];
 
     if (coinData.kind === "active") {
@@ -76,10 +79,6 @@ export class FatManager {
         coin.modifier ? coin.modifier(currentState) : currentState,
       stateAfterPermanentChanges,
     );
-  }
-
-  public adjustLocalCoins(amount: number): void {
-    this.gameState.localCoins += amount;
   }
 
   public pickCoin(): void {
