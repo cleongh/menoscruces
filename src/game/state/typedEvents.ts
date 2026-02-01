@@ -7,7 +7,19 @@ type EventMap = {
   "global-round-changed": [newValue: number];
   "current-coins-reset": [];
   "coin-commited": [coinData: Coin];
+  "player-health-updated": [playerHealth: CurrentPlayerHealth]
 };
+
+export class CurrentPlayerHealth  {
+  public maxHealth: number
+  public currentHealth: number
+
+  constructor(maxHealth: number, currrentHealth: number) {
+    this.maxHealth = maxHealth;
+    this.currentHealth = currrentHealth;
+  }
+  
+}
 
 export class TypedEventEmitter extends Phaser.Events.EventEmitter {
   constructor() {
