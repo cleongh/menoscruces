@@ -36,11 +36,14 @@ export class Preloader extends Scene {
     this.load.image("moneda_sonic", "coins/moneda_sonic.png");
     this.load.image("moneda_caracol", "coins/moneda_caracol.png");
     this.load.image("moneda_pulpo", "coins/moneda_pulpo.png");
+    this.load.image("moneda_cuchillito", "coins/moneda_cuchillito.png");
 
     this.load.image("boss", "placeholder/boss.jpg");
     this.load.image("big-coin", "placeholder/big-coin.png");
     this.load.image("projectileEnemy", "placeholder/projectileEnemy.jpg");
-    this.load.image("projectile", "placeholder/projectile.jpg");
+    this.load.image("projectile", "enemies/cobete.png");
+
+    //this.load.image("projectile", "placeholder/projectile.jpg");
     this.load.image("landmark", "placeholder/landmark.jpg");
     this.load.image("buttonNormal", "ui/ButtonNormal.png");
     this.load.image("buttonHover", "ui/ButtonHover.png");
@@ -97,12 +100,12 @@ export class Preloader extends Scene {
 
     /** PROPS (landmarks) */
     this.load.spritesheet("bush", "props/bush.png", {
-      frameWidth: 256, 
+      frameWidth: 256,
       frameHeight: 256
     })
 
     this.load.spritesheet("grass", "props/grass.png", {
-      frameWidth: 256, 
+      frameWidth: 256,
       frameHeight: 256
     })
 

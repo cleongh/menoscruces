@@ -15,17 +15,20 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
 
         scene.time.addEvent({
             delay: lifeSpan,
-            callback: () => { 
+            callback: () => {
                 this.shooter.setCanShoot(true);
-                this.destroy(); 
+                this.destroy();
             },
             callbackScope: this,
         })
 
-        this.setDisplaySize(10, 10);
+        this.setDisplaySize(20, 20);
     }
 
     setDirection(direction: Phaser.Math.Vector2) {
+        if (direction.x < 0) {
+            this.setFlipX(true);
+        }
         this.body.setVelocity(direction.x * this.speed, direction.y * this.speed);
     }
 }
@@ -73,7 +76,7 @@ export class ProjectileEnemy extends AbstractEnemy {
         this.canShoot = false;
     }
 
-    setCanShoot(canShoot: boolean){
+    setCanShoot(canShoot: boolean) {
         this.canShoot = canShoot;
     }
 }
