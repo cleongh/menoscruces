@@ -3,7 +3,6 @@ import { BigCoinData } from "../sceneObjects/BigCoin";
 import { coinDefinitions } from "../sceneObjects/coinDefinitions";
 import { GameScene } from "../scenes/GameScene";
 import { BaseStats, Coin, GameState } from "./GameState";
-import { CurrentPlayerHealth } from "./typedEvents";
 
 export class FatManager {
   private gameState: GameState;
@@ -36,6 +35,7 @@ export class FatManager {
        * monedas grandes recogidas en la ronda actual, no entregadas (temporales)
        */
       currentCoins: [],
+      currentHealth: baseStats.healthBase,
     };
     this.scene = gameScene;
   }
@@ -144,13 +144,13 @@ export class FatManager {
     );
   }
 
-  // TODO use this function, and make function update the healthbard
-  public playerHealthUpdated(maxHealth: number, currentHealth: number) {
-    console.log("Fat manager updatehealth called", currentHealth);
-    this.scene.typedEvents.emit(
-      "player-health-updated",
-      new CurrentPlayerHealth(maxHealth, currentHealth),
-    );
+  private updatePlayerHealth(currentHealth: number) {
+    this.gameState.currentHealth = currentHealth;
+    this.scene.typedEvents.emit("player-health-updated", currentHealth);
+
+    if (currentHealth <= 0) {
+      this.scene.typedEvents.emit("player-dead");
+    }
   }
 
   /**
@@ -168,14 +168,28 @@ export class FatManager {
       Math.floor(Math.random() * currentTierCoins.availableCoins.length)
     ];
   }
+
+  public damagePlayer(damage: number) {
+    // valor actual transformado de la defensa
+    const defense = this.getTransformedState().baseStats.defenseBase;
+    damage = Math.max(damage - defense, 0);
+    this.updatePlayerHealth(Math.max(0, this.gameState.currentHealth - damage));
+  }
+
+  public regenPlayer() {
+    const regen = this.getTransformedState().baseStats.regenBase;
+    const health = this.getTransformedState().currentHealth;
+    const maxHealth = this.getTransformedState().baseStats.healthBase;
+    this.updatePlayerHealth(Math.min(maxHealth, health + regen));
+  }
 }
 
 export const baseStats: BaseStats = {
   attackBase: 250,
-  defenseBase: 5,
+  defenseBase: 0.05,
   speedBase: 100,
-  healthBase: 100,
-  regenBase: 1,
+  healthBase: 5,
+  regenBase: 0.01,
   rangeBase: 1,
   enemyDamageBase: 20,
   enemySpeedBase: 80,

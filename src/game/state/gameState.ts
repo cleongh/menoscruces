@@ -49,6 +49,11 @@ export interface GameState {
    * Monedas actuales que posee el jugador
    */
   currentCoins: Coin[];
+
+  /**
+   * Vida actual del personaje
+   */
+  currentHealth: number;
 }
 
 /**
