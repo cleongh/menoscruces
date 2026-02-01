@@ -60,6 +60,33 @@ export class MainMenu extends Scene {
     /*this.input.once("pointerdown", () => {
       this.scene.start("GameScene");
     });*/
+
+    let state = 0;
+    this.input.keyboard?.on("keydown-SPACE", () => {
+      if (state === 0) {
+        return;
+      }
+      if (state === 1) {
+        this.scene.start("GameScene");
+      } else if (state === 2) {
+        this.scene.start("Credicts");
+      }
+      this.playButton.deselect();
+      this.credits.deselect();
+      state = 0;
+    });
+
+    this.input.keyboard?.on("keydown-W", () => {
+      this.playButton.select();
+      this.credits.deselect();
+      state = 1;
+    });
+
+    this.input.keyboard?.on("keydown-S", () => {
+      this.credits.select();
+      this.playButton.deselect();
+      state = 2;
+    });
   }
 
   credictsButtonHoverState() {
