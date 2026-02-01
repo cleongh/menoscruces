@@ -124,6 +124,8 @@ export class Preloader extends Scene {
     this.load.audio("music", "music/MainSongLoop.mp3");
 
     this.load.audio("coinToss", ["sfx/CoinTossSFX.ogg", "sfx/CoinTossSFX.mp3"]);
+
+    this.load.audio("menuSong", "music/MainMenuSongLoop.ogg");
   }
 
   create() {
