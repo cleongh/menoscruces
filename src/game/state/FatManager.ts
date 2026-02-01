@@ -174,7 +174,7 @@ export class FatManager {
 export const baseStats: BaseStats = {
   attackBase: 250,
   defenseBase: 5,
-  speedBase: 500, //TODO restore after testing
+  speedBase: 100,
   healthBase: 100,
   regenBase: 1,
   rangeBase: 1,
