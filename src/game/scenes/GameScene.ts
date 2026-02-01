@@ -12,12 +12,14 @@ import { TypedEventEmitter } from "../state/typedEvents";
 import HealthBar from "../UI/HealthBar";
 
 import VibratingPipeline from "../pipelines/VibratingPipeline";
+import { Button } from "../UI/Button";
 
 export class GameScene extends Phaser.Scene {
   declare body: Phaser.Physics.Arcade.Body;
 
   private player: Player;
   private healthbar: HealthBar;
+  private exitButton: Button;
   private merchant: Merchant;
   private enemies: Phaser.Physics.Arcade.Group;
   private projectiles: Phaser.Physics.Arcade.Group;
@@ -115,7 +117,13 @@ export class GameScene extends Phaser.Scene {
     this.inventory = new InventoryUI(this, 50, 40);
 
     this.healthbar = new HealthBar(this, 0, 35);
-
+    this.exitButton = new Button(this,"QUIT",900,140,"buttonNormalSmall",
+      "buttonHoverSmall",
+      "buttonPressedSmall","18px");
+    this,this.exitButton.setDepth(100);
+    this.exitButton.setPointerUpCallback(() => {
+      this.exitScene("MainMenu");
+    });
     this.physics.world.setBounds(0, 0, this.width, this.height);
     this.cameras.main.setBounds(0, 0, this.width, this.height);
     this.cameras.main.startFollow(this.player);
@@ -147,8 +155,7 @@ export class GameScene extends Phaser.Scene {
     this.smellImage.alpha = 0;
 
     this.typedEvents.on("player-dead", () => {
-      this.music.stop();
-      this.scene.start("GameOver");
+      this.exitScene("GameOver");
     });
   }
 
@@ -271,4 +278,10 @@ export class GameScene extends Phaser.Scene {
       callbackScope: this,
     });
   }
+  exitScene(scene:string)
+  {
+    this.music.stop();
+    this.scene.start(scene);
+  }
+  
 }
