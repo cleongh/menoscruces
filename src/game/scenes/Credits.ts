@@ -1,7 +1,7 @@
 import { Scene } from "phaser";
 import { Button } from "../UI/Button";
 
-export class Credicts extends Scene {
+export class Credits extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera;
   background: Phaser.GameObjects.Image;
   credits: Phaser.GameObjects.Text;
