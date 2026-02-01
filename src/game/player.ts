@@ -2,6 +2,8 @@ import AbstractEnemy from "./enemies/AbstractEnemy";
 import RubberBand from "./RubberBand";
 import { GameScene } from "./scenes/GameScene";
 
+import VibratingPipeline from "./pipelines/VibratingPipeline";
+
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   declare body: Phaser.Physics.Arcade.Body;
 
@@ -34,6 +36,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this);
     scene.physics.add.existing(this);
     this.setCollideWorldBounds(true);
+
+    this.setPipeline(VibratingPipeline.KEY);
 
     this.dir = new Phaser.Math.Vector2(0, 0);
     this.lastDir = new Phaser.Math.Vector2(1, 0);

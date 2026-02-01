@@ -2,7 +2,7 @@ import { enemyWaves } from "../enemies/enemyWave";
 import { BigCoinData } from "../sceneObjects/BigCoin";
 import { coinDefinitions } from "../sceneObjects/coinDefinitions";
 import { GameScene } from "../scenes/GameScene";
-import { BaseStats, Coin, GameState } from "./GameState";
+import { BaseStats, Coin, GameState } from "./gameState";
 
 export class FatManager {
   private gameState: GameState;
@@ -41,9 +41,15 @@ export class FatManager {
   }
 
   public registerNewLocalCoin(coinData: Coin): void {
+    // vida máxima previa al cambio
+    const oldMaxHealth = this.getTransformedState().baseStats.healthBase;
+
     // Las monedas van: [nueva, vieja1, vieja2, vieja3, vieja4]
     if (this.gameState.currentCoins.length >= 5) {
-      this.gameState.currentCoins.pop();
+      const oldCoin = this.gameState.currentCoins.pop();
+      if (oldCoin && oldCoin.kind === "active") {
+        oldCoin.onEffectEnd(this.scene);
+      }
     }
 
     this.gameState.currentCoins = [coinData, ...this.gameState.currentCoins];
@@ -53,6 +59,15 @@ export class FatManager {
     }
 
     this.scene.typedEvents.emit("big-coin-collected", coinData);
+
+    // vida máxima después del cambio
+    const newMaxHealth = this.getTransformedState().baseStats.healthBase;
+    const currentHealth = this.getTransformedState().currentHealth;
+
+    // ñapa para que actualizar la vida máxima también actualice la vida actual
+    this.updatePlayerHealth(
+      Math.max(0, currentHealth + (newMaxHealth - oldMaxHealth)),
+    );
   }
 
   public tickActiveCoins(): void {

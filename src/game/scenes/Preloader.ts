@@ -49,9 +49,16 @@ export class Preloader extends Scene {
     this.load.image("buttonHover", "ui/ButtonHover.png");
     this.load.image("buttonPressed", "ui/ButtonPressed.png");
 
+    this.load.image("clouds", "clouds.png");
+
     this.load.image("coin", "coins/monedilla.png");
 
     this.load.spritesheet("player", "player.png", {
+      frameWidth: 256,
+      frameHeight: 256,
+    });
+
+    this.load.spritesheet("merchant", "merchant.png", {
       frameWidth: 256,
       frameHeight: 256,
     });
@@ -131,6 +138,14 @@ export class Preloader extends Scene {
       frames: this.anims.generateFrameNumbers("player", { start: 0, end: 0 }),
     });
 
+        
+    this.anims.create({
+      key: "merchant",
+      frames: this.anims.generateFrameNumbers("merchant", { start: 0, end: 3 }),
+      frameRate: 8, // Velocidad de la animación
+      repeat: -1, // Animación en bucle
+    });
+    
     this.anims.create({
       key: "gomilla",
       frames: this.anims.generateFrameNumbers("gomilla", { start: 0, end: 1 }),
