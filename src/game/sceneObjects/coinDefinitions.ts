@@ -82,14 +82,14 @@ const AresCoin_Tier1: BigCoinData = {
 };
 
 const SmellCoin: BigCoinData = {
-  texture: "moneda_bomba",
+  texture: "moneda_peste",
   name: "Smell Coin",
   passCost: 100,
   option1: {
     name: "What a stench!",
     description: "Generates a smell that harms enemies.",
     kind: "active",
-    texture: "moneda_bomba",
+    texture: "moneda_peste",
     onEffectStart(scene) {
       scene.time.addEvent({
         delay: 5000,
@@ -98,14 +98,14 @@ const SmellCoin: BigCoinData = {
         loop: true,
       });
     },
-    onEffectTick(scene) {},
-    onEffectEnd(scene) {},
+    onEffectTick(scene) { },
+    onEffectEnd(scene) { },
   },
   option2: {
     name: "Good Smell",
     description: "Generates a smell that heals enemies.",
     kind: "active",
-    texture: "moneda_bomba",
+    texture: "moneda_curita",
     onEffectStart(scene) {
       scene.time.addEvent({
         delay: 7000,
@@ -121,8 +121,8 @@ const SmellCoin: BigCoinData = {
         loop: true,
       });
     },
-    onEffectTick(scene) {},
-    onEffectEnd(scene) {},
+    onEffectTick(scene) { },
+    onEffectEnd(scene) { },
   },
 };
 
