@@ -1,3 +1,5 @@
+import { colors } from "./colors";
+
 export class CoinInventoryUI extends Phaser.GameObjects.Container {
   private coins: Phaser.GameObjects.Sprite[] = [];
 
@@ -103,8 +105,8 @@ export class CoinInventoryUI extends Phaser.GameObjects.Container {
    * Añade múltiples monedas secuencialmente.
    * @param textures Array de nombres de las texturas de las monedas a añadir
    */
-  public addItems(textures: string[]) {
-    textures.forEach((texture) => {
+  public addItems(items: { texture: string; face: "head" | "tail" }[]) {
+    items.forEach(({ texture, face }) => {
       // Gestión de la cola (FIFO) por cada moneda nueva
       if (this.coins.length >= this.maxSlots) {
         const oldest = this.coins.shift();
@@ -119,7 +121,8 @@ export class CoinInventoryUI extends Phaser.GameObjects.Container {
       // Instanciamos la moneda en la posición final (derecha)
       const sprite = this.scene.add
         .sprite(spawnX, 0, texture)
-        .setDisplaySize(this.coinSize, this.coinSize);
+        .setDisplaySize(this.coinSize, this.coinSize)
+        .setTint(colors[face]);
 
       this.coins.push(sprite);
       this.add(sprite);
@@ -129,8 +132,8 @@ export class CoinInventoryUI extends Phaser.GameObjects.Container {
     this.refreshPositions();
   }
 
-  public addItem(texture: string) {
-    this.addItems([texture]);
+  public addItem(item: { texture: string; face: "head" | "tail" }) {
+    this.addItems([item]);
   }
 
   public clearInventory() {
