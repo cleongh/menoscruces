@@ -56,6 +56,11 @@ export class Preloader extends Scene {
       frameHeight: 256,
     });
 
+    this.load.spritesheet("merchant", "merchant.png", {
+      frameWidth: 256,
+      frameHeight: 256,
+    });
+
     /* ENEMIES */
     this.load.spritesheet("eleph", "enemies/eleph.png", {
       frameWidth: 256,
@@ -131,6 +136,14 @@ export class Preloader extends Scene {
       frames: this.anims.generateFrameNumbers("player", { start: 0, end: 0 }),
     });
 
+        
+    this.anims.create({
+      key: "merchant",
+      frames: this.anims.generateFrameNumbers("merchant", { start: 0, end: 3 }),
+      frameRate: 8, // Velocidad de la animación
+      repeat: -1, // Animación en bucle
+    });
+    
     this.anims.create({
       key: "gomilla",
       frames: this.anims.generateFrameNumbers("gomilla", { start: 0, end: 1 }),
