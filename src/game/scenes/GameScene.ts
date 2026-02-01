@@ -31,7 +31,8 @@ export class GameScene extends Phaser.Scene {
   public fatManager: FatManager;
   private enemySpawner: EnemySpawner;
 
-  private smellImage: Phaser.GameObjects.Arc;
+  //private smellImage: Phaser.GameObjects.Arc;
+  private smellImage: Phaser.GameObjects.Sprite;
 
   constructor() {
     super("GameScene");
@@ -127,7 +128,8 @@ export class GameScene extends Phaser.Scene {
       ease: "Linear",
     });
 
-    this.smellImage = this.add.circle(this.player.x, this.player.y, 10, 0x00FF00, 0.5);
+    this.smellImage = this.add.sprite(this.player.x, this.player.y, "hodor", 0);
+    this.smellImage.play("hodor");
     this.smellImage.active = false;
     this.smellImage.alpha = 0;
   }
@@ -169,12 +171,12 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
-  public infernallSmell_Cara(){
+  public infernallSmell_Cara() {
     this.smellImage.active = true;
     this.smellImage.setX(this.player.x);
     this.smellImage.setY(this.player.y);
-    this.smellImage.radius = 2 * this.player.width * this.fatManager.getTransformedState().baseStats.rangeBase;
-    this.smellImage.alpha = 0.4;
+    this.smellImage.setScale(this.fatManager.getTransformedState().baseStats.rangeBase);
+    this.smellImage.alpha = 0.8;
 
 
     this.enemies.getChildren().forEach((enemy: any) => {
@@ -185,7 +187,7 @@ export class GameScene extends Phaser.Scene {
           this.player.y,
           enemy.x,
           enemy.y,
-        ) <= 2 * this.player.width * this.fatManager.getTransformedState().baseStats.rangeBase
+        ) <= this.smellImage.width / 2 * this.fatManager.getTransformedState().baseStats.rangeBase
       ) {
         let damage = this.fatManager.getTransformedState().baseStats.attackBase;
         enemy.quitHealth(damage * 3);
@@ -204,13 +206,12 @@ export class GameScene extends Phaser.Scene {
     })
   }
 
-  public infernallSmell_Cruz(){
+  public infernallSmell_Cruz() {
     this.smellImage.active = true;
     this.smellImage.setX(this.player.x);
     this.smellImage.setY(this.player.y);
-    this.smellImage.radius = 2 * this.player.width * this.fatManager.getTransformedState().baseStats.rangeBase;
+    this.smellImage.setScale(this.fatManager.getTransformedState().baseStats.rangeBase); this.smellImage.alpha = 0.4;
     this.smellImage.alpha = 0.4;
-    
     this.enemies.getChildren().forEach((enemy: any) => {
       enemy.update(this.player);
       if (
@@ -219,10 +220,10 @@ export class GameScene extends Phaser.Scene {
           this.player.y,
           enemy.x,
           enemy.y,
-        ) <= 2 * this.player.width * this.fatManager.getTransformedState().baseStats.rangeBase
+        ) <= this.smellImage.width / 2 * this.fatManager.getTransformedState().baseStats.rangeBase
       ) {
         let damage = this.fatManager.getTransformedState().baseStats.attackBase;
-        enemy.quitHealth(-damage/2);
+        enemy.quitHealth(-damage / 2);
 
         console.log("Da vida");
       }
