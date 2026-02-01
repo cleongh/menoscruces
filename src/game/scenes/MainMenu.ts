@@ -6,7 +6,7 @@ export class MainMenu extends Scene {
   logo: GameObjects.Image;
   title: GameObjects.Text;
   playButton: Button;
-  credicts: Button;
+  credits: Button;
 
   constructor() {
     super("MainMenu");
@@ -22,9 +22,9 @@ export class MainMenu extends Scene {
       this.scene.start("GameScene");
     });
 
-    this.credicts = new Button(this, "CREDITS", 512, 512, "buttonNormal", "buttonHover", "buttonPressed");
+    this.credits = new Button(this, "CREDITS", 512, 512, "buttonNormal", "buttonHover", "buttonPressed");
 
-    this.credicts.setPointerUpCallback(() => {
+    this.credits.setPointerUpCallback(() => {
       this.scene.start("Credicts");
     });
 
@@ -35,15 +35,15 @@ export class MainMenu extends Scene {
   }
 
   credictsButtonHoverState() {
-    this.credicts.setStyle({ fill: '#ff0' });
+    this.credits.setStyle({ fill: '#ff0' });
   }
 
   credictsButtonRestState() {
-    this.credicts.setStyle({ fill: '#ffffff' });
+    this.credits.setStyle({ fill: '#ffffff' });
   }
 
   credictsButtonActiveState() {
-    this.credicts.setStyle({ fill: '#0ff' });
+    this.credits.setStyle({ fill: '#0ff' });
   }
 
 
