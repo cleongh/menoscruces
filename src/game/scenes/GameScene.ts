@@ -160,7 +160,7 @@ export class GameScene extends Phaser.Scene {
     this.smellImage.setY(this.player.y);
   }
 
-  createLandmarks(numLandMarks: number = 10) {
+  createLandmarks(numLandMarks: number = 80) {
     for (let i = 0; i < numLandMarks; ++i) {
       let x = Phaser.Math.Between(0, this.width);
       let y = Phaser.Math.Between(0, this.height);

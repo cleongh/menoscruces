@@ -95,6 +95,17 @@ export class Preloader extends Scene {
       frameHeight: 128
     });
 
+    /** PROPS (landmarks) */
+    this.load.spritesheet("bush", "props/bush.png", {
+      frameWidth: 256, 
+      frameHeight: 256
+    })
+
+    this.load.spritesheet("grass", "props/grass.png", {
+      frameWidth: 256, 
+      frameHeight: 256
+    })
+
     this.load.audio("music", "music/MainSongLoop.mp3");
 
     this.load.audio("coinToss", ["sfx/CoinTossSFX.ogg", "sfx/CoinTossSFX.mp3"]);
