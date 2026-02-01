@@ -7,6 +7,7 @@ export class MainMenu extends Scene {
   title: GameObjects.Text;
   playButton: Button;
   credits: Button;
+  private music: any;
 
   constructor() {
     super("MainMenu");
@@ -27,6 +28,7 @@ export class MainMenu extends Scene {
     );
 
     this.playButton.setPointerUpCallback(() => {
+      this.music.stop();
       this.scene.start("Lore");
     });
 
@@ -41,6 +43,7 @@ export class MainMenu extends Scene {
     );
     let state = 1;
     this.credits.setPointerUpCallback(() => {
+      this.music.stop();
       this.scene.start("Credicts");
     });
 
@@ -91,6 +94,26 @@ export class MainMenu extends Scene {
       if(state == 0)
         state = 2;
       this.showButtonFeedback(state);
+    });
+
+    const config = {
+      mute: false,
+      volume: 0,
+      rate: 1,
+      detune: 0,
+      seek: 0,
+      loop: true,
+      delay: 0,
+    };
+
+    this.music = this.sound.add("menuSong", config);
+    this.music.play();
+
+    this.tweens.add({
+      targets: this.music,
+      volume: { from: 0, to: 0.5 },
+      duration: 3000,
+      ease: "Linear",
     });
   }
 

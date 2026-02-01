@@ -51,6 +51,10 @@ export class Preloader extends Scene {
     this.load.image("buttonHover", "ui/ButtonHover.png");
     this.load.image("buttonPressed", "ui/ButtonPressed.png");
     this.load.image("MainMenuBg", "ui/MainMenuBg.png");
+    this.load.image("buttonNormalSmall", "ui/ButtonNormalSmall.png");
+    this.load.image("buttonHoverSmall", "ui/ButtonHoverSmall.png");
+    this.load.image("buttonPressedSmall", "ui/ButtonPressedSmall.png");
+
 
     this.load.image("clouds", "clouds.png");
 
@@ -124,6 +128,8 @@ export class Preloader extends Scene {
     this.load.audio("music", "music/MainSongLoop.mp3");
 
     this.load.audio("coinToss", ["sfx/CoinTossSFX.ogg", "sfx/CoinTossSFX.mp3"]);
+
+    this.load.audio("menuSong", "music/MainMenuSongLoop.ogg");
   }
 
   create() {
