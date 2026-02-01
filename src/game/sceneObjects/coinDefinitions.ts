@@ -1,4 +1,4 @@
-import { BigCoin, BigCoinData } from "./BigCoin";
+import { BigCoinData } from "./BigCoin";
 
 interface TierDefinition {
   name: string;
@@ -96,15 +96,10 @@ const SmellCoin: BigCoinData = {
         callback: scene.infernallSmell_Cara,
         callbackScope: scene,
         loop: true,
-      }
-      )
+      });
     },
-    onEffectTick(scene) {
-
-    },
-    onEffectEnd(scene) {
-
-    },
+    onEffectTick(scene) {},
+    onEffectEnd(scene) {},
   },
   option2: {
     name: "Good Smell",
@@ -120,19 +115,14 @@ const SmellCoin: BigCoinData = {
             callback: scene.infernallSmell_Cruz,
             callbackScope: scene,
             loop: true,
-          })
+          });
         },
         callbackScope: scene,
         loop: true,
-      }
-      )
+      });
     },
-    onEffectTick(scene) {
-
-    },
-    onEffectEnd(scene) {
-
-    },
+    onEffectTick(scene) {},
+    onEffectEnd(scene) {},
   },
 };
 
@@ -177,10 +167,6 @@ const RunCoin: BigCoinData = {
 export const coinDefinitions: TierDefinition[] = [
   {
     name: "Tier 1",
-    availableCoins: [
-      SnakeCoin_Tier1,
-      AresCoin_Tier1,
-      SmellCoin,
-    ],
+    availableCoins: [SnakeCoin_Tier1, AresCoin_Tier1, SmellCoin],
   },
 ];
