@@ -1,10 +1,10 @@
 import { Scene } from "phaser";
 import { Button } from "../UI/Button";
 
-export class Credicts extends Scene {
+export class Credits extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera;
   background: Phaser.GameObjects.Image;
-  credicts: Phaser.GameObjects.Text;
+  credits: Phaser.GameObjects.Text;
   ret: Button;
 
   constructor() {
@@ -18,7 +18,7 @@ export class Credicts extends Scene {
     this.background = this.add.image(512, 384, "background");
     this.background.setAlpha(0.5);
 
-    this.credicts = this.add.text(512, 384, "Credicts", {
+    this.credits = this.add.text(512, 384, "Credits", {
       fontFamily: "Arial Black",
       fontSize: 64,
       color: "#ffffff",
@@ -26,7 +26,7 @@ export class Credicts extends Scene {
       strokeThickness: 8,
       align: "center",
     });
-    this.credicts.setOrigin(0.5);
+    this.credits.setOrigin(0.5);
     this.ret= new Button(this, "Main Menu", 512, 512, "buttonNormal", "buttonHover", "buttonPressed");
 
     this.ret.setPointerUpCallback(() => {
@@ -54,14 +54,14 @@ export class Credicts extends Scene {
   }
 
   returnButtonHoverState() {
-    this.credicts.setStyle({ fill: '#ff0'});
+    this.credits.setStyle({ fill: '#ff0'});
   }
 
   returnButtonRestState() {
-    this.credicts.setStyle({ fill: '#ffffff' });
+    this.credits.setStyle({ fill: '#ffffff' });
   }
 
   returnButtonActiveState() {
-    this.credicts.setStyle({ fill: '#0ff' });
+    this.credits.setStyle({ fill: '#0ff' });
   }
 }
