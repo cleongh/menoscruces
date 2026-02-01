@@ -13,10 +13,10 @@ export class MainMenu extends Scene {
   }
 
   create() {
-    this.background = this.add.image(512, 384, "background");
+    this.background = this.add.image(512, 384, "MainMenuBg");
 
     // this.logo = this.add.image(512, 300, "logo");
-    this.logo = this.add
+    /*this.logo = this.add
       .text(
         this.cameras.main.worldView.x + this.cameras.main.width / 2,
         this.cameras.main.worldView.y + this.cameras.main.height / 3.5, //this.config.height / 2,
@@ -28,12 +28,12 @@ export class MainMenu extends Scene {
           fontFamily: "salpicaduraFont",
         },
       )
-      .setOrigin(0.5, 0.5);
+      .setOrigin(0.5, 0.5);*/
     this.playButton = new Button(
       this,
       "PLAY",
-      512,
-      400,
+      650,
+      450,
       "buttonNormal",
       "buttonHover",
       "buttonPressed",
@@ -46,8 +46,8 @@ export class MainMenu extends Scene {
     this.credits = new Button(
       this,
       "CREDITS",
-      512,
-      512,
+      650,
+      562,
       "buttonNormal",
       "buttonHover",
       "buttonPressed",

@@ -45,6 +45,7 @@ export class Preloader extends Scene {
     this.load.image("buttonNormal", "ui/ButtonNormal.png");
     this.load.image("buttonHover", "ui/ButtonHover.png");
     this.load.image("buttonPressed", "ui/ButtonPressed.png");
+    this.load.image("MainMenuBg", "ui/MainMenuBg.png");
 
     this.load.image("coin", "coins/monedilla.png")
 
