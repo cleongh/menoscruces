@@ -22,6 +22,12 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
   // emitter de particulas tras el mercader
   trailEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
 
+  // si el mercader mira hacia la derecha (x>0)
+  facingForward = true
+
+  // escala a la que se muestra el mercader
+  merchantScale = 0.4
+
   // reference to the player, see if it is colliding still with the merchant
   player: Player;
 
@@ -40,23 +46,28 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
   fatManager: FatManager;
 
   constructor(scene: Phaser.Scene, x: number, y: number, player: Player) {
-    super(scene, x, y, "flares");
+    super(scene, x, y, "merchant");
     scene.add.existing(this);
     scene.physics.add.existing(this);
-    this.setDisplaySize(30, 30);
+    this.setScale(this.merchantScale);
 
     this.fatManager = (scene as GameScene).fatManager;
     this.player = player;
 
     // añadir pedos cósmicos al mercader
-    this.trailEmitter = this.scene.add.particles(0, 0, "flares", {
-      lifespan: 2000,
-      scale: { start: 0.2, end: 0 },
-      blendMode: "ADD",
+    this.trailEmitter = this.scene.add.particles(0, 0, 'flares', {
+      lifespan: 3000,
+      scale: { start: 0.16, end: 0.06 },
+      alpha: { start: 0.5, end: 0}, 
+      blendMode: 'ADD',
       emitting: true,
-      speed: { min: this.speed - 20, max: this.speed + 20 },
+      speed: { min: this.speed - 10, max: this.speed + 10 },
+      accelerationX: { min: -16, max: 16},
+      accelerationY: { min: -16, max: 16},
       angle: 0,
     });
+
+    this.trailEmitter.setDepth(-1);
 
     // genera nueva zona de destino inicial
     this.onDestinationReached();
@@ -69,11 +80,20 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
   }
 
   update() {
+
+    // mover animacion
+
+    //this.play("idle", true)
+
+    this.play("merchant", true);
+
     // seguir viajando al siguiente destino
     this.scene.physics.moveToObject(this, this.destinationZone, this.speed);
 
     // mover el trail
-    this.trailEmitter?.setX(this.x);
+    let emitterX = this.facingForward ? this.x + 64*this.merchantScale : this.x - 64*this.merchantScale
+
+    this.trailEmitter?.setX(emitterX);
     this.trailEmitter?.setY(this.y);
 
     // cuando el jugador se acerca al merchant, habilitar interaccion
@@ -142,7 +162,15 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
       // update particle emitter angle when destination changes
       this.updateParticleEmitter();
 
-      this.hasReachedDestination = false;
+      if (this.x < this.destinationZone.x) {
+        this.setFlipX(false);
+        this.facingForward = true;
+      } else {
+        this.setFlipX(true);
+        this.facingForward = false;
+      }
+
+      this.hasReachedDestination = false
     }
   }
 
@@ -283,7 +311,7 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
     merchantY: number,
   ): [number, number] {
     var signX = merchantX;
-    var signY = merchantY - this.playerMinDistance / 4;
+    var signY = merchantY - this.playerMinDistance / 3;
 
     return [signX, signY];
   }

@@ -3,10 +3,12 @@ import { Coin } from "../state/gameState";
 
 import { CoinCounterUI } from "./CoinCounterUI";
 import { CoinInventoryUI } from "./CoinInventoryUI";
+import { StatsPanelUI } from "./StatsUI";
 
 export class InventoryUI extends Phaser.GameObjects.Container {
   private localCoins: CoinInventoryUI;
   private permanentCoins: CoinInventoryUI;
+  private statsUI: StatsPanelUI;
 
   private readonly maxLocalSlots = 5;
   private readonly maxPermanentSlots = 25;
@@ -24,6 +26,13 @@ export class InventoryUI extends Phaser.GameObjects.Container {
 
     this.localCounterUI = new CoinCounterUI(this.scene, 280, 97);
     this.add([this.localCounterUI]);
+
+    this.statsUI = new StatsPanelUI(
+      this.scene,
+      20,
+      200,
+      scene.fatManager.getTransformedState().baseStats,
+    );
 
     this.localCoins = new CoinInventoryUI(
       scene,
@@ -48,11 +57,11 @@ export class InventoryUI extends Phaser.GameObjects.Container {
     scene.add.existing(this);
 
     scene.typedEvents.on("big-coin-collected", (coinData: Coin) => {
-      this.localCoins.addItem(coinData.texture);
+      this.localCoins.addItem({ ...coinData });
     });
 
     scene.typedEvents.on("coins-commited", (coins: Coin[]) => {
-      this.permanentCoins.addItems(coins.map((c) => c.texture));
+      this.permanentCoins.addItems(coins);
     });
 
     scene.typedEvents.on("local-coins-changed", (newValue) => {

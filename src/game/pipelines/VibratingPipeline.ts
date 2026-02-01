@@ -15,37 +15,7 @@ export default class VibratingPipeline
   constructor(game: Phaser.Game) {
     super({
       game: game,
-      //renderer: game.renderer,
       fragShader: vibratingShader,
-      /*
-      fragShader: `
-        precision mediump float;
-
-        uniform sampler2D uMainSampler;
-        uniform vec2 uTextureSize;
-
-        uniform sampler2D uGradientSampler;
-
-        uniform float time;
-
-        varying vec2 outTexCoord;
-
-        void main(void) 
-        {
-          float step = mod(floor(time * 3.0),3.0);
-
-          vec4 offset = texture2D(uGradientSampler, mod(outTexCoord+step/3.0, 1.0));
-          vec2 uv = outTexCoord + 0.1*offset.xy;
-
-          vec4 texture = texture2D(uMainSampler, uv);
-          vec4 color = texture;
-
-          vec4 texture2 = texture2D(uGradientSampler, outTexCoord);
-
-          float c = 0.5*sin(outTexCoord.x) + 0.5;
-          gl_FragColor = texture;//color;//vec4(c, c, c, 1.0);//color;
-        }
-      `*/
     });
   }
 

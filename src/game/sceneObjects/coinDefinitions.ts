@@ -10,6 +10,7 @@ const SnakeCoin_Tier1: BigCoinData = {
   name: "Snake Coin",
   passCost: 55,
   option1: {
+    face: "head",
     name: "+10 Extra Health",
     description: "Increases your maximum health by 10 points.",
     kind: "passive",
@@ -26,6 +27,7 @@ const SnakeCoin_Tier1: BigCoinData = {
     },
   },
   option2: {
+    face: "tail",
     name: "-10 Extra Health",
     description: "Decreases your maximum health by 10 points.",
     kind: "passive",
@@ -48,6 +50,7 @@ const AresCoin_Tier1: BigCoinData = {
   name: "Ares Coin",
   passCost: 85,
   option1: {
+    face: "head",
     name: "+1 Attack",
     description: "Increases your attack by 1 point.",
     kind: "passive",
@@ -64,6 +67,7 @@ const AresCoin_Tier1: BigCoinData = {
     },
   },
   option2: {
+    face: "tail",
     name: "-1 Attack",
     description: "Decreases your attack by 1 point.",
     kind: "passive",
@@ -82,14 +86,15 @@ const AresCoin_Tier1: BigCoinData = {
 };
 
 const SmellCoin: BigCoinData = {
-  texture: "moneda_bomba",
+  texture: "moneda_peste",
   name: "Smell Coin",
   passCost: 100,
   option1: {
+    face: "head",
     name: "What a stench!",
     description: "Generates a smell that harms enemies.",
     kind: "active",
-    texture: "moneda_bomba",
+    texture: "moneda_peste",
     onEffectStart(scene) {
       scene.time.addEvent({
         delay: 5000,
@@ -98,14 +103,15 @@ const SmellCoin: BigCoinData = {
         loop: true,
       });
     },
-    onEffectTick(scene) {},
-    onEffectEnd(scene) {},
+    onEffectTick(scene) { },
+    onEffectEnd(scene) { },
   },
   option2: {
+    face: "tail",
     name: "Good Smell",
     description: "Generates a smell that heals enemies.",
     kind: "active",
-    texture: "moneda_bomba",
+    texture: "moneda_curita",
     onEffectStart(scene) {
       scene.time.addEvent({
         delay: 7000,
@@ -121,8 +127,8 @@ const SmellCoin: BigCoinData = {
         loop: true,
       });
     },
-    onEffectTick(scene) {},
-    onEffectEnd(scene) {},
+    onEffectTick(scene) { },
+    onEffectEnd(scene) { },
   },
 };
 
@@ -131,6 +137,7 @@ const RunCoin: BigCoinData = {
   name: "Run Coin",
   passCost: 100,
   option1: {
+    face: "head",
     name: "Run!",
     description: "Increases your movement speed.",
     kind: "passive",
@@ -147,6 +154,7 @@ const RunCoin: BigCoinData = {
     },
   },
   option2: {
+    face: "tail",
     name: "Snail Coin",
     description: "Decreases your movement speed.",
     kind: "passive",
@@ -169,6 +177,7 @@ const ReviveCoin: BigCoinData = {
   name: "Revivify",
   passCost: 100,
   option1: {
+    face: "head",
     name: "Health, comrade",
     description: "Makes your life better and refreshing.",
     kind: "passive",
@@ -186,6 +195,7 @@ const ReviveCoin: BigCoinData = {
     },
   },
   option2: {
+    face: "tail",
     name: "Ye' Olde",
     description: "Makes you get older faster.",
     kind: "passive",

@@ -37,6 +37,8 @@ export class Preloader extends Scene {
     this.load.image("moneda_caracol", "coins/moneda_caracol.png");
     this.load.image("moneda_pulpo", "coins/moneda_pulpo.png");
     this.load.image("moneda_cuchillito", "coins/moneda_cuchillito.png");
+    this.load.image("moneda_peste", "coins/moneda_peste.png");
+    this.load.image("moneda_curita", "coins/moneda_curita.png");
 
     this.load.image("boss", "placeholder/boss.jpg");
     this.load.image("big-coin", "placeholder/big-coin.png");
@@ -53,6 +55,8 @@ export class Preloader extends Scene {
     this.load.image("clouds", "clouds.png");
 
     this.load.image("coin", "coins/monedilla.png");
+
+    this.load.image("credits", "ui/CreditsBg.png");
 
     this.load.spritesheet("player", "player.png", {
       frameWidth: 256,
@@ -139,14 +143,14 @@ export class Preloader extends Scene {
       frames: this.anims.generateFrameNumbers("player", { start: 0, end: 0 }),
     });
 
-        
+
     this.anims.create({
       key: "merchant",
       frames: this.anims.generateFrameNumbers("merchant", { start: 0, end: 3 }),
       frameRate: 8, // Velocidad de la animación
       repeat: -1, // Animación en bucle
     });
-    
+
     this.anims.create({
       key: "gomilla",
       frames: this.anims.generateFrameNumbers("gomilla", { start: 0, end: 1 }),

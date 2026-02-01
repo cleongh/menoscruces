@@ -1,14 +1,16 @@
 import { GameScene } from "../scenes/GameScene";
 import { NewCoinSceneConfig } from "../scenes/NewCoinScene";
-import { Coin } from "../state/GameState";
+import { Coin } from "../state/gameState";
 import { AbstractCoin } from "./AbstractCoin";
 
 export interface BigCoinData {
   /** Textura de esta moneda en el mundo */
   texture: string;
   name: string;
-  option1: Coin;
-  option2: Coin;
+  // Forzamos que la moneda de la opción 1 sea de cara 'head'
+  option1: Coin & { face: "head" };
+  // Forzamos que la moneda de la opción 2 sea de cara 'tail'
+  option2: Coin & { face: "tail" };
   /** Monedas necesarias para saltarse la decisión de lanzar esta moneda */
   passCost: number;
 }

@@ -6,6 +6,7 @@ export interface IBaseCoin {
   readonly name: string;
   readonly description: string;
   readonly modifier?: GameStateTransformer;
+  readonly face: "head" | "tail";
 }
 
 export interface IActiveCoin extends Omit<IBaseCoin, "kind"> {
@@ -61,7 +62,7 @@ export interface GameState {
  */
 export type GameStateTransformer = (state: GameState) => GameState;
 
-export interface BaseStats {
+export interface PlayerStats {
   /**
    * Ataque base del personaje (daño absoluto por golpe)
    */
@@ -86,7 +87,9 @@ export interface BaseStats {
    * Rango base del personaje. Valor entre 0 y X, 1 es el balor base. 0.5 indica que el rango es la mitad. Y 2 que es el doble de rango
    */
   rangeBase: number;
+}
 
+export type BaseStats = PlayerStats & {
   /**
    * Daño base que infligen los enemigos
    */
@@ -101,4 +104,4 @@ export interface BaseStats {
   enemyDistanceAttack: number;
 
   enemyRangedAttack: number;
-}
+};
