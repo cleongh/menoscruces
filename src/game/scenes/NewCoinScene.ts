@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { BigCoinData } from "../sceneObjects/BigCoin";
 import { Button } from "../UI/Button";
 import { colors } from "../UI/colors";
+import { FatManager } from "../state/FatManager";
 
 export interface NewCoinSceneConfig {
     // número de monedas disponible actualmente (no commiteadas)
@@ -444,6 +445,7 @@ export class NewCoinScene extends Phaser.Scene {
             onComplete: () => {
                 // Al completar el lanzamiento, llamar al callback con el resultado
                 //this.finishRollScene(true, isHeads);
+                
                 this.coinResult = isHeads;
                 this.skipResult = false;
                 this.continueButton.show();

@@ -42,6 +42,12 @@ export class BigCoin extends AbstractCoin {
             : this.coinData.option2;
           fatManager.registerNewLocalCoin(selectedCoin);
         }
+
+        if(fatManager.getTransformedState().currentHealth <= 0){
+          this.scene.scene.start("GameOver");
+          this.scene.scene.stop("NewCoinScene");
+          return;
+        }
         // Reanudar la escena del juego después de manejar el resultado
         this.scene.scene.resume("GameScene");
         this.scene.scene.stop("NewCoinScene");
