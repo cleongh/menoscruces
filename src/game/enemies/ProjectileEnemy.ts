@@ -31,10 +31,13 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
       callbackScope: this,
     });
 
-    this.setDisplaySize(10, 10);
+    this.setDisplaySize(20, 20);
   }
 
   setDirection(direction: Phaser.Math.Vector2) {
+    if (direction.x < 0) {
+      this.setFlipX(true);
+    }
     this.body.setVelocity(direction.x * this.speed, direction.y * this.speed);
   }
 }

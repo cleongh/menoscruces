@@ -36,11 +36,14 @@ export class Preloader extends Scene {
     this.load.image("moneda_sonic", "coins/moneda_sonic.png");
     this.load.image("moneda_caracol", "coins/moneda_caracol.png");
     this.load.image("moneda_pulpo", "coins/moneda_pulpo.png");
+    this.load.image("moneda_cuchillito", "coins/moneda_cuchillito.png");
 
     this.load.image("boss", "placeholder/boss.jpg");
     this.load.image("big-coin", "placeholder/big-coin.png");
     this.load.image("projectileEnemy", "placeholder/projectileEnemy.jpg");
-    this.load.image("projectile", "placeholder/projectile.jpg");
+    this.load.image("projectile", "enemies/cobete.png");
+
+    //this.load.image("projectile", "placeholder/projectile.jpg");
     this.load.image("landmark", "placeholder/landmark.jpg");
     this.load.image("buttonNormal", "ui/ButtonNormal.png");
     this.load.image("buttonHover", "ui/ButtonHover.png");
@@ -180,7 +183,7 @@ export class Preloader extends Scene {
       repeat: -1, // Animación en bucle
     });
     //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-    // this.scene.start("MainMenu");
-    this.scene.start("GameScene");
+    this.scene.start("MainMenu");
+    // this.scene.start("GameScene");
   }
 }
