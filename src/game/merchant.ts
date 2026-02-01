@@ -33,8 +33,8 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
 
   // indicador visual de que se puede interactuar con el mercader
   interactionSign: Phaser.GameObjects.Text;
-  interactionSignBackgroundDefault = "#2201fc";
-  interactionSignBackgroundPressed = "#fc01fc";
+  interactionSignBackgroundDefault = "#d2d2d2";
+  interactionSignBg: Phaser.GameObjects.Rectangle;
 
   // pulsar tecla M para interactuar con mercader
   private mKey = "keydown-M";
@@ -58,12 +58,12 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
     this.trailEmitter = this.scene.add.particles(0, 0, 'flares', {
       lifespan: 3000,
       scale: { start: 0.16, end: 0.06 },
-      alpha: { start: 0.5, end: 0}, 
+      alpha: { start: 0.5, end: 0 },
       blendMode: 'ADD',
       emitting: true,
-      speed: { min: this.speed - 10, max: this.speed + 10 },
-      accelerationX: { min: -16, max: 16},
-      accelerationY: { min: -16, max: 16},
+      speed: { min: this.speed - 20, max: this.speed - 10 },
+      accelerationX: { min: -16, max: 20 },
+      accelerationY: { min: -16, max: 20 },
       angle: 0,
     });
 
@@ -91,7 +91,7 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
     this.scene.physics.moveToObject(this, this.destinationZone, this.speed);
 
     // mover el trail
-    let emitterX = this.facingForward ? this.x + 64*this.merchantScale : this.x - 64*this.merchantScale
+    let emitterX = this.facingForward ? this.x + 64 * this.merchantScale : this.x - 64 * this.merchantScale
 
     this.trailEmitter?.setX(emitterX);
     this.trailEmitter?.setY(this.y);
@@ -130,6 +130,8 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
         );
         this.interactionSign.setX(newInteractionSignCoords[0]);
         this.interactionSign.setY(newInteractionSignCoords[1]);
+        this.interactionSignBg.setX(newInteractionSignCoords[0]);
+        this.interactionSignBg.setY(newInteractionSignCoords[1]);
       }
     }
   }
@@ -271,9 +273,17 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
   onPlayerWantsToTrade() {
     if (this.playerIsWithMerchant && !this.playerHasInteracted) {
       this.playerHasInteracted = true;
-      this.interactionSign?.setBackgroundColor(
-        this.interactionSignBackgroundPressed,
-      );
+
+
+      this.scene.tweens.add({
+        targets: [this.interactionSign, this.interactionSignBg],
+        alpha: 0,
+        displayWidth: 40,
+        displayHeight: 40,
+        duration: 100,
+        ease: "Quad.easeOut",
+      })
+
       this.fatManager.commitCoinsToMerchant();
       this.speed = this.defaultSpeed;
     }
@@ -284,10 +294,14 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
    */
   showInteraction() {
     let signCoordinates = this.getInteractionSignCoords(this.x, this.y);
+
+    this.interactionSignBg = this.scene.add.rectangle(signCoordinates[0], signCoordinates[1], 34, 30, 0x000000)
+      .setOrigin(0.5);
+
     this.interactionSign = this.scene.add
       .text(signCoordinates[0], signCoordinates[1], "M", {
         fontSize: "20px",
-        color: "#ffffff",
+        color: "#000000",
         align: "center",
         fixedWidth: 30,
         backgroundColor: this.interactionSignBackgroundDefault,
@@ -301,6 +315,7 @@ export default class Merchant extends Phaser.Physics.Arcade.Sprite {
    */
   hideInteraction() {
     this.interactionSign.destroy();
+    this.interactionSignBg.destroy();
   }
 
   /**
