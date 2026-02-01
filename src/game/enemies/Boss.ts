@@ -6,8 +6,8 @@ import { baseStats } from "../state/FatManager";
 export default class Boss extends AbstractEnemy {
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, {
-      health: baseStats.enemyDamageBase * 2,
-      speed: baseStats.enemyHealthBase * 1.2,
+      health: baseStats.enemyHealthBase * 2,
+      speed: baseStats.enemySpeedBase * 1.2,
       attack: baseStats.enemyDamageBase * 2,
       distanceAttack: baseStats.enemyRangedAttack,
       sprite: "eleph",
