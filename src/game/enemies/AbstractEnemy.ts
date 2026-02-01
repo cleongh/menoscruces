@@ -57,7 +57,7 @@ export default abstract class AbstractEnemy
   }
 
   followPlayer(player: Player) {
-    this.scene.physics.moveToObject(this, player, this.speed);
+    this.scene.physics.moveToObject(this, player, this.speed * player.width);
   }
 
   quitHealth(damage: number) {
@@ -74,8 +74,7 @@ export default abstract class AbstractEnemy
 
     this.health -= damage;
 
-    if(this.health > this.maxHealth)
-      this.health = this.maxHealth;
+    if (this.health > this.maxHealth) this.health = this.maxHealth;
 
     this.canMove = false;
     this.scene.time.addEvent({
