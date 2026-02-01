@@ -206,10 +206,6 @@ const ReviveCoin: BigCoinData = {
 export const coinDefinitions: TierDefinition[] = [
   {
     name: "Tier 1",
-<<<<<<< HEAD
     availableCoins: [SnakeCoin_Tier1, AresCoin_Tier1, SmellCoin, ReviveCoin],
-=======
-    availableCoins: [SnakeCoin_Tier1, AresCoin_Tier1, SmellCoin],
->>>>>>> 025fb7216fb0207abee2d22a7c67bfb2ba4c090b
   },
 ];
