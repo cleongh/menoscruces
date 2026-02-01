@@ -1,5 +1,6 @@
 import { GameScene } from "../scenes/GameScene";
 import { Coin } from "../state/GameState";
+import { CoinCounterUI } from "./CoinCounterUI";
 import { CoinInventoryUI } from "./CoinInventoryUI";
 
 export class InventoryUI extends Phaser.GameObjects.Container {
@@ -7,14 +8,11 @@ export class InventoryUI extends Phaser.GameObjects.Container {
   private permanentCoins: CoinInventoryUI;
 
   private readonly maxLocalSlots = 5;
-  private readonly maxPermanentSlots = 30;
+  private readonly maxPermanentSlots = 25;
   private readonly slotSpacing = 50;
 
-  // Counters
-  private localCoinCount: number = 0;
-
-  // UI Text elements
-  private localCounterText: Phaser.GameObjects.Text;
+  // UI para contar monedas locales
+  private localCounterUI: CoinCounterUI;
 
   constructor(scene: GameScene, x: number, y: number) {
     super(scene, x, y);
@@ -23,38 +21,26 @@ export class InventoryUI extends Phaser.GameObjects.Container {
     this.setScrollFactor(0);
     this.setDepth(100); // y esto para que siempre esté encima de todo
 
-    this.localCounterText = scene.add.text(
-      this.scene.cameras.main.width - 300,
-      15,
-      `CHIBICOINS : 0`,
-      {
-        fontSize: "20px",
-        color: "#ffd700",
-        stroke: "#000",
-        fontFamily: "salpicaduraFont",
-        strokeThickness: 3,
-      },
-    );
-
-    this.add([this.localCounterText]);
+    this.localCounterUI = new CoinCounterUI(this.scene, 280, 97);
+    this.add([this.localCounterUI]);
 
     this.localCoins = new CoinInventoryUI(
       scene,
       0,
-      50,
+      95,
       this.maxLocalSlots,
       this.slotSpacing,
-      30,
+      40,
     );
     this.add(this.localCoins);
 
     this.permanentCoins = new CoinInventoryUI(
       scene,
       0,
-      25,
+      32,
       this.maxPermanentSlots,
-      this.slotSpacing / 2,
-      15,
+      35,
+      25,
     );
     this.add(this.permanentCoins);
 
@@ -69,23 +55,11 @@ export class InventoryUI extends Phaser.GameObjects.Container {
     });
 
     scene.typedEvents.on("local-coins-changed", (newValue) => {
-      this.updateLocalCounter(newValue);
+      this.localCounterUI.updateCount(newValue);
     });
 
     scene.typedEvents.on("current-coins-reset", () => {
       this.localCoins.clearInventory();
-    });
-  }
-
-  private updateLocalCounter(amount: number) {
-    this.localCoinCount = amount;
-    this.localCounterText.setText(`Chibicoins: ${this.localCoinCount}`);
-
-    this.scene.tweens.add({
-      targets: [this.localCounterText],
-      scale: 1.1,
-      duration: 50,
-      yoyo: true,
     });
   }
 }

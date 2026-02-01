@@ -1,11 +1,9 @@
-import { Coin } from "../state/GameState";
-
 export class CoinInventoryUI extends Phaser.GameObjects.Container {
   private coins: Phaser.GameObjects.Sprite[] = [];
 
-  private maxSlots = 5;
-  private slotSpacing = 60;
-  private coinSize = 30;
+  private maxSlots: number;
+  private slotSpacing: number;
+  private coinSize: number;
 
   constructor(
     scene: Phaser.Scene,
@@ -21,48 +19,107 @@ export class CoinInventoryUI extends Phaser.GameObjects.Container {
     this.slotSpacing = slotSpacing;
     this.coinSize = coinSize;
 
-    // Ajuste para que la UI se quede fija en la pantalla aunque se mueva la cámara
-    this.setScrollFactor(0);
-    this.setDepth(100); // y esto para que siempre esté encima de todo
+    // Dibujamos primero el fondo y los slots
+    // Importante el orden para que las monedas queden por encima
+    this.drawVisualStructure();
 
+    this.setScrollFactor(0);
+    this.setDepth(100);
     scene.add.existing(this);
   }
 
-  public addItem(texture: string) {
-    if (this.coins.length >= this.maxSlots) {
-      const oldest = this.coins.shift();
-      oldest?.destroy();
+  private drawVisualStructure() {
+    const graphics = this.scene.add.graphics();
+    const padding = 15;
+
+    // Calculamos el espacio total que ocupan los slots
+    const totalSlotsWidth = (this.maxSlots - 1) * this.slotSpacing;
+    // El ancho del fondo debe cubrir desde el inicio del primer slot al final del último
+    const bgWidth = totalSlotsWidth + this.coinSize + padding * 2;
+    const bgHeight = this.coinSize + padding * 2;
+
+    // --- DIBUJO DEL MARCO PRINCIPAL ---
+    graphics.fillStyle(0x222222, 0.8);
+    graphics.lineStyle(3, 0xffd700, 1);
+
+    // Para alinear verticalmente desde la izquierda,
+    // el rectángulo empieza en x = 0. (SI NO SE VA AL LADO)
+    const startX = 0;
+    const startY = -bgHeight / 2;
+
+    graphics.fillRoundedRect(startX, startY, bgWidth, bgHeight, 10);
+    graphics.strokeRoundedRect(startX, startY, bgWidth, bgHeight, 10);
+
+    // --- DIBUJO DE LOS SLOTS ---
+    for (let i = 0; i < this.maxSlots; i++) {
+      graphics.fillStyle(0x000000, 0.5);
+      graphics.lineStyle(1, 0x555555, 1);
+
+      const slotSize = this.coinSize + 8;
+
+      // Calculamos la posición X para que el primer slot esté centrado
+      // respecto al inicio del cuadro + padding
+      const slotX = this.coinSize / 2 + padding + i * this.slotSpacing;
+
+      graphics.fillRoundedRect(
+        slotX - slotSize / 2,
+        -slotSize / 2,
+        slotSize,
+        slotSize,
+        5,
+      );
+      graphics.strokeRoundedRect(
+        slotX - slotSize / 2,
+        -slotSize / 2,
+        slotSize,
+        slotSize,
+        5,
+      );
     }
 
-    const sprite = this.scene.add
-      .sprite(this.x, this.y, texture)
-      .setDisplaySize(this.coinSize, this.coinSize);
-
-    this.coins.push(sprite);
-    this.add([sprite]);
-
-    this.refreshPositions();
+    this.add(graphics);
   }
 
   private refreshPositions() {
     const displayOrder = [...this.coins].reverse();
+    const padding = 15;
+    const firstSlotX = this.coinSize / 2 + padding;
 
     displayOrder.forEach((item, index) => {
-      const posX = index * this.slotSpacing;
+      // La posición de la moneda debe coincidir con la del slot calculado arriba
+      const posX = firstSlotX + index * this.slotSpacing;
 
       this.scene.tweens.add({
-        targets: [item],
+        targets: item,
         x: posX,
+        y: 0,
         duration: 250,
         ease: "Back.easeOut",
       });
     });
   }
 
+  public addItem(texture: string) {
+    // Gestión de la cola (FIFO)
+    if (this.coins.length >= this.maxSlots) {
+      const oldest = this.coins.shift();
+      oldest?.destroy();
+    }
+
+    // Instanciamos la moneda.
+    // Empezamos en la posición del último slot (derecha) para que "entre" visualmente
+    const sprite = this.scene.add
+      .sprite((this.maxSlots - 1) * this.slotSpacing, 0, texture)
+      .setDisplaySize(this.coinSize, this.coinSize);
+
+    this.coins.push(sprite);
+    this.add(sprite);
+
+    this.refreshPositions();
+  }
+
   public clearInventory() {
-    this.coins.forEach((item) => {
-      item.destroy();
-    });
+    this.coins.forEach((c) => c.destroy());
     this.coins = [];
   }
 }
