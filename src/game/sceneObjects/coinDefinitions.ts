@@ -96,15 +96,10 @@ const SmellCoin: BigCoinData = {
         callback: scene.infernallSmell_Cara,
         callbackScope: scene,
         loop: true,
-      }
-      )
+      });
     },
-    onEffectTick(scene) {
-
-    },
-    onEffectEnd(scene) {
-
-    },
+    onEffectTick(scene) {},
+    onEffectEnd(scene) {},
   },
   option2: {
     name: "Good Smell",
@@ -120,19 +115,14 @@ const SmellCoin: BigCoinData = {
             callback: scene.infernallSmell_Cruz,
             callbackScope: scene,
             loop: true,
-          })
+          });
         },
         callbackScope: scene,
         loop: true,
-      }
-      )
+      });
     },
-    onEffectTick(scene) {
-
-    },
-    onEffectEnd(scene) {
-
-    },
+    onEffectTick(scene) {},
+    onEffectEnd(scene) {},
   },
 };
 
@@ -174,13 +164,48 @@ const RunCoin: BigCoinData = {
   },
 };
 
+const ReviveCoin: BigCoinData = {
+  texture: "moneda_pulpo",
+  name: "Revivify",
+  passCost: 100,
+  option1: {
+    name: "Health, comrade",
+    description: "Makes your life better and refreshing.",
+    kind: "passive",
+    texture: "moneda_pulpo",
+    modifier: (state) => {
+      const newSpeed = state.baseStats.regenBase + 0.01;
+      return {
+        ...state,
+        baseStats: {
+          ...state.baseStats,
+
+          regenBase: newSpeed,
+        },
+      };
+    },
+  },
+  option2: {
+    name: "Ye' Olde",
+    description: "Makes you get older faster.",
+    kind: "passive",
+    texture: "moneda_pulpo",
+    modifier: (state) => {
+      const newSpeed = state.baseStats.regenBase - 0.01;
+      return {
+        ...state,
+        baseStats: {
+          ...state.baseStats,
+          regenBase: newSpeed,
+        },
+      };
+    },
+  },
+};
+
 export const coinDefinitions: TierDefinition[] = [
   {
     name: "Tier 1",
-    availableCoins: [
-      SnakeCoin_Tier1,
-      AresCoin_Tier1,
-      SmellCoin,
-    ],
+    availableCoins: [SnakeCoin_Tier1, AresCoin_Tier1, SmellCoin, ReviveCoin],
   },
 ];
