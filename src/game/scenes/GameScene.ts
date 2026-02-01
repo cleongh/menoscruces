@@ -101,7 +101,7 @@ export class GameScene extends Phaser.Scene {
 
     this.inventory = new InventoryUI(this, 50, 40);
 
-    this.healthbar = new HealthBar(this, 0, 0);
+    this.healthbar = new HealthBar(this, 0, 35);
 
     this.physics.world.setBounds(0, 0, this.width, this.height);
     this.cameras.main.setBounds(0, 0, this.width, this.height);

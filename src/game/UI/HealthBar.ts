@@ -1,85 +1,122 @@
-import { GameScene } from "../scenes/GameScene"
-import { CurrentPlayerHealth } from "../state/typedEvents"
+import { GameScene } from "../scenes/GameScene";
 
 export default class HealthBar extends Phaser.GameObjects.Container {
-    width: number
-    height: number
+  private barWidth: number;
+  private barHeight: number;
+  private padding: number = 4;
 
-    padding: number = 4
+  // Colores originales preservados
+  private backgroundColor: number =
+    Phaser.Display.Color.HexStringToColor("#979797").color;
+  private colorFull: number =
+    Phaser.Display.Color.HexStringToColor("#1eff00").color;
+  private colorHalf: number =
+    Phaser.Display.Color.HexStringToColor("#fff200").color;
+  private colorQuarter: number =
+    Phaser.Display.Color.HexStringToColor("#ff4000").color;
+  private goldBorder: number = 0xffd700; // Color dorado de tus otros contenedores
 
-    borderColor: number = Phaser.Display.Color.HexStringToColor('#4a4a4a').color
-    backgroundColor: number = Phaser.Display.Color.HexStringToColor('#979797').color
+  private totalHealth: number = 100;
+  private currentHealth: number = 100;
 
-    colorFull: number = Phaser.Display.Color.HexStringToColor('#1eff00').color
-    colorHalf: number = Phaser.Display.Color.HexStringToColor('#fff200').color
-    colorQuarter: number = Phaser.Display.Color.HexStringToColor('#ff4000').color
+  private graphics: Phaser.GameObjects.Graphics;
+  private fillingRectangle: Phaser.GameObjects.Rectangle;
+  private healthText: Phaser.GameObjects.Text;
 
-    totalHealth: number = 100
-    currentHealth: number = 100
+  constructor(scene: GameScene, x: number, y: number) {
+    super(scene, x, y);
 
-    borderRectangle: Phaser.GameObjects.Rectangle
-    backgroundRectangle: Phaser.GameObjects.Rectangle
-    fillingRectangle: Phaser.GameObjects.Rectangle
+    this.barWidth = scene.cameras.main.width;
+    this.barHeight = 26;
 
-    // TODO añadir valor numérico!
+    this.setScrollFactor(0);
+    this.setDepth(100);
 
-    constructor(scene: GameScene, x: number, y: number) {
-        super(scene, x, y);
+    // 1. Gráficos para el Marco Redondeado (Estilo coherente)
+    this.graphics = scene.add.graphics();
 
-        this.width = scene.cameras.main.width;
-        this.height = 20;
+    // 2. Rectángulo de fondo (detrás del relleno)
+    this.fillingRectangle = new Phaser.GameObjects.Rectangle(
+      scene,
+      this.padding,
+      0,
+      this.barWidth - 2 * this.padding,
+      this.barHeight - 2 * this.padding,
+      this.backgroundColor,
+    );
+    this.fillingRectangle.setOrigin(0, 0.5);
 
-        // Ajuste para que la UI se quede fija en la pantalla aunque se mueva la cámara
-        this.setScrollFactor(0);
-        this.setDepth(100); // y esto para que siempre esté encima de todo
-
-        this.borderRectangle = new Phaser.GameObjects.Rectangle(scene, x, y, this.width, this.height, this.borderColor)
-        this.borderRectangle.setOrigin(0, 0)
-
-        this.backgroundRectangle = new Phaser.GameObjects.Rectangle(scene, x + this.padding, y + this.padding, this.width - 2 * this.padding, this.height - 2 * this.padding, this.backgroundColor)
-        this.backgroundRectangle.setOrigin(0, 0)
-
-        this.fillingRectangle = new Phaser.GameObjects.Rectangle(scene, x + this.padding, y + this.padding, this.width - 2 * this.padding, this.height - 2 * this.padding, this.backgroundColor)
-        this.fillingRectangle.setOrigin(0, 0)
-
-        scene.add.existing(this.borderRectangle);
-        scene.add.existing(this.backgroundRectangle);
-        scene.add.existing(this.fillingRectangle);
-        scene.add.existing(this);
-
-        this.add(this.borderRectangle)
-        this.add(this.backgroundRectangle)
-        this.add(this.fillingRectangle)
-
-        this.updateHealthBar(this.totalHealth, this.currentHealth);
-
-        scene.typedEvents.on("player-health-updated", (current: CurrentPlayerHealth) => {
-            this.updateHealthBar(current.maxHealth, current.currentHealth);
+    // Texto de salud (Ej: 37/100)
+    this.healthText = scene.add.text(this.barWidth / 2, 0, "100 / 100", {
+      fontSize: "14px",
+      fontFamily: "Arial",
+      color: "#ffffff",
+      stroke: "#000000",
+      strokeThickness: 3,
     });
+    this.healthText.setOrigin(0.5);
 
-    }
+    // Añadir al contenedor
+    this.add([this.graphics, this.fillingRectangle, this.healthText]);
+    scene.add.existing(this);
 
+    // Inicializar visualmente
+    this.updateHealthBar(this.totalHealth, this.currentHealth);
 
-    updateHealthBar(totalHealth: number, currentHealth: number) {
-        this.totalHealth = totalHealth;
-        this.currentHealth = currentHealth;
-        let healthPercentage = currentHealth / totalHealth
+    scene.typedEvents.on("player-health-updated", (current) => {
+      const maxHealth = (
+        this.scene as GameScene
+      ).fatManager.getTransformedState().baseStats.healthBase;
+      this.updateHealthBar(maxHealth, current);
+    });
+  }
 
-        let totalFillingWidth = this.width - 2 * this.padding
-        let currentFillingWidth = totalFillingWidth * healthPercentage
+  updateHealthBar(totalHealth: number, currentHealth: number) {
+    this.totalHealth = totalHealth;
+    this.currentHealth = currentHealth;
+    const healthPercentage = Phaser.Math.Clamp(
+      currentHealth / totalHealth,
+      0,
+      1,
+    );
 
-        this.fillingRectangle.displayWidth = currentFillingWidth;
-        this.fillingRectangle.fillColor = this.getFillingColor(healthPercentage);
-    }
+    // Actualizar el ancho y color del relleno
+    const totalFillingWidth = this.barWidth - 2 * this.padding;
+    this.fillingRectangle.displayWidth = totalFillingWidth * healthPercentage;
+    this.fillingRectangle.fillColor = this.getFillingColor(healthPercentage);
 
-    getFillingColor(healthPercentage: number): number {
-        if (healthPercentage > 0.5) {
-            return this.colorFull
-        } else if (healthPercentage > 0.25) {
-            return this.colorHalf
-        } else {
-            return this.colorQuarter
-        }
-    }
+    // Actualizar el texto
+    const currentFormatted = Math.max(0, currentHealth).toFixed(2);
 
+    this.healthText.setText(`${currentFormatted} / ${totalHealth}`);
+
+    // Redibujar el marco redondeado para que coincida con tus otros contenedores
+    this.graphics.clear();
+
+    // Fondo oscuro del contenedor
+    this.graphics.fillStyle(0x222222, 0.8);
+    this.graphics.lineStyle(3, this.goldBorder, 1);
+
+    // Dibujamos el marco centrado verticalmente
+    this.graphics.fillRoundedRect(
+      0,
+      -this.barHeight / 2,
+      this.barWidth,
+      this.barHeight,
+      8,
+    );
+    this.graphics.strokeRoundedRect(
+      0,
+      -this.barHeight / 2,
+      this.barWidth,
+      this.barHeight,
+      8,
+    );
+  }
+
+  getFillingColor(healthPercentage: number): number {
+    if (healthPercentage > 0.5) return this.colorFull;
+    if (healthPercentage > 0.25) return this.colorHalf;
+    return this.colorQuarter;
+  }
 }

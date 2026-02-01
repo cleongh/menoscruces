@@ -17,7 +17,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   private attackTime: number = 500;
   private attackCollider: RubberBand;
 
-  private health: number;
   private cooldownDamage: number = 200;
   private canRecieveDamage: boolean;
 
@@ -169,25 +168,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     });
 
     const fatManager = (this.scene as GameScene).fatManager;
-    damage =
-      damage - fatManager.getTransformedState().baseStats.defenseBase > 0
-        ? damage - fatManager.getTransformedState().baseStats.defenseBase
-        : 0;
-    this.health -= damage;
-    fatManager.playerHealthUpdated(100, this.health);
-
-    if (this.health <= 0) {
-      this.destroy();
-    }
+    // si morimos, el manager lo va a notificar con un evento, no hace falta gestionar aquí nada más
+    fatManager.damagePlayer(damage);
   }
 
   heal() {
     const fatManager = (this.scene as GameScene).fatManager;
-    this.health =
-      this.health + fatManager.getTransformedState().baseStats.regenBase <
-      fatManager.getTransformedState().baseStats.healthBase
-        ? this.health + fatManager.getTransformedState().baseStats.regenBase
-        : fatManager.getTransformedState().baseStats.healthBase;
-    fatManager.playerHealthUpdated(100, this.health);
+    // OJO: esto se hace con el valor del regen calculado, así que no es equivalente a damage negativo, por
+    // si a alguien le tienta hacer esa maldad
+    fatManager.regenPlayer();
   }
 }
