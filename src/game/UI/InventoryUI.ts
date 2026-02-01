@@ -26,11 +26,12 @@ export class InventoryUI extends Phaser.GameObjects.Container {
     this.localCounterText = scene.add.text(
       this.scene.cameras.main.width - 300,
       15,
-      `Monedas Actuales: 0`,
+      `CHIBICOINS : 0`,
       {
-        fontSize: "18px",
+        fontSize: "20px",
         color: "#ffd700",
         stroke: "#000",
+        fontFamily: "salpicaduraFont",
         strokeThickness: 3,
       },
     );
@@ -78,7 +79,7 @@ export class InventoryUI extends Phaser.GameObjects.Container {
 
   private updateLocalCounter(amount: number) {
     this.localCoinCount = amount;
-    this.localCounterText.setText(`Monedas Actuales: ${this.localCoinCount}`);
+    this.localCounterText.setText(`Chibicoins: ${this.localCoinCount}`);
 
     this.scene.tweens.add({
       targets: [this.localCounterText],
