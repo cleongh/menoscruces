@@ -6,7 +6,7 @@ import { Preloader } from "./scenes/Preloader";
 import { GameScene } from "./scenes/GameScene";
 import { NewCoinScene } from "./scenes/NewCoinScene";
 import { Credits } from "./scenes/Credits";
-import {Lore} from "./scenes/Lore";
+import { Lore } from "./scenes/Lore";
 
 //  Find out more information about the Game Config at:
 //  https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
@@ -20,7 +20,7 @@ const config: Phaser.Types.Core.GameConfig = {
   physics: {
     default: "arcade",
     arcade: {
-      debug: true,
+      debug: false,
     },
   },
 };

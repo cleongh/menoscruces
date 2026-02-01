@@ -17,7 +17,7 @@ export class GameOver extends Scene {
     this.background.setAlpha(0.5);
 
     this.gameover_text = this.add.text(512, 384, "Game Over", {
-      fontFamily: "Arial Black",
+      fontFamily: "salpicaduraFont",
       fontSize: 64,
       color: "#ffffff",
       stroke: "#000000",
@@ -28,6 +28,11 @@ export class GameOver extends Scene {
 
     this.input.once("pointerdown", () => {
       this.scene.start("MainMenu");
+    });
+
+    this.input.keyboard?.on("keydown-SPACE", () => {
+      this.scene.start("MainMenu");
+
     });
   }
 }
