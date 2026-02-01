@@ -9,7 +9,7 @@ export class Button {
     pointerOverCallback?: () => void;
     pointerOutCallback?: () => void;
 
-    constructor(scene: Phaser.Scene, text: string, x: number, y: number, imagen: string = "", imagenHover: string = "", imagenPressed: string = "", wide: integer = -1, height : integer = -1) {
+    constructor(scene: Phaser.Scene, text: string, x: number, y: number, imagen: string = "", imagenHover: string = "", imagenPressed: string = "", fontS = "34px") {
         this.bg = scene.add.image(x, y, imagen)
             .setInteractive({ useHandCursor: true })
 
@@ -17,17 +17,11 @@ export class Button {
         this.imgHover.visible = false;
         this.imgPressed = scene.add.image(x, y, imagenPressed);
         this.imgPressed.visible = false;
-
-        if(wide >= 0 && height >= 0)
-        {
-            this.bg.setSize(wide,height);
-            this.imgHover.setSize(wide,height);
-            this.imgPressed.setSize(wide,height);
-        }
+        
 
         this.label = scene.add
             .text(x, y, text, {
-                fontSize: "34px",
+                fontSize: fontS,
                 color: '#000000',
                 fontFamily: "salpicaduraFont",
             })
@@ -35,6 +29,7 @@ export class Button {
 
         // INTERACCIONES CON EL BOTÓN
         this.bg.on("pointerdown", () => {
+
             this.bg.setScale(0.96);
             this.imgHover.setScale(0.96);
             this.imgPressed.setScale(0.96);
@@ -45,6 +40,7 @@ export class Button {
             this.pointerDownCallback && this.pointerDownCallback();
         });
         this.bg.on("pointerup", () => {
+
             this.bg.setScale(1);
             this.label.setScale(1);
 
@@ -56,6 +52,7 @@ export class Button {
             this.pointerUpCallback && this.pointerUpCallback();
         });
         this.bg.on("pointerout", () => {
+   
             this.bg.setScale(1);
 
             this.imgHover.setScale(1);
@@ -85,6 +82,15 @@ export class Button {
         this.bg.disableInteractive();
     }
 
+
+    setDepth(d:number)
+    {
+        this.bg.setDepth(d);
+        this.imgHover.setDepth(d);
+        this.imgPressed.setDepth(d);
+        this.label.setDepth(d);
+    }
+
     show() {
         this.bg.setVisible(true);
         this.label.setVisible(true);
@@ -107,6 +113,7 @@ export class Button {
     }
 
     select() {
+
         this.bg.setScale(1.1);
         this.label.setScale(1.1);
         this.imgHover.setScale(1.1);
