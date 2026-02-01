@@ -17,6 +17,8 @@ export interface NewCoinSceneConfig {
     onCoinFlippedResult: (pass: boolean, isHead: boolean) => void;
 }
 
+const coinsName = "CHIBICOINS";
+
 /**
  * Escena para el lanzamiento de moneda cuando se consigue una moneda de tipo especial
  * de esas que la cara te da buffo pero la cruz te putea
@@ -237,9 +239,9 @@ export class NewCoinScene extends Phaser.Scene {
             .text(
                 this.scale.width / 2,
                 this.scale.height * 0.1,
-                `Monedas normales: ${this.bonusCoin}`,
+                `${coinsName}: ${this.bonusCoin}`,
                 {
-                    fontSize: "28px",
+                    fontSize: "36px",
                     color: "#ffff00",
                     fontFamily: "salpicaduraFont",
                 },
@@ -249,10 +251,10 @@ export class NewCoinScene extends Phaser.Scene {
         this.add
             .text(
                 this.scale.width / 2,
-                this.scale.height * 0.16,
-                `Coste por omitir lanzamiento: ${this.passCost}`,
+                this.scale.height * 0.2,
+                `>> skip cost: ${this.passCost} <<`,
                 {
-                    fontSize: "20px",
+                    fontSize: "30px",
                     color: "#ffaaaa",
                     fontFamily: "salpicaduraFont",
                 },
@@ -382,7 +384,7 @@ export class NewCoinScene extends Phaser.Scene {
      */
     private skipCoin(): void {
         this.bonusCoin -= this.passCost;
-        this.bonusCoinText.setText(`Monedas normales: ${this.bonusCoin}`);
+        this.bonusCoinText.setText(`${coinsName}: ${this.bonusCoin}`);
 
         this.skipResult = true;
         this.time.addEvent({

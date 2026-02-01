@@ -161,6 +161,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     const fatManager = (this.scene as GameScene).fatManager;
     damage = damage - fatManager.getTransformedState().baseStats.defenseBase > 0 ? damage - fatManager.getTransformedState().baseStats.defenseBase : 0;
     this.health -= damage;
+    fatManager.playerHealthUpdated(100, this.health)
 
     if (this.health <= 0) {
       this.destroy();
@@ -170,5 +171,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   heal() {
     const fatManager = (this.scene as GameScene).fatManager;
     this.health = this.health + fatManager.getTransformedState().baseStats.regenBase < fatManager.getTransformedState().baseStats.healthBase ? this.health + fatManager.getTransformedState().baseStats.regenBase : fatManager.getTransformedState().baseStats.healthBase
+    fatManager.playerHealthUpdated(100, this.health);
   }
 }
