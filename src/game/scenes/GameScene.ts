@@ -147,7 +147,7 @@ export class GameScene extends Phaser.Scene {
     this.smellImage.alpha = 0;
   }
 
-  update(time : number) {
+  update() {
     this.player.update(this.cursors);
     this.fatManager.tickActiveCoins();
 
@@ -175,7 +175,6 @@ export class GameScene extends Phaser.Scene {
     // Parámetros al "pipeline" (shader) de vibración usado en el
     // player.
     if (this.vibratingPipeline) {
-      this.vibratingPipeline.set1f('time', time);
       this.vibratingPipeline.set1f('scale', 0.007); // Cantidad de desplazamiento
       this.vibratingPipeline.set1f('speed', 5); // > 1. Cambios por segundo
     }
