@@ -56,6 +56,8 @@ export class Preloader extends Scene {
 
     this.load.image("coin", "coins/monedilla.png");
 
+    this.load.image("credits", "ui/CreditsBg.png");
+
     this.load.spritesheet("player", "player.png", {
       frameWidth: 256,
       frameHeight: 256,
