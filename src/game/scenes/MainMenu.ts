@@ -40,7 +40,7 @@ export class MainMenu extends Scene {
     );
 
     this.playButton.setPointerUpCallback(() => {
-      this.scene.start("GameScene");
+      this.scene.start("Lore");
     });
 
     this.credits = new Button(
